@@ -1,16 +1,19 @@
-from flask import Flask
-from flask_mysqldb import MySQL 
+import os
+from flask import Flask, render_template, json, request
+from flaskext.mysql import MySQL 
 
 app = Flask(__name__)
 
 # Configuração e conexão do banco
+app.config['MYSQL_DATABASE_USER'] = 'root'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'E$p@c02024!'
+# Criar database
+app.config['MYSQL_DATABASE_DB'] = ''
+app.config['MYSQL_DATABASE_HOST'] = ''
 
-# api.secret_key = 'you secret key' (manter comentado temporariamente)
+mysql.init_app(app)
 
-app.config["MYSQL_HOST"] = "localhost"
-app.config["MYSQL_USER"] = "root"
-app.config["MYSQL_PASSWORD"] = ""
-# app.config["MYSQL_DB"] = "database"
+# def cadastro():
+#     return render_template('cadastro.html')
 
-mysql = MySQL(app)
 
