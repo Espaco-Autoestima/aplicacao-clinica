@@ -6,6 +6,7 @@ app = Flask(__name__)
 # Configuração e conexão do banco (a conexão não está funcionando)
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'E$p@c02024!'
+# app.config['MYSQL_ROOT_PASSWORD'] = 'E$p@c02024!'
 app.config['MYSQL_DB'] = 'espacoautoestima'
 app.config['MYSQL_HOST'] = '172.17.0.2'
 # app.config['MYSQL_HOST'] = '172.17.0.1' -> IP do Gateway
