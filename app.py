@@ -1,20 +1,43 @@
-from flask import Flask, render_template, json, request
+from flask import Flask, render_template, request
 from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
-# Configuração e conexão do banco
-app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'E$p@c02024!'
-app.config['MYSQL_DATABASE_DB'] = ''
-app.config['MYSQL_DATABASE_HOST'] = ''
+# Configuração e conexão do banco (a conexão não está funcionando)
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'E$p@c02024!'
+app.config['MYSQL_DB'] = 'espacoautoestima'
+app.config['MYSQL_HOST'] = '172.17.0.2'
+# app.config['MYSQL_HOST'] = '172.17.0.1' -> IP do Gateway
+# app.config['MYSQL_HOST'] = 'dockermysql5' -> Nome do container Docker criado
 
 mysql = MySQL(app)
 
-# def cadastro():
-#     return render_template('cadastro.html')
+@app.route('/clientes', methods=['POST', 'GET'])
+def cadastroClientes():
+    nome = request.form['nome']
+    horario = request.form['horario']
+
+    if nome and horario:
+        connector = mysql.connect()
+        cursor = connector.cursor()
+        cursor.execute('INSERT INTO clientes (nome, horario) VALUES (%s, %s)', (nome, horario))
+        connector.commit()
+    return render_template('cadastro-clientes.html')
+
+# @app.route('/profissionais')
+# def teste():
+#     nome = request.form['nome']
+#     especializacao = request.form['especializacao']
+
+#     if nome and especializacao:
+#         connector = mysql.connect()
+#         cursor = connector.cursor()
+#         cursor.execute('INSERT INTO clientes (nome, especializacao) VALUES (%s, %s)', (nome, especializacao))
+#         connector.commit()
+#     return render_template('cadastro-profissionais.html')
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(debug=True)
 
 
