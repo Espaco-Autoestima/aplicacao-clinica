@@ -17,12 +17,12 @@ mysql = MySQL(app)
 @app.route('/clientes', methods=['POST', 'GET'])
 def cadastroClientes():
     nome = request.form['nome']
-    horario = request.form['horario']
+    telefone = request.form['telefone']
 
-    if nome and horario:
+    if nome and telefone:
         connector = mysql.connect()
         cursor = connector.cursor()
-        cursor.execute('INSERT INTO clientes (nome, horario) VALUES (%s, %s)', (nome, horario))
+        cursor.execute('INSERT INTO clientes (nome, telefone) VALUES (%s, %s)', (nome, telefone))
         connector.commit()
     return render_template('cadastro-clientes.html')
 
