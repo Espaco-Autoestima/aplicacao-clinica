@@ -27,7 +27,7 @@ def cadastroClientes():
     return render_template('cadastro-clientes.html')
 
 # @app.route('/profissionais')
-# def teste():
+# def cadastroProfissionais():
 #     nome = request.form['nome']
 #     especializacao = request.form['especializacao']
 
