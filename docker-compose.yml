@@ -1,8 +1,13 @@
-version: '3.9'
+version: '3.10'
 services:
  web:
   build: .
+  working_dir: /data
   command: python app.py 
+  links:
+    - db
+  volumes:
+    - .:/data
   ports:
     - "5000:5000"
  db:
