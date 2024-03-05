@@ -3,7 +3,7 @@ services:
  web:
   build: .
   working_dir: /data
-  command: python app.py 
+  command: python clientes.py 
   links:
     - db
   volumes:
@@ -13,8 +13,8 @@ services:
  db:
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: E$p@c02024!
       MYSQL_DATABASE: espacoautoestima
+      MYSQL_HOST: 172.17.0.2
       MYSQL_USER: root
       MYSQL_PASSWORD: E$p@c02024!
     volumes:
