@@ -15,6 +15,10 @@ mysql = MySQL(app)
 def index():
     return "Seja bem-vindo!"
 
+@app.route('/iniciar')
+def iniciar():
+    return render_template('cadastro-clientes.html')
+
 # Criar rotas das operações básicas do banco (CRUD)
 @app.route('/clientes/cadastrar', methods=['POST'])
 def adicionarCliente():
