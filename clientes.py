@@ -11,13 +11,13 @@ app.config['MYSQL_HOST'] = "172.17.0.2"
 
 mysql = MySQL(app)
 
-@app.route('/')
+@app.route('/agendamento')
 def index():
-    return "Seja bem-vindo!"
+    return render_template('agendamento.html')
 
-@app.route('/iniciar')
-def iniciar():
-    return render_template('cadastro-clientes.html')
+# @app.route('/cadastroClientes', methods=['POST'])
+# def adicionarCliente():
+#     return render_template('cadastro-clientes.html')
 
 # Criar rotas das operações básicas do banco (CRUD)
 @app.route('/clientes/cadastrar', methods=['POST'])
@@ -60,12 +60,12 @@ def deletarCliente():
 
 @app.route('/profissionais/cadastrar')
 def cadastrarProfissional():
-    if request.method == 'POST' and 'nome' in request.form and 'especializacao' in request.form:
+    if request.method == 'POST' and 'nome' in request.form and 'especialidade' in request.form:
         nome = request.form['nome']
-        especializacao = request.form['especializacao']
+        especialidade = request.form['especializacao']
 
         cursor = mysql.connection.cursor()
-        cursor.execute("INSERT INTO profissionais(nome, especializacao) VALUES(%s, %s)", (nome, especializacao))
+        cursor.execute("INSERT INTO profissionais(nome, especialidade) VALUES(%s, %s)", (nome, especialidade))
         mysql.connection.commit()
         return redirect(url_for('success'))
     return render_template('profissionais.html')
