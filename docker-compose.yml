@@ -2,12 +2,12 @@ version: '3.10'
 services:
  web:
   build: .
-  working_dir: /data
+  working_dir: /db_data
   command: python clientes.py 
   links:
     - db
   volumes:
-    - .:/data
+    - .:/db_data
   ports:
     - "5000:5000"
  db:
@@ -21,5 +21,3 @@ services:
       - db_data:/var/lib/mysql
     ports:
       - "3306:3306"
-volumes:
- db_data:
