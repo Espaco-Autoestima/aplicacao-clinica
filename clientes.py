@@ -3,8 +3,7 @@ from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
-# Configuração e conexão do banco (a conexão não está funcionando)
-# app.config['MYSQL_USER'] = "dev"
+# Configuração e conexão do banco
 app.config['MYSQL_USER'] = "root"
 app.config['MYSQL_PASSWORD'] = "E$p@c02024!"
 app.config['MYSQL_DB'] = "espacoautoestima"
@@ -21,19 +20,19 @@ def iniciar():
     return render_template('cadastro-clientes.html')
 
 # Criar rotas das operações básicas do banco (CRUD) de clientes, exceto DELETE
-@app.route('/cadastrarCliente', methods=['POST'])
+@app.route('/cadastrarCliente', methods=['POST', 'GET'])
 def adicionarCliente():
-    if request.method == 'POST' and 'nome' in request.form and 'telefone' in request.form and 'email' in request.form and 'endereco' in request.form:
+    if request.method == 'POST' and 'nome' in request.form and 'telefone' in request.form and 'email' in request.form:
         nome = request.form['nome']
         telefone = request.form['telefone']
         email = request.form['email']
-        endereco = request.form['endereco']
 
         cursor = mysql.connection.cursor()
-        cursor.execute("INSERT INTO clientes(nome, telefone, email, endereco) VALUES (%s, %s, %s, %s)", (nome, telefone, email, endereco))
+        # Remover campo 'endereço' do banco
+        cursor.execute("INSERT INTO clientes(nome, telefone, email) VALUES (%s, %s, %s)", (nome, telefone, email))
         mysql.connection.commit()
-        return redirect(url_for('success'))
-    return render_template('clientes.html')
+        return redirect('clientes.html')
+    return render_template('cadastro-clientes.html')
 
 @app.route('/clientes', methods=['GET'])
 def consultarCliente():
@@ -42,16 +41,17 @@ def consultarCliente():
     clientes = cursor.fetchall()
     return render_template('clientes.html', clientes = clientes)
 
-@app.route('/clientes/atualizar/<int:id>', methods=['POST'])
+@app.route('/atualizarClientes/<int:id>', methods=['POST'])
 def atualizarCliente(id):
     if request.method == 'POST':
         nome = request.form['nome']
         telefone = request.form['telefone']
+        email = request.form['email']
 
         cursor = mysql.connection.cursor()
-        cursor.execute("UPDATE clientes SET nome=%s, telefone=%s WHERE id=%s", (nome, telefone, id))
+        cursor.execute("UPDATE clientes SET nome=%s, telefone=%s, email=%s WHERE id=%s", (nome, telefone, email, id))
         mysql.connection.commit()
-        return redirect(url_for('success'))
+        return redirect('atualizar-cliente')
     return render_template('clientes.html')
 
 # Criar rotas das operações básicas do banco (CRUD) de profissionais, exceto DELETE
