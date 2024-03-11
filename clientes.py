@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect
 from flask_mysqldb import MySQL
 
 app = Flask(__name__)
@@ -27,29 +27,28 @@ def adicionarCliente():
         telefone = request.form['telefone']
         email = request.form['email']
 
-        cursor = mysql.connection.cursor()
-        # Remover campo 'endereço' do banco
-        cursor.execute("INSERT INTO clientes(nome, telefone, email) VALUES (%s, %s, %s)", (nome, telefone, email))
+        conn = mysql.connection.cursor()
+        conn.execute("INSERT INTO clientes(nome, telefone, email) VALUES (%s, %s, %s)", (nome, telefone, email))
         mysql.connection.commit()
         return redirect('clientes.html')
     return render_template('cadastro-clientes.html')
 
-@app.route('/clientes', methods=['GET'])
+@app.route('/clientes', methods=['POST', 'GET'])
 def consultarCliente():
-    cursor = mysql.connection.cursor()
-    cursor.execute("SELECT * FROM clientes")
-    clientes = cursor.fetchall()
+    conn = mysql.connection.cursor()
+    conn.execute("SELECT * FROM clientes")
+    clientes = conn.fetchall()
     return render_template('clientes.html', clientes = clientes)
 
-@app.route('/atualizarClientes/<int:id>', methods=['POST'])
+@app.route('/atualizarClientes/<int:id>', methods=['POST', 'GET'])
 def atualizarCliente(id):
     if request.method == 'POST':
         nome = request.form['nome']
         telefone = request.form['telefone']
         email = request.form['email']
 
-        cursor = mysql.connection.cursor()
-        cursor.execute("UPDATE clientes SET nome=%s, telefone=%s, email=%s WHERE id=%s", (nome, telefone, email, id))
+        conn = mysql.connection.cursor()
+        conn.execute("UPDATE clientes SET nome=%s, telefone=%s, email=%s WHERE id=%s", (nome, telefone, email, id))
         mysql.connection.commit()
         return redirect('atualizar-cliente')
     return render_template('clientes.html')
@@ -62,8 +61,8 @@ def atualizarCliente(id):
 #         especialidade = request.form['especializacao']
 # Adicionar telefone e endereço
 
-#         cursor = mysql.connection.cursor()
-#         cursor.execute("INSERT INTO profissionais(nome, especialidade) VALUES(%s, %s)", (nome, especialidade))
+#         conn = mysql.connection.cursor()
+#         conn.execute("INSERT INTO profissionais(nome, especialidade) VALUES(%s, %s)", (nome, especialidade))
 #         mysql.connection.commit()
 #         return redirect(url_for('success'))
 #     return render_template('profissionais.html')
@@ -79,8 +78,8 @@ def atualizarCliente(id):
 #         # alterar campo na tabela do banco
 #         horario = request.form['horario']
         
-#         cursor = mysql.connection.cursor()
-#         cursor.execute("INSERT INTO consulta(nome, telefone, sessao, horario) VALUES (%s, %s, %s, %s)", (nome, telefone, sessao, horario))
+#         conn = mysql.connection.cursor()
+#         conn.execute("INSERT INTO consulta(nome, telefone, sessao, horario) VALUES (%s, %s, %s, %s)", (nome, telefone, sessao, horario))
 #         mysql.connection.commit()
 #     return render_template('agendamento.html')
 

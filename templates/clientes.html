@@ -1,9 +1,22 @@
 <!DOCTYPE html>
-    <form action="/clientes/cadastrar" method="POST">
-        <label for="nome">Nome do cliente:</label>
-        <input type="text" id="nome" name="nome"/> <br>
-        <label for="telefone">Telefone:</label>
-        <input type="text" id="telefone" name="telefone"/> <br>
-        <input type="submit" value="enviar" />
-    </form>   
+    <title>Clientes cadastrados</title>
+    <body>
+        <h1>Lista de clientes</h1>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>E-mail</th>
+            </tr>
+            {% for cliente in clientes %}
+            <tr>
+                <th>{{ cliente[0] }}</th>
+                <th>{{ cliente[1] }}</th>
+                <th>{{ cliente[2] }}</th>
+                <th>{{ cliente[3] }}</th>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
 </html>
