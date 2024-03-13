@@ -27,9 +27,10 @@ def adicionarCliente():
         telefone = request.form['telefone']
         email = request.form['email']
 
-        conn = mysql.connection.cursor()
-        conn.execute("INSERT INTO clientes(nome, telefone, email) VALUES (%s, %s, %s)", (nome, telefone, email))
-        mysql.connection.commit()
+        conn = mysql.connection
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO clientes(nome, telefone, email) VALUES (%s, %s, %s)", (nome, telefone, email))
+        conn.commit()
         return redirect('clientes.html')
     return render_template('cadastro-clientes.html')
 
