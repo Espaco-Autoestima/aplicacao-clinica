@@ -1,6 +1,6 @@
 FROM python:3.7-slim
 RUN pip install flask
-RUN pip install flask-mysqldb
+RUN pip install mysql-connector-python
 COPY clientes.py clientes.py
 RUN mkdir templates
 RUN mkdir static
