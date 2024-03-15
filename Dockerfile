@@ -5,7 +5,7 @@ COPY clientes.py clientes.py
 RUN mkdir templates
 RUN mkdir static
 COPY templates/*  /templates/
-COPY static/*  /static/
+COPY templates/static/*  /static/
 RUN chmod -R a+rwx static
 RUN chmod -R a+rwx templates
 CMD ["python","clientes.py"]

@@ -2,7 +2,6 @@ version: '3.7'
 services:
  web:
   build: .
-  working_dir: /db_data
   command: python clientes.py 
   links:
     - db
@@ -17,7 +16,5 @@ services:
       MYSQL_HOST: 172.17.0.2
       MYSQL_USER: root
       MYSQL_PASSWORD: E$p@c02024!
-    volumes:
-      - db_data:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - "3309:3309"

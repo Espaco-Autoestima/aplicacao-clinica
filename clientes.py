@@ -1,17 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for
-#from flask_mysqldb import MySQL
+from flask import Flask, render_template, request, redirect
 import mysql.connector
 
 app = Flask(__name__)
 
-# Configuração e conexão do banco (flask-mysqldb)
-# app.config['MYSQL_USER'] = "root"
-# app.config['MYSQL_PASSWORD'] = "E$p@c02024!"
-# app.config['MYSQL_DB'] = "espacoautoestima"
-# app.config['MYSQL_HOST'] = "localhost"
-
-# mysql = MySQL(app)
-
+# Configuração e conexão do banco de dados 
 config = {
     'user': 'root', 
     'password': 'E$p@c02024!', 
@@ -29,7 +21,6 @@ def iniciar():
     return render_template('cadastro-clientes.html')
 
 # Criar rotas das operações básicas do banco (CRUD) de clientes, exceto DELETE
-
 @app.route('/cadastrarCliente', methods=['POST', 'GET'])
 def adicionarCliente():
     if request.method == 'POST' and 'nome' in request.form and 'telefone' in request.form and 'email' in request.form:
@@ -40,7 +31,7 @@ def adicionarCliente():
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
 
-        # Inserindo os dados no banco de dados
+        # Inserindo os dados no banco
         query = "INSERT INTO clientes (nome, telefone, email) VALUES (%s, %s, %s)"
         cursor.execute(query, (nome, telefone, email))
         cnx.commit()
@@ -85,7 +76,7 @@ def cadastrarProfissional():
 
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
-        # Inserindo os dados no banco de dados
+        # Inserindo os dados no banco
         query = "INSERT INTO profissionais (nome, telefone, especialidade) VALUES (%s, %s, %s)"
         cursor.execute(query, (nome, telefone, especialidade))
         cnx.commit()
