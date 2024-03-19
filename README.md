@@ -24,7 +24,8 @@ $ pip install mysql-connector-python
 ```
 ## Configuração do banco e conexão com a aplicação
 Obs: A escolha da biblioteca para conexão com o banco é única e exclusivamente do(s) desenvolvedor(es). 
-Com as instalações feitas, a configuração do banco de dados já pode ser feita em seu arquivo .py, através de variáveis de ambiente definindo o nome de usuário, senha, nome do banco e o host (id do container Docker quando for criado):
+
+Com as instalações feitas, a configuração do banco de dados já pode ser feita em seu arquivo .py, através de variáveis de ambiente definindo o nome de usuário, senha, nome do banco e o host (endereço IPV4 do container Docker quando for criado):
 
 ```
 config = {
@@ -53,7 +54,7 @@ Para verificar o ID do container Docker, execute:
 ```
 docker network inspect bridge
 ```
-Verifique o host do endereço IPVA (iniciado por 172) e subsitua na chave 'host' do dicionário de configuração do arquivo .py
+Verifique o host do endereço IPV4 (iniciado por 172) e subsitua na chave 'host' do dicionário de configuração do arquivo .py
 ```
 'host': '172.x.x.x'
 ```
