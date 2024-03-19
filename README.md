@@ -10,7 +10,7 @@ Aplicação desenvolvida especificamente para uma clínica de estética chamada 
 ## Ferramentas 
 A linguagem back-end responsável pelas regras de negócio e lógica da aplicação em questão é o **[Python](https://docs.python.org/pt-br/3/tutorial/)**:
 * O framework web utilizado é **[Flask]([https://docs.djangoproject.com/en/5.0/](https://flask.palletsprojects.com/en/3.0.x/))** que permite que a construção de aplicações web de maneira simples e objetiva com a capacidade de escalar para aplicações complexas;
-* Neste projeto, utilizamos o Flask para criar páginas web dinâmicas através de rotas. O Flask facilita a criação de endpoints e a integração com bancos de dados, tornando o desenvolvimento do backend eficiente e organizado
+* Neste projeto, utilizamos o Flask para criar páginas web dinâmicas através de rotas, pois facilita a criação de endpoints e a integração com bancos de dados, tornando o desenvolvimento do backend eficiente e organizado.
 
 O SGBD utilizado nesse projeto é o MySQL, que por sua vez, está sendo executado em um container Docker, através da utilização de uma imagem na versão 5.7. Abaixo, segue os comandos para instalação do Flask, da biblioteca de conexão com o banco e a construção do container Docker:
 
@@ -30,7 +30,7 @@ Com as instalações feitas, a configuração do banco de dados já pode ser fei
 config = {
     'user': 'nome-usuario', 
     'password': 'senha', 
-    'host': 'localhost', 
+    'host': '172.x.x.x', 
     'database': 'nome-banco',
 }
 ```
@@ -41,9 +41,9 @@ O comando abaixo permite baixar imagens prontas do Docker Hub
 ```
 docker pull mysql:5.7
 ```
-Após isso, crie o container e defina seu nome, senha do usuário 'root', a porta e a imagem que será utilizada. Lebre-se que a senha definida aqui, deve ser adicionada como variável de ambiente no arquivo .py
+Após isso, crie o container e defina seu nome, senha do usuário 'root', a porta em que o container vai rodar e a imagem que será utilizada. Lebre-se que a senha definida aqui, deve ser adicionada como variável de ambiente no arquivo .py
 ```
-docker run --name nome-container -e MYSQL_ROOT_PASSWORD=senha-usuario-banco -p 3306:3306 -d mysql:5.7
+docker run --name nome-container -e MYSQL_ROOT_PASSWORD=senha -p 3306:3306 -d mysql:5.7
 ```
 Agora, execute o seguinte comando para listar os containers ativos:
 ```
