@@ -71,7 +71,7 @@ Com acesso ao banco, você pode criar o database que armazenará as tabelas cria
 create schema nome-database;
 ```
 ```
-use espacoautoestima;
+use nome-database;
 ```
 Agora, crie uma tabela de exemplo para verificar se o banco está funcionando nos conformes
 ```
