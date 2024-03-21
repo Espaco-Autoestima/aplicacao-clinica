@@ -17,4 +17,4 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: E$p@c02024!
     ports:
-      - "3309:3309"
+      - "3306:3306"
