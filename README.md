@@ -81,3 +81,32 @@ Verifique se a tabela foi criada com os devidos atributos:
 ```
 DESCRIBE usuarios;
 ```
+## Criação do Dockerfile 
+O Dockerfile permite a construção de uma imagem própria da aplicação, sem a necessidade e o dever de executá-la localmente. Para criá-lo, basta executar o seguinte comando:
+```
+docker image build -t nome-imagem .
+```
+Obs: É muito importante se atentar e não esquecer do ponto final 
+
+Após isso, execute:
+```
+docker run -p 5000:5000 -d nome-imagem
+```
+
+### Criação do Docker Compose 
+Para executar o Docker Compose, é necessário que os containers sejam parados. Liste todos para recuperar o ID e então:
+```
+docker stop id-container-1 (aplicação)
+docker stop id-container-2 (banco de dados)
+```
+Agora sim, o compose pode ser executado:
+```
+docker compose up -d
+```
+Obs: Será necessário recriar o próprio banco e tabelas e é importante que antes desse comando ser rodado, a tag definida no arquivo .yml seja alterada nas configuração do banco, mais especificamente na chave "host" ao invés do ID do container Docker
+
+Em caso de uma eventual mudança ou queira refazer:
+```
+docker compose stop
+docker compose down 
+```
