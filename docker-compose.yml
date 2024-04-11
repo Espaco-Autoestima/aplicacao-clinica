@@ -2,7 +2,7 @@ version: '3.7'
 services:
  web:
   build: .
-  command: python clientes.py 
+  command: python app.py 
   links:
     - db
   volumes:
