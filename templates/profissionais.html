@@ -8,6 +8,7 @@
                 <th>Nome</th>
                 <th>Telefone</th>
                 <th>Especialidade</th>
+                <th>Ações</th>
             </tr>
             {% for profissional in profissionais %}
             <tr>
@@ -15,6 +16,8 @@
                 <th>{{ profissional[1] }}</th>
                 <th>{{ profissional[2] }}</th>
                 <th>{{ profissional[3] }}</th>
+                <th>{{ profissional[4] }}</th>
+                <th>{{ profissional[5] }}</th>
             </tr>
             {% endfor %}
         </table>

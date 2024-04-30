@@ -19,17 +19,18 @@ def index():
 # Rotas das operações básicas do banco (CRUD) de clientes, exceto DELETE
 @app.route('/cadastrarCliente', methods=['POST', 'GET'])
 def adicionarCliente():
-    if request.method == 'POST' and 'nome' in request.form and 'telefone' in request.form and 'email' in request.form:
+    if request.method == 'POST' and 'nome' in request.form and 'telefone' in request.form and 'email' in request.form and 'cpf' in request.form:
         nome = request.form['nome']
         telefone = request.form['telefone']
         email = request.form['email']
+        cpf = request.form['cpf']
 
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
 
         # Inserindo os dados no banco
-        query = "INSERT INTO clientes (nome, telefone, email) VALUES (%s, %s, %s)"
-        cursor.execute(query, (nome, telefone, email))
+        query = "INSERT INTO clientes (nome, telefone, email, cpf) VALUES (%s, %s, %s, %s)"
+        cursor.execute(query, (nome, telefone, email, cpf))
         cnx.commit()
         cursor.close()
         cnx.close()
@@ -51,11 +52,12 @@ def atualizarCliente(id):
         nome = request.form['nome']
         telefone = request.form['telefone']
         email = request.form['email']
+        cpf = request.form['cpf']
 
         cnx = mysql.connection.cursor()
         cursor = cnx.cursor()
-        query = "UPDATE clientes SET nome=%s, telefone=%s, email=%s WHERE id=%s"
-        cursor.execute(query, (id, nome, telefone, email))
+        query = "UPDATE clientes SET nome=%s, telefone=%s, email=%s, cpf=%s WHERE id=%s"
+        cursor.execute(query, (id, nome, telefone, email, cpf))
         cnx.commit()
         cursor.close()
         cnx.close()
@@ -65,7 +67,7 @@ def atualizarCliente(id):
 
 # Rotas das operações básicas do banco (CRUD) de profissionais, exceto DELETE
 @app.route('/cadastrarProfissional', methods=['POST', 'GET'])
-def cadastrarProfissional():
+def adicionarProfissional():
     if request.method == 'POST' and 'nome' in request.form and 'telefone' in request.form and 'especialidade' in request.form:
         nome = request.form['nome']
         telefone = request.form['telefone']
@@ -155,6 +157,60 @@ def atualizarFornecedor(id):
         return redirect('fornecedores')
 
     return render_template('atualizar-fornecedores.html')
+
+# Regras de negócio de produtos
+@app.route('/cadastrarProduto', methods=['POST', 'GET'])
+def adicionarProduto():
+    if request.method == 'POST' and 'nome' in request.form and 'data-validade' in request.form and 'quantidade' in request.form and 'marca' in request.form and 'preco' in request.form and 'descricao' in request.form:
+        produto = request.form['nome']
+        dataValidade = request.form['data-validade']
+        quantidade = request.form['quantidade']
+        marca = request.form['marca']
+        preco = request.form['preco']
+        descricao = request.form['descricao']
+
+        cnx = mysql.connector.connect(**config)
+        cursor = cnx.cursor()
+
+        # Inserindo dados no banco 
+        query = "INSERT INTO produtos (nome, data_validade, quantidade, marca, preco, descricao) VALUES (%s, %s, %s, %s, %s, %s)"
+        cursor.execute(query, (produto, dataValidade, quantidade, marca, preco, descricao))
+        cnx.commit()
+        cursor.close()
+        cnx.close()
+        return redirect('produtos')
+    
+    return render_template('cadastro-produtos.html')
+
+@app.route('/produtos', methods=['POST', 'GET'])
+def consultarProduto():
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+    cursor.execute("SELECT * FROM produtos")
+    produtos = cursor.fetchall()
+    return render_template('produtos.html', produtos = produtos)
+
+@app.route('/atualizarProduto', methods=['POST', 'GET'])
+def atualizarProduto(id):
+    if request.method == 'POST':
+        produto = request.form['nome']
+        dataValidade = request.form['data-validade']
+        quantidade = request.form['quantidade']
+        marca = request.form['marca']
+        preco = request.form['preco']
+        descricao = request.form['descricao']
+
+        cnx = mysql.connection.cursor()
+        cursor = cnx.cursor()
+        query = "UPDATE produtos SET nome=%s, data_validade=%s, quantidade=%s, marca=%s, preco=%s, descricao=%s WHERE id=%s"
+        cursor.execute(query, (id, produto, dataValidade, quantidade, marca, preco, descricao))
+        cnx.commit()
+        cursor.close()
+        cnx.close()
+        return redirect('produtos')
+    
+    return render_template('atualizar-produtos.html')
+
 
 if __name__ == "__main__":
     app.run(debug=True)

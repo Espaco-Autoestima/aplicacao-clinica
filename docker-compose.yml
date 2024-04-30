@@ -6,14 +6,14 @@ services:
   links:
     - db
   volumes:
-    - .:/db_data
+    - ./controllers:/app
   ports:
     - "5000:5000"
  db:
     image: mysql:5.7
     environment:
       MYSQL_DATABASE: espacoautoestima
-      MYSQL_HOST: 172.17.0.2
+      MYSQL_HOST: localhost
       MYSQL_USER: root
       MYSQL_PASSWORD: E$p@c02024!
     ports:
