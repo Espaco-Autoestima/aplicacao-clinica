@@ -1,0 +1,54 @@
+/* Componentes globais */
+:root {
+    --primary: #00D47D;
+    --secondary: #0ECE6B;
+}
+
+* {
+    font-family: "Oranienbaum", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    padding-top: 10% !important;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+/* Formulário de cadastro */
+form {
+    text-align: center;
+    display: block;
+}
+
+label, p {
+    font-size: 16px;
+    padding: 5px 0;
+}
+
+input {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin: 5px 0;
+    width: 30%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #9c9c9c;
+}
+
+button.botao {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin-top: 10px;
+    padding: 6px;
+    background-color: var(--primary);
+    color: #FFFFFF;
+    font-size: 18px;
+    border: none;
+    display: block;
+}
+

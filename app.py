@@ -121,7 +121,6 @@ def adicionarFornecedor():
 
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
-
         # Inserindo os dados no banco
         query = "INSERT INTO fornecedores (nome, telefone, empresa) VALUES (%s, %s, %s)"
         cursor.execute(query, (nome, telefone, empresa))
@@ -158,7 +157,7 @@ def atualizarFornecedor(id):
 
     return render_template('atualizar-fornecedores.html')
 
-# Regras de negócio de produtos
+# Rotas das operações básicas do banco (CRUD) de produtos, exceto DELETE
 @app.route('/cadastrarProduto', methods=['POST', 'GET'])
 def adicionarProduto():
     if request.method == 'POST' and 'nome' in request.form and 'data-validade' in request.form and 'quantidade' in request.form and 'marca' in request.form and 'preco' in request.form and 'descricao' in request.form:
@@ -171,7 +170,6 @@ def adicionarProduto():
 
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
-
         # Inserindo dados no banco 
         query = "INSERT INTO produtos (nome, data_validade, quantidade, marca, preco, descricao) VALUES (%s, %s, %s, %s, %s, %s)"
         cursor.execute(query, (produto, dataValidade, quantidade, marca, preco, descricao))
@@ -210,7 +208,6 @@ def atualizarProduto(id):
         return redirect('produtos')
     
     return render_template('atualizar-produtos.html')
-
 
 if __name__ == "__main__":
     app.run(debug=True)
