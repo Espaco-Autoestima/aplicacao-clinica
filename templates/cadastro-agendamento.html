@@ -1,5 +1,11 @@
 <!DOCTYPE html>
-    <form action="/realizar-agendamento" method="POST">
+<head>
+    <title>Agendar consulta</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1 class="cadastro-agendamento">Agendar consulta</h1>
+    <form action="/realizarAgendamento" method="POST">
         <label for="nome">Nome do cliente</label>
         <input type="text" id="nomec" name="nomec"/> <br>
         <label for="nomep">Nome do profissional</label>
@@ -8,6 +14,7 @@
         <input type="number" id="sessao" name="sessao"/> <br>
         <label for="horario">Horário</label>
         <input type="time" id="horario" name="horario"/> <br>
-        <button type="submit" value="enviar">Agendar</button>
+        <button type="submit" value="enviar" class="botao">Agendar</button>
     </form>   
+</body>
 </html>

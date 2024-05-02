@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<head>
+    <title>Cadastro de produtos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1 class="cadastro-produtos">Cadastrar produto</h1>
     <form action="/cadastrarProduto" method="POST">
         <label for="nome">Nome do produto</label>
         <input type="text" id="nome" name="nome"/> <br>
@@ -12,6 +18,7 @@
         <input type="number" name="preco" id="preco" min="0" step="0.01" /> <br>
         <label for="descricao">Descrição</label>
         <input type="text" id="descricao" name="descricao"/> <br>
-        <button type="submit" value="enviar">Adicionar produto</button>
+        <button type="submit" value="enviar" class="botao">Adicionar produto</button>
     </form>   
+</body>
 </html>
