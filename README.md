@@ -1,4 +1,7 @@
 # Clínica Espaço Autoestima - Sistema de agendamento
+
+🚧 Em construção 🚧
+
 Aplicação desenvolvida especificamente para uma clínica de estética chamada "Espaço Autoestima" que visa o cadastro e agendamento de clientes com suas respectivas sessões, horário e os(as) profissionais que irão tratá-los. Assim como, cadastro de produtos que serão utilizados nas sessões, controle de estoque, entre outros. Esse projeto se refere à disciplina de "Software Product: Analysis and Specification" do 4° semestre do curso de Análise e Desenvolvimento de Sistemas da Faculdade Impacta.
 
 ## Integrantes
