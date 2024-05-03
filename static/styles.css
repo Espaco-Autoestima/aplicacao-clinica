@@ -4,6 +4,11 @@
     --secondary: #0ECE6B;
 }
 
+@font-face {
+    font-family: "Oranienbaum", serif;
+    src: url(/fonts/Oranienbaum-Regular.ttf) format('ttf');
+}
+
 * {
     font-family: "Oranienbaum", serif;
     font-weight: 400;
