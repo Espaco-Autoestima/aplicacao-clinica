@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+    <head>
+        <title>Login</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    </head>
+    <body>
+        <h1 class="login">Fazer login</h1>
+        <form action="/login" method="POST">
+            <label for="email">E-mail</label>
+            <input type="text" id="email" name="email"/> <br>
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="senha"/> <br>
+            <a href="{{ url_for('cadastro') }}">Ainda não possui uma conta? Cadastre-se</a>
+            <button type="submit" value="enviar" class="botao">Entrar</button>
+    </form>   
+    </body>
+</html>

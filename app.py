@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for, flash
+import re
 import mysql.connector
 
 app = Flask(__name__)
@@ -14,7 +15,52 @@ config = {
 
 @app.route('/')
 def index():
-    return render_template('cadastro-clientes.html')
+    return render_template('index.html')
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+#     if request.method == 'POST' and 'email' in request.form and 'senha' in request.form:
+#         email = request.form['email']
+#         senha = request.form['senha']
+    return render_template('login.html')
+
+# Criar tabela de "contas" com nome, cpf, telefone, e-mail, senha
+@app.route('/cadastro', methods=['POST', 'GET'])
+def cadastro():
+    if request.method == 'POST' and 'nome-usuario' in request.form and 'telefone' in request.form and 'email' in request.form and 'senha' in request.form:
+        nome_usuario = request.form['nome-usuario']
+        telefone = request.form['telefone']
+        email = request.form['email']
+        senha = request.form['senha']
+
+        cnx = mysql.connector.connect(**config)
+        cursor = cnx.cursor()
+
+        query = "SELECT * FROM contas WHERE nome_usuario = %s"
+        cursor.execute(query, (nome_usuario, telefone, email, senha))
+        conta = cursor.fetchone()
+        if conta:
+            flash('Essa conta já existe!')
+            return redirect(url_for('login'))
+        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email): 
+            flash('Endereço de e-mail inválido!')
+        elif not re.match(r'[A-Za-z0-9]+', nome_usuario): 
+            flash('O campo nome de usuário deve conter apenas letras e números!')
+        elif not nome_usuario or not telefone or not email or not senha: 
+            flash('Por favor, preencha os campos do formulário!')
+        else:
+            query = "INSERT INTO contas (nome_usuario, telefone, email, senha) VALUES (%s, %s, %s, %s)"
+            cursor.execute(query, (nome_usuario, telefone, email, senha))
+            cnx.commit()
+            cursor.close()
+            cnx.close()
+            return redirect('login')
+        
+    return render_template('cadastro.html')
+
+@app.route('/logout')
+def logout():
+    return redirect(url_for('login'))
 
 # Rotas das operações básicas do banco (CRUD) de clientes, exceto DELETE
 @app.route('/cadastrarCliente', methods=['POST', 'GET'])

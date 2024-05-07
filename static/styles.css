@@ -1,14 +1,18 @@
-/* Componentes globais */
+/* Padrão */
 :root {
     --primary: #00D47D;
     --secondary: #0ECE6B;
+    --tertiary: #00856F;
+    --quaternary: #8FAFA7;
 }
 
+/* Sempre que possível, utilizar o formato woff2 e woff para fontes */
 @font-face {
     font-family: "Oranienbaum", serif;
     src: url(/fonts/Oranienbaum-Regular.ttf) format('ttf');
 }
 
+/* Global */
 * {
     font-family: "Oranienbaum", serif;
     font-weight: 400;
@@ -44,6 +48,7 @@ input {
     border: 1px solid #9c9c9c;
 }
 
+/* Botão dos formulários */
 button.botao {
     margin-left: auto;
     margin-right: auto;
