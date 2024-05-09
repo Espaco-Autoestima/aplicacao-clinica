@@ -8,7 +8,7 @@
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             <div class="notification is-danger">
-                {{ messages[0] }}. Clique para fazer <a href="{{ url_for('login') }}">login</a>.
+                {{ messages[0] }} Clique para fazer <a href="{{ url_for('login') }}">login</a>.
             </div>
         {% endif %}
         {% endwith %}
@@ -21,8 +21,8 @@
             <input type="text" id="email" name="email"/> <br>
             <label for="senha">Senha</label>
             <input type="password" id="senha" name="senha"/> <br>
+            <button type="submit" value="enviar" class="botao">Cadastrar-se</button>
             <a href="{{ url_for('login') }}">Já possui uma conta? Faça login</a>
-            <button type="submit" value="enviar" class="botao">Entrar</button>
     </form>   
     </body>
 </html>

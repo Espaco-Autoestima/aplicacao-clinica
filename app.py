@@ -1,8 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 import re
 import mysql.connector
 
 app = Flask(__name__)
+
+# Chave secreta para armazenar a sessão do usuário
+app.config['SECRET_KEY'] = 'projeto-espaco-autoestima2024'
 
 # Configuração e conexão do banco de dados 
 config = {
@@ -14,17 +17,30 @@ config = {
 }
 
 @app.route('/')
-def index():
-    return render_template('index.html')
+def home():
+    return render_template('home.html')
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-#     if request.method == 'POST' and 'email' in request.form and 'senha' in request.form:
-#         email = request.form['email']
-#         senha = request.form['senha']
+    if request.method == 'POST' and 'email' in request.form and 'senha' in request.form:
+        email = request.form['email']
+        senha = request.form['senha']
+
+        cnx = mysql.connector.connect(**config)
+        cursor = cnx.cursor()
+
+        query = "SELECT * FROM contas WHERE email = %s AND senha = %s"
+        cursor.execute(query, (email, senha))
+        conta = cursor.fetchone()
+        if conta:
+            session['loggedin'] = True
+            session['id'] = conta['id']
+            session['nome_usuario'] = conta['nome_usuario']
+            return redirect('home')
+        else:
+            flash('Conta ainda não cadastrada!')
     return render_template('login.html')
 
-# Criar tabela de "contas" com nome, cpf, telefone, e-mail, senha
 @app.route('/cadastro', methods=['POST', 'GET'])
 def cadastro():
     if request.method == 'POST' and 'nome-usuario' in request.form and 'telefone' in request.form and 'email' in request.form and 'senha' in request.form:
@@ -41,13 +57,12 @@ def cadastro():
         conta = cursor.fetchone()
         if conta:
             flash('Essa conta já existe!')
-            return redirect(url_for('login'))
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email): 
             flash('Endereço de e-mail inválido!')
         elif not re.match(r'[A-Za-z0-9]+', nome_usuario): 
             flash('O campo nome de usuário deve conter apenas letras e números!')
-        elif not nome_usuario or not telefone or not email or not senha: 
-            flash('Por favor, preencha os campos do formulário!')
+        elif not re.match(r'([0-9]{2,3})?(\([0-9]{2}\))([0-9]{4,5})([0-9]{4})', telefone):
+            flash('Telefone inválido!')
         else:
             query = "INSERT INTO contas (nome_usuario, telefone, email, senha) VALUES (%s, %s, %s, %s)"
             cursor.execute(query, (nome_usuario, telefone, email, senha))
@@ -60,6 +75,9 @@ def cadastro():
 
 @app.route('/logout')
 def logout():
+    session.pop('loggedin', None)
+    session.pop('id', None)
+    session.pop('nome_usuario', None)
     return redirect(url_for('login'))
 
 # Rotas das operações básicas do banco (CRUD) de clientes, exceto DELETE
@@ -73,8 +91,7 @@ def adicionarCliente():
 
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
-
-        # Inserindo os dados no banco
+        # Insere os dados no banco
         query = "INSERT INTO clientes (nome, telefone, email, cpf) VALUES (%s, %s, %s, %s)"
         cursor.execute(query, (nome, telefone, email, cpf))
         cnx.commit()
@@ -84,7 +101,7 @@ def adicionarCliente():
     
     return render_template('cadastro-clientes.html')
 
-@app.route('/clientes', methods=['POST', 'GET'])
+@app.route('/clientes', methods=['GET'])
 def consultarCliente():
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
@@ -121,7 +138,7 @@ def adicionarProfissional():
 
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
-        # Inserindo os dados no banco
+        # Insere os dados no banco
         query = "INSERT INTO profissionais (nome, telefone, especialidade) VALUES (%s, %s, %s)"
         cursor.execute(query, (nome, telefone, especialidade))
         cnx.commit()
@@ -131,7 +148,7 @@ def adicionarProfissional():
     
     return render_template('cadastro-profissionais.html')
 
-@app.route('/profissionais', methods=['POST', 'GET'])
+@app.route('/profissionais', methods=['GET'])
 def consultarProfissional():
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
@@ -167,7 +184,7 @@ def adicionarFornecedor():
 
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
-        # Inserindo os dados no banco
+        # Insere os dados no banco
         query = "INSERT INTO fornecedores (nome, telefone, empresa) VALUES (%s, %s, %s)"
         cursor.execute(query, (nome, telefone, empresa))
         cnx.commit()
@@ -177,7 +194,7 @@ def adicionarFornecedor():
     
     return render_template('cadastro-fornecedores.html')
 
-@app.route('/fornecedores', methods=['POST', 'GET'])
+@app.route('/fornecedores', methods=['GET'])
 def consultarFornecedor():
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
@@ -216,7 +233,7 @@ def adicionarProduto():
 
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
-        # Inserindo dados no banco 
+        # Insere dados no banco 
         query = "INSERT INTO produtos (nome, data_validade, quantidade, marca, preco, descricao) VALUES (%s, %s, %s, %s, %s, %s)"
         cursor.execute(query, (produto, dataValidade, quantidade, marca, preco, descricao))
         cnx.commit()
@@ -226,7 +243,7 @@ def adicionarProduto():
     
     return render_template('cadastro-produtos.html')
 
-@app.route('/produtos', methods=['POST', 'GET'])
+@app.route('/produtos', methods=['GET'])
 def consultarProduto():
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
