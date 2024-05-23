@@ -39,7 +39,7 @@ config = {
 Obs: A escolha da biblioteca para conexão com o banco é única e exclusivamente do(s) desenvolvedor(es). Neste caso, foi-se utilizada a 'mysql-connector-python'.
 
 ## Criação do container Docker
-Neste projeto, os desenvolvedores utilizaram o Docker no sistema operacional Windows para a criação e orquestração dos containers. Para isso, foi-se necessária a instalação do WSL[Windows Subsystem Linux]([https://learn.microsoft.com/pt-br/windows/wsl/install]) para que tudo funcionasse da melhor maneira possível. Segue os comandos para a criação do container Docker e da imagem do MySQL:
+Neste projeto, os desenvolvedores utilizaram o Docker no sistema operacional Windows para a criação e orquestração dos containers. Para isso, foi-se necessária a instalação do [Windows Subsystem Linux]([https://learn.microsoft.com/pt-br/windows/wsl/install]) para que tudo funcionasse da melhor maneira possível. Segue os comandos para a criação do container Docker e da imagem do MySQL:
 
 O comando abaixo permite baixar imagens prontas do Docker Hub: 
 ```
