@@ -38,6 +38,16 @@ CREATE TABLE agendamento(
     FOREIGN KEY (profissionais_id) REFERENCES profissionais(id)
 );
 
+-- CREATE TABLE horarios(
+--     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--     
+-- );
+
+-- CREATE TABLE consulta(
+--     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--     
+-- );
+
 CREATE TABLE produtos(
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
     nome VARCHAR(45), 
@@ -54,3 +64,8 @@ CREATE TABLE fornecedores(
     telefone VARCHAR(20), 
     empresa VARCHAR(20)
 );
+
+-- CREATE TABLE pagamentos(
+--     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--     
+-- );

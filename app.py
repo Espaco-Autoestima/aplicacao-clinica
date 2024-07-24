@@ -29,7 +29,7 @@ def login():
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
 
-        # Consulta a conta pelos atributos especificados
+        # Consulta a conta pelos atributos especificados para verificar existência
         query = "SELECT * FROM contas WHERE email = %s AND senha = %s"
         cursor.execute(query, (email, senha))
         conta = cursor.fetchone()

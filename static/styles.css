@@ -32,17 +32,12 @@ form {
     display: block;
 }
 
-/* label, p {
-    font-size: 16px;
-    padding: 5px 0;
-} */
-
 input {
     margin-left: auto;
     margin-right: auto;
     text-align: center;
     margin: 5px 0;
-    width: 30%;
+    width: 25%;
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #9c9c9c;
@@ -65,7 +60,7 @@ button.botao {
     display: block;
 }
 
-/* Badge de mensagens */
+/* Badge de mensagem de erro */
 .notification-is-danger {
     margin-left: auto;
     margin-right: auto;
