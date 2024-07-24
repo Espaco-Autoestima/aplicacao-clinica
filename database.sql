@@ -32,6 +32,7 @@ CREATE TABLE agendamento(
     data date, 
     horario time, 
     sessao BIGINT, 
+    status VARCHAR(20),
     clientes_id BIGINT, 
     profissionais_id BIGINT, 
     FOREIGN KEY (clientes_id) REFERENCES clientes(id), 

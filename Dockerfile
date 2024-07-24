@@ -1,8 +1,9 @@
-FROM python:3.10
+FROM python:3.7-slim
 WORKDIR /app
 RUN pip install flask
 RUN pip install mysql-connector-python
-COPY controllers/* /app/app.py
+COPY controllers/* /app/controllers
+COPY app.py /app/app.py
 COPY calendario/* /app/calendario/
 COPY fonts/* /app/fonts/
 RUN mkdir /app/templates

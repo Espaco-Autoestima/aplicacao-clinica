@@ -1,25 +1,27 @@
 <!DOCTYPE html>
+<html>
+<head>
     <title>Consultas agendadas</title>
-    <body>
-        <h1>Lista de consultas</h1>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Cliente</th>
-                <th>Profissional</th>
-                <th>Sessão</th>
-                <th>Horário</th>
-            </tr>
-            {% for agendamento in agendamentos %}
-            <tr>
-                <th>{{ agendamento[0] }}</th>
-                <th>{{ agendamento[1] }}</th>
-                <th>{{ agendamento[2] }}</th>
-                <th>{{ agendamento[3] }}</th>
-                <th>{{ agendamento[4] }}</th>
-                <th>{{ agendamento[5] }}</th>
-            </tr>
-            {% endfor %}
-        </table>
-    </body>
+</head>
+<body>
+    <h1>Lista de consultas</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Profissional</th>
+            <th>Sessão</th>
+            <th>Horário</th>
+        </tr>
+        {% for agendamento in agendamentos %}
+        <tr>
+            <td>{{ agendamento[0] }}</td> <!-- ID -->
+            <td>{{ agendamento[1] }}</td> <!-- Nome do Cliente -->
+            <td>{{ agendamento[2] }}</td> <!-- Nome do Profissional -->
+            <td>{{ agendamento[3] }}</td> <!-- Sessão -->
+            <td>{{ agendamento[4] }}</td> <!-- Data e Hora -->
+        </tr>
+        {% endfor %}
+    </table>
+</body>
 </html>
