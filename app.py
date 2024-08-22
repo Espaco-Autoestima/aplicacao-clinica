@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
 import mysql.connector
 
 app = Flask(__name__)
@@ -45,6 +45,26 @@ def consultarCliente():
     cursor.execute("SELECT * FROM clientes")
     clientes = cursor.fetchall()
     return render_template('clientes.html', clientes = clientes)
+
+# Pesquisa de clientes 
+# @app.route('/pesquisar', methods=['GET'])
+# def pesquisar():
+#     termo = request.args.get('termo')
+#     if not termo:
+#         return jsonify({'erro': 'Termo de pesquisa não fornecido'}), 400
+    
+#     cnx = mysql.connector.connect(**config)
+#     cursor = cnx.cursor(dictionary=True)
+    
+#     # Usando placeholders para evitar SQL Injection
+#     query = "SELECT * FROM clientes WHERE nome LIKE %s OR cpf LIKE %s"
+#     cursor.execute(query, ('%' + termo + '%', '%' + termo + '%'))
+    
+#     resultados = cursor.fetchall()
+#     cursor.close()
+#     cnx.close()
+    
+#     return render_template('clientes.html', resultados=resultados)
 
 @app.route('/atualizarCliente/<int:id>', methods=['POST', 'GET'])
 def atualizarCliente(id):
@@ -274,7 +294,7 @@ def consultar_agendamento():
 
 # Implementação da regra de negócio de atualizar agendamentos
 
-# Regras de negócio de consultas
+# Calendário
 
 if __name__ == "__main__":
     app.run(debug=True)

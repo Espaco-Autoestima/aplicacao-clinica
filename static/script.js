@@ -21,3 +21,23 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// Pesquisa
+// document.getElementById('pesquisa').addEventListener('input', function() {
+//     var termo = this.value.trim();
+//     if (termo.length > 2) { // Ignora pesquisas muito curtas
+//         fetch(`/pesquisar?termo=${encodeURIComponent(termo)}`)
+//             .then(response => response.json())
+//             .then(data => {
+//                 var resultadosDiv = document.getElementById('resultados');
+//                 resultadosDiv.innerHTML = ''; // Limpa os resultados antigos
+                
+//                 data.resultados.forEach(resultado => {
+//                     var div = document.createElement('div');
+//                     div.textContent = `${resultado.nome} - ${resultado.cpf}`;
+//                     resultadosDiv.appendChild(div);
+//                 });
+//             })
+//             .catch(error => console.error('Erro ao buscar dados:', error));
+//         }
+// });
