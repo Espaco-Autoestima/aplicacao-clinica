@@ -248,7 +248,7 @@ def agendar_consulta():
         disponibilidade = cursor.fetchone()
 
         if disponibilidade:
-            # Horário está ocupado
+            # Horário não disponível
             return 'Horário não disponível para agendamento.'
         else:
             # Horário está disponível, então inserir na tabela de agendamento
@@ -271,6 +271,10 @@ def consultar_agendamento():
     agendamentos = cursor.fetchall()
     print("Agendamentos recuperados:", agendamentos)  # Log para verificar os agendamentos recuperados
     return render_template('agendamentos.html', agendamentos=agendamentos)
+
+# Implementação da regra de negócio de atualizar agendamentos
+
+# Regras de negócio de consultas
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,10 +1,10 @@
-CREATE TABLE contas(
-    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    nome_usuario VARCHAR(20),
-    telefone VARCHAR(25),
-    email VARCHAR(40),
-    senha VARCHAR(20)
-);
+-- CREATE TABLE contas(
+--     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--     nome_usuario VARCHAR(20),
+--     telefone VARCHAR(25),
+--     email VARCHAR(40),
+--     senha VARCHAR(20)
+-- );
 
 CREATE TABLE clientes(
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
@@ -39,14 +39,20 @@ CREATE TABLE agendamento(
     FOREIGN KEY (profissionais_id) REFERENCES profissionais(id)
 );
 
--- CREATE TABLE horarios(
+-- Verificar/revisar as tabelas abaixo
+-- CREATE TABLE disponibilidade(
 --     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---     
+--     data date, 
+--     horario time,
+--     FOREIGN KEY (profissionais_id) REFERENCES profissionais(id) 
 -- );
 
 -- CREATE TABLE consulta(
 --     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---     
+--     data date,
+--     descricao VARCHAR(100),
+--     procedimento VARCHAR(50),
+--     status VARCHAR(20)   
 -- );
 
 CREATE TABLE produtos(
@@ -65,8 +71,3 @@ CREATE TABLE fornecedores(
     telefone VARCHAR(20), 
     empresa VARCHAR(20)
 );
-
--- CREATE TABLE pagamentos(
---     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---     
--- );
