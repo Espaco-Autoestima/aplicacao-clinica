@@ -210,7 +210,7 @@ def consultarProduto():
     produtos = cursor.fetchall()
     return render_template('produtos.html', produtos = produtos)
 
-@app.route('/atualizarProduto', methods=['POST', 'GET'])
+@app.route('/atualizarProduto/<int:id>', methods=['POST', 'GET'])
 def atualizarProduto(id):
     if request.method == 'POST':
         produto = request.form['nome']
@@ -247,7 +247,7 @@ def agendar_consulta():
 
         # Verificar se o profissional já tem um agendamento na mesma data e hora
         query_verificar_agendamento = """
-            SELECT * FROM Agendamento
+            SELECT * FROM agendamento
             WHERE nomeProfissional = %s AND dataHora = %s
         """
         cursor.execute(query_verificar_agendamento, (nome_profissional, data_hora))
@@ -258,11 +258,11 @@ def agendar_consulta():
 
         # Verificar na tabela de disponibilidades no MySQL se possuem a data com o profissional disponível
         query_disponibilidade = """ 
-            SELECT d.Id_disponibilidade
-            FROM Disponibilidade d
+            SELECT d.id_disponibilidade
+            FROM disponibilidade d
             INNER JOIN profissionais p ON
             p.profissionais_id = d.profissionais_id 
-            WHERE d.Dia = %s AND d.Hora = %s AND p.nome = %s
+            WHERE d.dia = %s AND d.hora = %s AND p.nome = %s
         """
         cursor.execute(query_disponibilidade, (data, horario, nome_profissional))
         disponibilidade = cursor.fetchone()
@@ -273,7 +273,7 @@ def agendar_consulta():
         else:
             # Horário está disponível, então inserir na tabela de agendamento
             query_agendamento = """
-                INSERT INTO Agendamento (nomeCliente, nomeProfissional, sessao, dataHora, clientes_id, profissionais_id)
+                INSERT INTO agendamento(nomeCliente, nomeProfissional, sessao, dataHora, clientes_id, profissionais_id)
                 VALUES (%s, %s, %s, %s, (SELECT clientes_id FROM clientes WHERE nome = %s), (SELECT profissionais_id FROM profissionais WHERE nome = %s))
             """
             cursor.execute(query_agendamento, (nome_cliente, nome_profissional, sessao, data_hora, nome_cliente, nome_profissional))
@@ -283,17 +283,17 @@ def agendar_consulta():
 
     return render_template('cadastro-agendamento.html')
 
-@app.route('/agendamentos', methods=['GET'])
+@app.route('/agendamentos', methods=['POST', 'GET'])
 def consultar_agendamento():
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
-    cursor.execute("SELECT * FROM Agendamento")
+    cursor.execute("SELECT * FROM agendamento")
     agendamentos = cursor.fetchall()
     print("Agendamentos recuperados:", agendamentos)  # Log para verificar os agendamentos recuperados
     return render_template('agendamentos.html', agendamentos=agendamentos)
 
 # Implementação da regra de negócio de atualizar agendamentos
-@app.route('/atualizarAgendamentos', methods=['POST', 'GET'])
+@app.route('/atualizarAgendamentos/<int:id>', methods=['POST', 'GET'])
 def atualizar_agendamento(id):
     if request.method == 'POST':
         nome_cliente = request.form['nomec']
@@ -305,7 +305,7 @@ def atualizar_agendamento(id):
 
         cnx = mysql.connection.cursor()
         cursor = cnx.cursor()
-        query = "UPDATE Agendamento SET nome_cliente=%s, nome_profissional=%s, sessao=%s, horario=%s, data=%s, data_hora=%s WHERE id=%s"
+        query = "UPDATE agendamento SET nome_cliente=%s, nome_profissional=%s, sessao=%s, horario=%s, data=%s, data_hora=%s WHERE id=%s"
         cursor.execute(query, (id, nome_cliente, nome_profissional, sessao, horario, data, data_hora))
         cnx.commit()
         cursor.close()
@@ -315,6 +315,9 @@ def atualizar_agendamento(id):
     return render_template('agendamentos.html')
 
 # Calendário
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
