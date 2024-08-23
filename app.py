@@ -14,7 +14,7 @@ config = {
 
 @app.route('/')
 def index():
-    return render_template('cadastro-clientes.html')
+    return render_template('cadastro-agendamento.html')
 
 # Rotas das operações básicas do banco (CRUD) de clientes, exceto DELETE
 @app.route('/cadastrarCliente', methods=['POST', 'GET'])
