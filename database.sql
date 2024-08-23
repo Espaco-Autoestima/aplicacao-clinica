@@ -28,11 +28,10 @@ CREATE TABLE procedimentos(
 );
 
 CREATE TABLE agendamento(
-    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
---    data date, 
---    horario time,
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nomeCliente VARCHAR(30),
     nomeProfissional VARCHAR(30),
+    dataHora datetime, 
     sessao BIGINT, 
     clientes_id BIGINT, 
     profissionais_id BIGINT, 
@@ -40,7 +39,7 @@ CREATE TABLE agendamento(
     FOREIGN KEY (profissionais_id) REFERENCES profissionais(id)
 );
 
--- Verificar/revisar as tabelas abaixo
+-- Verificar/revisar as tabelas de disponibilidade e consulta
 CREATE TABLE disponibilidade(
     id_disponibilidade BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     dia date, 

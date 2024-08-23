@@ -233,7 +233,7 @@ def atualizarProduto(id):
 
 # Regras de negócio de agendamento
 @app.route('/realizarAgendamento', methods=['POST', 'GET'])
-def agendar_consulta():
+def realizar_agendamento():
     if request.method == 'POST' and 'nomec' in request.form and 'nomep' in request.form and 'sessao' in request.form and 'horario' in request.form and 'data' in request.form: 
         nome_cliente = request.form['nomec']
         nome_profissional = request.form['nomep']
@@ -245,7 +245,7 @@ def agendar_consulta():
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
 
-        # Verificar se o profissional já tem um agendamento na mesma data e hora
+        # Verifica se o profissional já tem um agendamento na mesma data e hora
         query_verificar_agendamento = """
             SELECT * FROM agendamento
             WHERE nomeProfissional = %s AND dataHora = %s
@@ -256,12 +256,12 @@ def agendar_consulta():
         if agendamento_existe:
             return 'Este profissional já tem um agendamento nesta data e horário.'
 
-        # Verificar na tabela de disponibilidades no MySQL se possuem a data com o profissional disponível
+        # Verifica na tabela de disponibilidades no MySQL se possuem a data com o profissional disponível
         query_disponibilidade = """ 
             SELECT d.id_disponibilidade
             FROM disponibilidade d
             INNER JOIN profissionais p ON
-            p.profissionais_id = d.profissionais_id 
+            p.id = d.profissionais_id 
             WHERE d.dia = %s AND d.hora = %s AND p.nome = %s
         """
         cursor.execute(query_disponibilidade, (data, horario, nome_profissional))
@@ -274,7 +274,7 @@ def agendar_consulta():
             # Horário está disponível, então inserir na tabela de agendamento
             query_agendamento = """
                 INSERT INTO agendamento(nomeCliente, nomeProfissional, sessao, dataHora, clientes_id, profissionais_id)
-                VALUES (%s, %s, %s, %s, (SELECT clientes_id FROM clientes WHERE nome = %s), (SELECT profissionais_id FROM profissionais WHERE nome = %s))
+                VALUES (%s, %s, %s, %s, (SELECT id FROM clientes WHERE nome = %s), (SELECT id FROM profissionais WHERE nome = %s))
             """
             cursor.execute(query_agendamento, (nome_cliente, nome_profissional, sessao, data_hora, nome_cliente, nome_profissional))
             cnx.commit()
