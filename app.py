@@ -293,6 +293,26 @@ def consultar_agendamento():
     return render_template('agendamentos.html', agendamentos=agendamentos)
 
 # Implementação da regra de negócio de atualizar agendamentos
+@app.route('/atualizarAgendamentos', methods=['POST', 'GET'])
+def atualizar_agendamento(id):
+    if request.method == 'POST':
+        nome_cliente = request.form['nomec']
+        nome_profissional = request.form['nomep']
+        sessao = request.form['sessao']
+        horario = request.form['horario']
+        data = request.form['data']
+        data_hora = data + ' ' + horario + ':00'
+
+        cnx = mysql.connection.cursor()
+        cursor = cnx.cursor()
+        query = "UPDATE Agendamento SET nome_cliente=%s, nome_profissional=%s, sessao=%s, horario=%s, data=%s, data_hora=%s WHERE id=%s"
+        cursor.execute(query, (id, nome_cliente, nome_profissional, sessao, horario, data, data_hora))
+        cnx.commit()
+        cursor.close()
+        cnx.close()
+        return redirect('agendamentos')
+    
+    return render_template('agendamentos.html')
 
 # Calendário
 
