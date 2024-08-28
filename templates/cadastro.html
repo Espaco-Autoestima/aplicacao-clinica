@@ -6,12 +6,12 @@
     <body>
         <h1 class="cadastro">Cadastrar-se</h1>
         <form action="/registro" method="POST">
-            <input type="text" id="nome_usuario" name="nome_usuario" placeholder="Nome de usuário"/> <br>
+            <input type="text" id="nome" name="nome" placeholder="Nome"/> <br>
             <input type="text" id="telefone" name="telefone" placeholder="Telefone"/> <br>
             <input type="text" id="email" name="email" placeholder="E-mail"/> <br>
             <input type="password" id="senha" name="senha" placeholder="Senha"/> <br>
             <button type="submit" value="enviar" class="botao">Cadastrar-se</button>
-            <span>Já possui uma conta? <a href="{{ url_for('login') }}">Faça login</a></span>
+            <span>Já possui uma conta? <a class="link-login" href="{{ url_for('login') }}">Faça login</a></span>
         </form>   
     </body>
 </html>

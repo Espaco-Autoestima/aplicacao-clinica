@@ -1,29 +1,29 @@
 <head>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <div class="sidebar">
     <h2 class="menu-title">MENU</h2>
-    <ul class="menu">
+    <ul style="list-style: none;" class="menu">
         <li class="menu-item">
-            <a href="/" class="category">Home</a>
+            <a href="../home" class="menu-home">Home</a>
         </li>
         <li class="menu-item">
-            <a href="/calendario" class="category">Agenda</a>
+            <a href="/calendario" class="menu-agenda">Agenda</a>
         </li>
         <li class="menu-item">
-            <a href="/realizarAgendamento" class="category">Agendamento</a>
+            <a href="/realizarAgendamento" class="menu-agendamento">Agendamentos</a>
         </li>
         <li class="menu-item">
-            <a href="#" class="category toggle">Cadastros</a>
-            <ul class="submenu">
-                <li><a href="#">Cliente</a></li>
-                <li><a href="#">Profissional</a></li>
+            <p class="titulo-cadastros-menu">Cadastros</p>
+            <ul style="list-style: none;" class="submenu">
+                <li><a href="/cadastrarCliente">Cliente</a></li>
+                <li><a href="/cadastrarProfissional">Profissional</a></li>
                 <li><a href="#">Pagamento</a></li>
-                <li><a href="#">Produto</a></li>
-                <li><a href="#">Procedimento</a></li>
+                <li><a href="/cadastrarProduto">Produto</a></li>
+                <li><a href="/cadastrarProcedimento">Procedimento</a></li>
             </ul>
         </li>
     </ul>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </div>
 

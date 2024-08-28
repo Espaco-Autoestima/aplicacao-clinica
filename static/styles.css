@@ -73,3 +73,10 @@ button.botao {
     border-radius: 8px;
 }
 
+ul, li, .menu-title {
+    text-align: left;
+}
+
+a.link-login, a.link-cadastro {
+    text-decoration: none;
+}

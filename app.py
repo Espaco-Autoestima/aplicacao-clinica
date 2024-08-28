@@ -25,38 +25,32 @@ def home():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-# Output message if something goes wrong...
-    # Check if "username" and "password" POST requests exist (user submitted form)
     if request.method == 'POST' and 'email' in request.form and 'senha' in request.form:
-        # Create variables for easy access
         email = request.form['email']
         senha = request.form['senha']
-        # Check if account exists using MySQL
-
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
 
-        # Inserindo os dados no banco
+        # Selecionando os dados no banco
         query = "SELECT * FROM contas WHERE email = %s AND senha = %s"
         cursor.execute(query, (email, senha))
         conta = cursor.fetchone()
-
+        # Verifica se existe a conta. Se existir, redireciona para a home
         if conta:
             session['loggedin'] = True
             session['id'] = conta[0]
             session['email'] = conta[1]
-            # Redirect to home page
             return redirect(url_for('home'))
         else:
-            # Account doesnt exist or username/password incorrect
-            flash("Incorrect username/password!", "danger")
+            # Caso a conta não exista ou se algum dado estiver incorreto
+            flash("E-mail ou senha incorretos", "danger")
 
     return render_template('login.html')
 
 @app.route('/registro', methods=['POST', 'GET'])
 def registrarUsuario():
-    if request.method == 'POST' and 'nome_usuario' in request.form and 'telefone' in request.form and 'email' in request.form and 'senha' in request.form:
-        nome_usuario = request.form['nome_usuario']
+    if request.method == 'POST' and 'nome' in request.form and 'telefone' in request.form and 'email' in request.form and 'senha' in request.form:
+        nome = request.form['nome']
         telefone = request.form['telefone']
         email = request.form['email']
         senha = request.form['senha']
@@ -66,7 +60,7 @@ def registrarUsuario():
 
         # Inserindo os dados no banco
         query = "INSERT INTO contas (nome_usuario, telefone, email, senha) VALUES (%s, %s, %s, %s)"
-        cursor.execute(query, (nome_usuario, telefone, email, senha))
+        cursor.execute(query, (nome, telefone, email, senha))
         cnx.commit()
         cursor.close()
         cnx.close()
