@@ -5,15 +5,8 @@
     </head>
     <body>
         <h1 class="cadastro">Cadastrar-se</h1>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="notification is-danger">
-                {{ messages[0] }} Clique para fazer <a href="{{ url_for('login') }}">login</a>.
-            </div>
-        {% endif %}
-        {% endwith %}
-        <form action="/cadastro" method="POST">
-            <input type="text" id="nome" name="nome" placeholder="Nome de usuário"/> <br>
+        <form action="/registro" method="POST">
+            <input type="text" id="nome_usuario" name="nome_usuario" placeholder="Nome de usuário"/> <br>
             <input type="text" id="telefone" name="telefone" placeholder="Telefone"/> <br>
             <input type="text" id="email" name="email" placeholder="E-mail"/> <br>
             <input type="password" id="senha" name="senha" placeholder="Senha"/> <br>

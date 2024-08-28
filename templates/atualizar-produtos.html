@@ -1,17 +1,23 @@
 <!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1 class="atualizar-produtos">Atualizar produto</h1>
     <form action="/atualizarProduto" method="POST">
-        <label for="nome">Nome do produto:</label>
+        <label for="nome">Nome do produto</label>
         <input type="text" id="nome" name="nome"/> <br>
-        <label for="data-validade">Data de validade:</label>
+        <label for="data-validade">Data de validade</label>
         <input type="date" id="data-validade" name="data-validade"/> <br>
-        <label for="quantidade">Quantidade:</label>
+        <label for="quantidade">Quantidade</label>
         <input type="number" id="quantidade" name="quantidade"/> <br>
-        <label for="marca">Marca:</label>
+        <label for="marca">Marca</label>
         <input type="text" id="marca" name="marca"/> <br>
-        <label for="preco">Preço:</label>
-        <input type="range" id="preco" name="preco" min="1"/> <br>
-        <label for="descricao">Descrição:</label>
+        <label for="preco">Preço</label>
+        <input type="number" name="preco" id="preco" min="0" step="0.01" /> <br>
+        <label for="descricao">Descrição</label>
         <input type="text" id="descricao" name="descricao"/> <br>
-        <button type="submit" value="enviar">Atualizar dados</button>
+        <button type="submit" value="enviar" class="botao">Adicionar produto</button>
     </form>   
+</body>
 </html>

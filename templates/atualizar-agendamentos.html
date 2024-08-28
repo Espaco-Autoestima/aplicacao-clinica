@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <head>
-    <title>Agendar consulta</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1 class="cadastro-agendamento">Agendar consulta</h1>
-    <form action="/agendamentos" method="POST">
+    <h1 class="cadastro-agendamento">Atualizar consulta</h1>
+    <form action="/atualizarAgendamentos" method="POST">
         <label for="nomec">Nome do cliente</label>
         <input type="text" id="nomec" name="nomec"/> <br>
         <label for="nomep">Nome do profissional</label>

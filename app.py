@@ -1,7 +1,10 @@
-from flask import Flask, render_template, request, redirect, jsonify
+from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, session
+from flask_login import login_required
 import mysql.connector
 
 app = Flask(__name__)
+
+app.secret_key = 'secret-key-ea'
 
 # Configuração e conexão do banco de dados 
 config = {
@@ -15,6 +18,61 @@ config = {
 @app.route('/')
 def index():
     return render_template('cadastro-agendamento.html')
+
+@app.route('/home')
+def home():
+    return render_template('home.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+# Output message if something goes wrong...
+    # Check if "username" and "password" POST requests exist (user submitted form)
+    if request.method == 'POST' and 'email' in request.form and 'senha' in request.form:
+        # Create variables for easy access
+        email = request.form['email']
+        senha = request.form['senha']
+        # Check if account exists using MySQL
+
+        cnx = mysql.connector.connect(**config)
+        cursor = cnx.cursor()
+
+        # Inserindo os dados no banco
+        query = "SELECT * FROM contas WHERE email = %s AND senha = %s"
+        cursor.execute(query, (email, senha))
+        conta = cursor.fetchone()
+
+        if conta:
+            session['loggedin'] = True
+            session['id'] = conta[0]
+            session['email'] = conta[1]
+            # Redirect to home page
+            return redirect(url_for('home'))
+        else:
+            # Account doesnt exist or username/password incorrect
+            flash("Incorrect username/password!", "danger")
+
+    return render_template('login.html')
+
+@app.route('/registro', methods=['POST', 'GET'])
+def registrarUsuario():
+    if request.method == 'POST' and 'nome_usuario' in request.form and 'telefone' in request.form and 'email' in request.form and 'senha' in request.form:
+        nome_usuario = request.form['nome_usuario']
+        telefone = request.form['telefone']
+        email = request.form['email']
+        senha = request.form['senha']
+
+        cnx = mysql.connector.connect(**config)
+        cursor = cnx.cursor()
+
+        # Inserindo os dados no banco
+        query = "INSERT INTO contas (nome_usuario, telefone, email, senha) VALUES (%s, %s, %s, %s)"
+        cursor.execute(query, (nome_usuario, telefone, email, senha))
+        cnx.commit()
+        cursor.close()
+        cnx.close()
+        return redirect(url_for('login'))
+    
+    return render_template('cadastro.html')
 
 # Rotas das operações básicas do banco (CRUD) de clientes, exceto DELETE
 @app.route('/cadastrarCliente', methods=['POST', 'GET'])
@@ -193,7 +251,7 @@ def adicionarProduto():
         cursor = cnx.cursor()
 
         # Inserindo dados no banco 
-        query = "INSERT INTO Produtos (nome, data_validade, quantidade, marca, preco, descricao) VALUES (%s, %s, %s, %s, %s, %s)"
+        query = "INSERT INTO produtos (nome, data_validade, quantidade, marca, preco, descricao) VALUES (%s, %s, %s, %s, %s, %s)"
         cursor.execute(query, (produto, dataValidade, quantidade, marca, preco, descricao))
         cnx.commit()
         cursor.close()
@@ -206,7 +264,7 @@ def adicionarProduto():
 def consultarProduto():
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
-    cursor.execute("SELECT * FROM Produtos")
+    cursor.execute("SELECT * FROM produtos")
     produtos = cursor.fetchall()
     return render_template('produtos.html', produtos = produtos)
 
@@ -248,7 +306,7 @@ def realizar_agendamento():
         # Verifica se o profissional já tem um agendamento na mesma data e hora
         query_verificar_agendamento = """
             SELECT * FROM agendamento
-            WHERE nomeProfissional = %s AND dataHora = %s
+            WHERE nomeProfissional = %s AND data = %s AND horario = %s
         """
         cursor.execute(query_verificar_agendamento, (nome_profissional, data_hora))
         agendamento_existe = cursor.fetchone()
@@ -273,12 +331,12 @@ def realizar_agendamento():
         else:
             # Horário está disponível, então inserir na tabela de agendamento
             query_agendamento = """
-                INSERT INTO agendamento(nomeCliente, nomeProfissional, sessao, dataHora, clientes_id, profissionais_id)
+                INSERT INTO agendamento(nomeCliente, nomeProfissional, sessao, data, horario, clientes_id, profissionais_id)
                 VALUES (%s, %s, %s, %s, (SELECT id FROM clientes WHERE nome = %s), (SELECT id FROM profissionais WHERE nome = %s))
             """
-            cursor.execute(query_agendamento, (nome_cliente, nome_profissional, sessao, data_hora, nome_cliente, nome_profissional))
+            cursor.execute(query_agendamento, (nome_cliente, nome_profissional, sessao, data, horario, data_hora))
             cnx.commit()
-            print("Agendamento inserido:", (nome_cliente, nome_profissional, sessao, data_hora, nome_cliente, nome_profissional))
+            print("Agendamento inserido:", (nome_cliente, nome_profissional, sessao, data, horario, data_hora))
             return redirect('agendamentos')
 
     return render_template('cadastro-agendamento.html')
@@ -303,16 +361,45 @@ def atualizar_agendamento(id):
         data = request.form['data']
         data_hora = data + ' ' + horario + ':00'
 
-        cnx = mysql.connection.cursor()
+        cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
-        query = "UPDATE agendamento SET nome_cliente=%s, nome_profissional=%s, sessao=%s, horario=%s, data=%s, data_hora=%s WHERE id=%s"
-        cursor.execute(query, (id, nome_cliente, nome_profissional, sessao, horario, data, data_hora))
-        cnx.commit()
-        cursor.close()
-        cnx.close()
-        return redirect('agendamentos')
+
+        # Verifica se o profissional já tem um agendamento na mesma data e hora
+        query_verificar_agendamento = """
+            SELECT * FROM agendamento
+            WHERE nomeProfissional = %s AND data = %s AND horario = %s
+        """
+        cursor.execute(query_verificar_agendamento, (id, nome_profissional, data_hora))
+        agendamento_existe = cursor.fetchone()
+
+        if agendamento_existe:
+            return 'Este profissional já tem um agendamento nesta data e horário.'
+
+        # Verifica na tabela de disponibilidades no MySQL se possuem a data com o profissional disponível
+        query_disponibilidade = """ 
+            SELECT d.id_disponibilidade
+            FROM disponibilidade d
+            INNER JOIN profissionais p ON
+            p.id = d.profissionais_id 
+            WHERE d.dia = %s AND d.hora = %s AND p.nome = %s
+        """
+        cursor.execute(query_disponibilidade, (data, horario, nome_profissional))
+        disponibilidade = cursor.fetchone()
+
+        if disponibilidade:
+            # Horário não disponível
+            return 'Horário não disponível para agendamento.'
+        else:
+            # Horário está disponível, então inserir na tabela de agendamento
+            query_agendamento = """
+                "UPDATE agendamento SET nome_cliente=%s, nome_profissional=%s, sessao=%s, data=%s, horario=%s WHERE id=%s"
+            """
+            cursor.execute(query_agendamento, (nome_cliente, nome_profissional, sessao, data, horario))
+            cnx.commit()
+            print("Agendamento atualizado:", (nome_cliente, nome_profissional, sessao, data, horario))
+            return redirect('agendamentos')
     
-    return render_template('agendamentos.html')
+    return render_template('atualizar-agendamentos.html')
 
 # Calendário
 
