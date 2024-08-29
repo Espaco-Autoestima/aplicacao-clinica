@@ -19,11 +19,10 @@
     font-style: normal;
 }
 
-body {
-    padding-top: 10% !important;
-    margin-left: auto;
-    margin-right: auto;
+h1.cadastro-clientes, h1.cadastro-produtos, h1.cadastro-fornecedores, 
+h1.caddastro-agendamento, h1.cadastro-profissionais {
     text-align: center;
+    padding-top: 200px;
 }
 
 /* Formulário de cadastro */
@@ -79,4 +78,19 @@ ul, li, .menu-title {
 
 a.link-login, a.link-cadastro {
     text-decoration: none;
+}
+
+h1.boas-vindas {
+    margin-left: 10px;
+}
+
+.sidebar {
+    border: 1px solid rgb(224, 224, 224);
+    border-radius: 15px;
+    width: 15%;
+    height: 100%;
+}
+
+h2.menu-title {
+    text-align: center;
 }

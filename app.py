@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_login import login_required
 import mysql.connector
+import re
 
 app = Flask(__name__)
 
@@ -19,10 +20,7 @@ config = {
 def index():
     return render_template('cadastro-agendamento.html')
 
-@app.route('/home')
-def home():
-    return render_template('home.html')
-
+# Rotas de login e cadastro
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST' and 'email' in request.form and 'senha' in request.form:
@@ -67,6 +65,12 @@ def registrarUsuario():
         return redirect(url_for('login'))
     
     return render_template('cadastro.html')
+
+@app.route('/home')
+def home():
+    if 'loggedin' in session:
+        return render_template('home.html', email=session['email'])
+    return redirect(url_for('login'))
 
 # Rotas das operações básicas do banco (CRUD) de clientes, exceto DELETE
 @app.route('/cadastrarCliente', methods=['POST', 'GET'])
@@ -131,9 +135,11 @@ def atualizarCliente(id):
         query = "UPDATE clientes SET nome=%s, telefone=%s, email=%s, cpf=%s WHERE id=%s"
         cursor.execute(query, (id, nome, telefone, email, cpf))
         cnx.commit()
+        cursor.execute("SELECT * FROM clientes WHERE id = %s", (id))
+        data = cursor.fetchall()
         cursor.close()
         cnx.close()
-        return redirect('clientes')
+        return redirect('clientes', datas=data)
     
     return render_template('atualizar-clientes.html')
 

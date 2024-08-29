@@ -1,4 +1,11 @@
-<!DOCTYPE html>
 {% extends 'menu.html' %}
-    <h1>Olá, como é bom te ver por aqui {{email}}</h1>   
+<!DOCTYPE html>
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+    <h1 class="boas-vindas">Olá, como é bom te ver por aqui, {{email}}</h1> 
+</body>  
 </html>
