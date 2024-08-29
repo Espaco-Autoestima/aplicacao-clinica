@@ -20,7 +20,8 @@
 }
 
 h1.cadastro-clientes, h1.cadastro-produtos, h1.cadastro-fornecedores, 
-h1.caddastro-agendamento, h1.cadastro-profissionais {
+h1.cadastro-agendamentos, h1.cadastro-profissionais, h1.cadastro, h1.login,
+h1.cadastro-procedimentos {
     text-align: center;
     padding-top: 200px;
 }
@@ -76,12 +77,26 @@ ul, li, .menu-title {
     text-align: left;
 }
 
-a.link-login, a.link-cadastro {
+/* Links do menu, cadastro e login */
+a.link-login, a.link-cadastro, a.menu-clientes,
+a.menu-profissionais, a.menu-pagamentos, a.menu-procedimentos, 
+a.menu-produtos {
     text-decoration: none;
+    color: #000;
+}
+
+a.menu-home, a.menu-agenda, a.menu-agendamento {
+    text-decoration: none;
+    color: #000;
 }
 
 h1.boas-vindas {
-    margin-left: 10px;
+    display: block;
+    text-align: center;
+}
+
+p.titulo-cadastros-menu {
+    font-weight: bold;
 }
 
 .sidebar {
@@ -93,4 +108,5 @@ h1.boas-vindas {
 
 h2.menu-title {
     text-align: center;
+    padding-bottom: 40px;
 }
