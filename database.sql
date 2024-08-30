@@ -1,6 +1,6 @@
 CREATE TABLE contas(
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    nome_usuario VARCHAR(20),
+    nome_usuario VARCHAR(50),
     telefone VARCHAR(25),
     email VARCHAR(40),
     senha VARCHAR(20)
