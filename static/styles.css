@@ -73,6 +73,19 @@ button.botao {
     border-radius: 8px;
 }
 
+/* Badge de mensagem de sucesso */
+.notification-is-success {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    text-align: center;
+    padding: 20px;
+    background-color: var(--primary);
+    color: #FFFFFF;
+    width: 20%;
+    border-radius: 8px;
+}
+
 ul, li, .menu-title {
     text-align: left;
 }

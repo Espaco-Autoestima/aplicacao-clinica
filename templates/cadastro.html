@@ -5,6 +5,13 @@
     </head>
     <body>
         <h1 class="cadastro">Cadastrar-se</h1>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification-is-danger">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
         <form action="/registro" method="POST">
             <input type="text" id="nome" name="nome" placeholder="Nome"/> <br>
             <input type="text" id="telefone" name="telefone" placeholder="Telefone"/> <br>

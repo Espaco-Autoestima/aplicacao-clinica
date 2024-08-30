@@ -56,13 +56,24 @@ def registrarUsuario():
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
 
-        # Inserindo os dados no banco
-        query = "INSERT INTO contas (nome_usuario, telefone, email, senha) VALUES (%s, %s, %s, %s)"
-        cursor.execute(query, (nome, telefone, email, senha))
-        cnx.commit()
-        cursor.close()
-        cnx.close()
-        return redirect(url_for('login'))
+        # Selecionando os dados no banco
+        query = "SELECT * FROM contas WHERE email = %s and senha = %s"
+        cursor.execute(query, (email, senha))
+        conta = cursor.fetchone()
+        # Verifica se existe a conta. Se existir, redireciona para a home
+        if conta:
+            session['loggedin'] = True
+            session['id'] = conta[0]
+            flash("E-mail já existe", "danger")
+        else:
+            # Inserindo os dados no banco
+            query = "INSERT INTO contas (nome_usuario, telefone, email, senha) VALUES (%s, %s, %s, %s)"
+            cursor.execute(query, (nome, telefone, email, senha))
+            cnx.commit()
+            cursor.close()
+            cnx.close()
+            flash("Usuário registrado com sucesso!", "success")
+            return redirect(url_for('login'))
     
     return render_template('cadastro.html')
 
