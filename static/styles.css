@@ -12,13 +12,20 @@
     src: url(/fonts/Oranienbaum-Regular.ttf) format('ttf');
 }
 
-/* Global */
-* {
-    font-family: "Oranienbaum", serif;
-    font-weight: 400;
-    font-style: normal;
+@font-face {
+    font-family: "Montserrat", serif;
+    src: url(/fonts/Montserrat-Medium.ttf) format('ttf');
 }
 
+/* Global */
+* {
+    font-family: "Montserrat", medium;
+    font-weight: 400;
+    font-style: normal;
+    background-color: #F0F0F0;
+}
+
+/* Títulos de cadastro */
 h1.cadastro-clientes, h1.cadastro-produtos, h1.cadastro-fornecedores, 
 h1.cadastro-agendamentos, h1.cadastro-profissionais, h1.cadastro, h1.login,
 h1.cadastro-procedimentos {
@@ -32,6 +39,7 @@ form {
     display: block;
 }
 
+/* Campos do formulário */
 input {
     margin-left: auto;
     margin-right: auto;
@@ -86,40 +94,76 @@ button.botao {
     border-radius: 8px;
 }
 
+/* Menu */
 ul, li, .menu-title {
+    margin-bottom: 15px;
+    background-color: #FFFFFF;
     text-align: left;
 }
 
-/* Links do menu, cadastro e login */
-a.link-login, a.link-cadastro, a.menu-clientes,
-a.menu-profissionais, a.menu-pagamentos, a.menu-procedimentos, 
-a.menu-produtos {
+/* Links do cadastro e login */
+a.link-login, a.link-cadastro {
     text-decoration: none;
     color: #000;
 }
 
-a.menu-home, a.menu-agenda, a.menu-agendamento {
+/* Links do submenu */
+a.menu-clientes, a.menu-profissionais, a.menu-pagamentos, 
+a.menu-procedimentos, a.menu-produtos {
+    font-size: 14px;
+    background-color: #FFFFFF;
     text-decoration: none;
     color: #000;
 }
 
-h1.boas-vindas {
-    display: block;
-    text-align: center;
+/* Links do menu */
+a.menu-home, a.menu-agenda, 
+a.menu-agendamento {
+    font-size: 16px;
+    background-color: #FFFFFF;
+    text-decoration: none;
+    color: #000;
 }
 
 p.titulo-cadastros-menu {
-    font-weight: bold;
+    padding-top: 20px;
+    font-size: 16px;
+    background-color: #FFFFFF;
+    text-decoration: none;
+    color: #000;
 }
 
+a.menu-home:hover, a.menu-agenda:hover, 
+a.menu-agendamento:hover {
+    max-width: 50%;
+    border-radius: 3px;
+    background-color: #CEFDF1;
+}
+
+/* Texto de boas-vindas da home */
+h1.boas-vindas {
+    padding-top: 40px;
+    text-align: left;
+    margin-left: 330px;
+}
+
+/* Borda do menu lateral */
 .sidebar {
+    display: flex;
+    flex-direction: column;
     border: 1px solid rgb(224, 224, 224);
     border-radius: 15px;
     width: 15%;
     height: 100%;
+    background-color: #FFFFFF;
+    padding: 0;
+    margin: 0;
+    position: fixed;
 }
 
+/* Título "menu" */
 h2.menu-title {
+    background-color: #FFFFFF;
     text-align: center;
     padding-bottom: 40px;
 }

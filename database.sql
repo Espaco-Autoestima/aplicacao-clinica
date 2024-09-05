@@ -1,3 +1,6 @@
+CREATE SCHEMA espacoautoestima;
+USE espacoautoestima;
+
 CREATE TABLE contas(
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nome_usuario VARCHAR(50),
