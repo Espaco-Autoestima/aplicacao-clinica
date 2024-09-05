@@ -22,22 +22,24 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Pesquisa
-// document.getElementById('pesquisa').addEventListener('input', function() {
-//     var termo = this.value.trim();
-//     if (termo.length > 2) { // Ignora pesquisas muito curtas
-//         fetch(`/pesquisar?termo=${encodeURIComponent(termo)}`)
-//             .then(response => response.json())
-//             .then(data => {
-//                 var resultadosDiv = document.getElementById('resultados');
-//                 resultadosDiv.innerHTML = ''; // Limpa os resultados antigos
-                
-//                 data.resultados.forEach(resultado => {
-//                     var div = document.createElement('div');
-//                     div.textContent = `${resultado.nome} - ${resultado.cpf}`;
-//                     resultadosDiv.appendChild(div);
-//                 });
-//             })
-//             .catch(error => console.error('Erro ao buscar dados:', error));
-//         }
-// });
+// Pesquisa de clientes por telefone
+document.getElementById('botao-buscar').addEventListener('click', function(event) {
+    event.preventDefault(); // Impede o envio do formulário padrão
+
+    const telefone = document.getElementById('pesquisa').value;
+
+    fetch('/pesquisar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            'pesquisa': telefone
+        })
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.body.innerHTML = data; // Atualiza o conteúdo da página com a resposta
+    })
+    .catch(error => console.error('Erro:', error));
+});

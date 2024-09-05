@@ -25,14 +25,6 @@
     background-color: #F0F0F0;
 }
 
-/* Títulos de cadastro */
-h1.cadastro-clientes, h1.cadastro-produtos, h1.cadastro-fornecedores, 
-h1.cadastro-agendamentos, h1.cadastro-profissionais, h1.cadastro, h1.login,
-h1.cadastro-procedimentos {
-    text-align: center;
-    padding-top: 200px;
-}
-
 /* Formulário de cadastro */
 form {
     text-align: center;
@@ -68,6 +60,20 @@ button.botao {
     display: block;
 }
 
+/* Links do cadastro e login */
+a.link-login, a.link-cadastro {
+    text-decoration: none;
+    color: #000;
+}
+
+/* Títulos de cadastro */
+h1.cadastro-clientes, h1.cadastro-produtos, h1.cadastro-fornecedores, 
+h1.cadastro-agendamentos, h1.cadastro-profissionais, h1.cadastro, h1.login,
+h1.cadastro-procedimentos {
+    text-align: center;
+    padding-top: 200px;
+}
+
 /* Badge de mensagem de erro */
 .notification-is-danger {
     margin-left: auto;
@@ -94,37 +100,21 @@ button.botao {
     border-radius: 8px;
 }
 
-/* Menu */
-ul, li, .menu-title {
+/* Texto de boas-vindas da home */
+h1.boas-vindas {
+    padding-top: 40px;
+    text-align: left;
+    margin-left: 330px;
+}
+
+/* Itens do menu */
+ul, li {
     margin-bottom: 15px;
     background-color: #FFFFFF;
     text-align: left;
 }
 
-/* Links do cadastro e login */
-a.link-login, a.link-cadastro {
-    text-decoration: none;
-    color: #000;
-}
-
-/* Links do submenu */
-a.menu-clientes, a.menu-profissionais, a.menu-pagamentos, 
-a.menu-procedimentos, a.menu-produtos {
-    font-size: 14px;
-    background-color: #FFFFFF;
-    text-decoration: none;
-    color: #000;
-}
-
-/* Links do menu */
-a.menu-home, a.menu-agenda, 
-a.menu-agendamento {
-    font-size: 16px;
-    background-color: #FFFFFF;
-    text-decoration: none;
-    color: #000;
-}
-
+/* Título do menu lateral */
 p.titulo-cadastros-menu {
     padding-top: 20px;
     font-size: 16px;
@@ -133,18 +123,12 @@ p.titulo-cadastros-menu {
     color: #000;
 }
 
-a.menu-home:hover, a.menu-agenda:hover, 
-a.menu-agendamento:hover {
-    max-width: 50%;
-    border-radius: 3px;
-    background-color: #CEFDF1;
-}
-
-/* Texto de boas-vindas da home */
-h1.boas-vindas {
-    padding-top: 40px;
-    text-align: left;
-    margin-left: 330px;
+/* Título "menu" */
+h2.menu-title {
+    padding-top: 25px;
+    background-color: #FFFFFF;
+    text-align: center;
+    padding-bottom: 40px;
 }
 
 /* Borda do menu lateral */
@@ -161,9 +145,36 @@ h1.boas-vindas {
     position: fixed;
 }
 
-/* Título "menu" */
-h2.menu-title {
+/* Links do submenu */
+a.menu-clientes, a.menu-profissionais, a.menu-pagamentos, 
+a.menu-procedimentos, a.menu-produtos {
+    font-size: 14px;
     background-color: #FFFFFF;
-    text-align: center;
-    padding-bottom: 40px;
+    text-decoration: none;
+    color: #000;
+}
+
+/* Efeito ao passar o mouse no submenu */
+a.menu-clientes:hover, a.menu-profissionais:hover, a.menu-pagamentos:hover, 
+a.menu-procedimentos:hover, a.menu-produtos:hover {
+    background-color: #CEFDF1;
+    transition: all 1s ease-out;
+}
+
+/* Links do menu */
+a.menu-home, a.menu-agenda, 
+a.menu-agendamento {
+    font-size: 16px;
+    background-color: #FFFFFF;
+    text-decoration: none;
+    color: #000;
+}
+
+/* Efeito ao passar o mouse no menu */
+a.menu-home:hover, a.menu-agenda:hover, 
+a.menu-agendamento:hover {
+    max-width: 50%;
+    border-radius: 3px;
+    background-color: #CEFDF1;
+    transition: all 1s ease-out;
 }

@@ -1,6 +1,14 @@
 <!DOCTYPE html>
     <title>Clientes cadastrados</title>
+    <head>
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+    </head>
     <body>
+        <form action="/pesquisar" method="POST">
+            <label for="pesquisa">Pesquisar pelo telefone: </label>
+            <input type="text" id="pesquisa" name="pesquisa" class="pesquisa-input" required>
+            <button id="botao-buscar" type="submit">Pesquisar</button>
+        </form>
         <h1>Lista de clientes</h1>
         <table>
             <tr>
@@ -11,6 +19,17 @@
                 <th>CPF</th>
                 <th>Ações</th>
             </tr>
+            {% if resultados %}
+            {% for resultado in resultados %}
+            <tr>
+                <td>{{ resultado.id }}</td>
+                <td>{{ resultado.nome }}</td>
+                <td>{{ resultado.telefone }}</td>
+                <td>{{ resultado.email }}</td>
+                <td>{{ resultado.cpf }}</td>
+            </tr>
+            {% endfor %}
+            {% else %}
             {% for cliente in clientes %}
             <tr>
                 <td>{{ cliente[0] }}</td>
@@ -22,6 +41,8 @@
                 <td>{{ cliente[6] }}</td>
             </tr>
             {% endfor %}
+            {% endif %}
+        </table>
         </table>
     </body>
 </html>
