@@ -1,14 +1,34 @@
 <!DOCTYPE html>
-    <title>Fornecedores cadastrados</title>
+    <html>
+    <head>
+        <title>Fornecedores cadastrados</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+    </head>
     <body>
-        <h1>Lista de fornecedores</h1>
-        <table>
+        <form action="/pesquisarFornecedor" method="POST">
+            <label for="pesquisa">Pesquisar pelo telefone: </label>
+            <input type="text" id="pesquisa" name="pesquisa" class="pesquisa-input-telefone" required>
+            <button id="botao-buscar" type="submit">Pesquisar</button>
+        </form>
+        <h1 class="lista-de-fornecedores">Lista de fornecedores</h1>
+        <table class="registro-fornecedores">
             <tr>
                 <th>ID</th>
                 <th>Nome</th>
                 <th>Telefone</th>
                 <th>Empresa</th>
             </tr>
+            {% if resultados %}
+            {% for resultado in resultados %}
+            <tr>
+                <td>{{ resultado.id }}</td>
+                <td>{{ resultado.nome }}</td>
+                <td>{{ resultado.telefone }}</td>
+                <td>{{ resultado.empresa }}</td>
+            </tr>
+            {% endfor %}
+            {% else %}
             {% for fornecedor in fornecedores %}
             <tr>
                 <th>{{ fornecedor[0] }}</th>
@@ -17,6 +37,7 @@
                 <th>{{ fornecedor[3] }}</th>
             </tr>
             {% endfor %}
+            {% endif %}
         </table>
     </body>
 </html>

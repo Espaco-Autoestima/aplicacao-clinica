@@ -18,7 +18,7 @@ config = {
 def index():
     return render_template('cadastro-agendamento.html')
 
-# Rotas de login e cadastro
+# Rotas de login de usuários
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST' and 'email' in request.form and 'senha' in request.form:
@@ -43,6 +43,7 @@ def login():
 
     return render_template('login.html')
 
+# Rota de cdastro de usuários
 @app.route('/registro', methods=['POST', 'GET'])
 def registrarUsuario():
     if request.method == 'POST' and 'nome' in request.form and 'telefone' in request.form and 'email' in request.form and 'senha' in request.form:
@@ -75,6 +76,7 @@ def registrarUsuario():
     
     return render_template('cadastro.html')
 
+# Página inicial apenas para usuários logados
 @app.route('/home')
 def home():
     if 'loggedin' in session:
@@ -111,26 +113,25 @@ def consultarCliente():
     clientes = cursor.fetchall()
     return render_template('clientes.html', clientes = clientes)
 
-#Busca de clientes 
-@app.route('/pesquisar', methods=['POST'])
-def pesquisar():
+# Busca de clientes por e-mail
+@app.route('/pesquisarCliente', methods=['POST'])
+def pesquisar_clientes():
     try:
-        telefone = request.form.get("pesquisa")
+        email = request.form.get("pesquisa")
         
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor(dictionary=True)
             
         # Usando placeholders para evitar SQL Injection
-        query = "SELECT * FROM clientes WHERE telefone=%s"
-        cursor.execute(query, (telefone,))
+        query = "SELECT * FROM clientes WHERE email=%s"
+        cursor.execute(query, (email,))
             
         resultados = cursor.fetchall()
 
         return render_template('clientes.html', resultados = resultados)
         
     except mysql.connector.Error as err:
-        print(f"Erro ao executar a consulta MySQL: {err}")
-        return "Ocorreu um erro ao executar a consulta MySQL", 500
+        return f"Tente novamente mais tarde: {err}", 500
         
     finally:
         cursor.close()
@@ -185,6 +186,30 @@ def consultarProfissional():
     profissionais = cursor.fetchall()
     return render_template('profissionais.html', profissionais = profissionais)
 
+# Busca de profissionais por telefone
+@app.route('/pesquisarProfissional', methods=['POST'])
+def pesquisar_profissionais():
+    try:
+        telefone = request.form.get("pesquisa")
+        
+        cnx = mysql.connector.connect(**config)
+        cursor = cnx.cursor(dictionary=True)
+            
+        # Usando placeholders para evitar SQL Injection
+        query = "SELECT * FROM profissionais WHERE telefone=%s"
+        cursor.execute(query, (telefone,))
+            
+        resultados = cursor.fetchall()
+
+        return render_template('profissionais.html', resultados = resultados)
+        
+    except mysql.connector.Error as err:
+        return f"Tente novamente mais tarde: {err}", 500
+        
+    finally:
+        cursor.close()
+        cnx.close()
+
 @app.route('/atualizarProfissional/<int:id>', methods=['POST', 'GET'])
 def atualizarProfissional(id):
     if request.method == 'POST':
@@ -231,6 +256,30 @@ def consultarFornecedor():
     cursor.execute("SELECT * FROM fornecedores")
     fornecedores = cursor.fetchall()
     return render_template('fornecedores.html', fornecedores = fornecedores)
+
+# Busca de fornecedores por telefone 
+@app.route('/pesquisarFornecedor', methods=['POST'])
+def pesquisar_fornecedores():
+    try:
+        telefone = request.form.get("pesquisa")
+        
+        cnx = mysql.connector.connect(**config)
+        cursor = cnx.cursor(dictionary=True)
+            
+        # Usando placeholders para evitar SQL Injection
+        query = "SELECT * FROM fornecedores WHERE telefone=%s"
+        cursor.execute(query, (telefone,))
+            
+        resultados = cursor.fetchall()
+
+        return render_template('fornecedores.html', resultados = resultados)
+        
+    except mysql.connector.Error as err:
+        return f"Tente novamente mais tarde: {err}", 500
+        
+    finally:
+        cursor.close()
+        cnx.close()
 
 @app.route('/atualizarFornecedor/<int:id>', methods=['POST', 'GET'])
 def atualizarFornecedor(id):
@@ -281,6 +330,29 @@ def consultarProduto():
     cursor.execute("SELECT * FROM produtos")
     produtos = cursor.fetchall()
     return render_template('produtos.html', produtos = produtos)
+
+# Busca de produtos por nome
+@app.route('/pesquisarProduto', methods=['POST'])
+def pesquisar_produtos():
+    try:
+        nome = request.form.get("pesquisa")
+
+        cnx = mysql.connector.connect(**config)
+        cursor = cnx.cursor(dictionary=True)
+
+        query = "SELECT * FROM produtos WHERE nome=%s"
+        cursor.execute(query, (nome,))
+
+        resultados = cursor.fetchall()
+
+        return render_template('produtos.html', resultados = resultados)
+    
+    except mysql.connector.Error as err:
+        return f"Tente novamente mais tarde: {err}", 500
+
+    finally:
+        cursor.close()
+        cnx.close() 
 
 @app.route('/atualizarProduto/<int:id>', methods=['POST', 'GET'])
 def atualizarProduto(id):

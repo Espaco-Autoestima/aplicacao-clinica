@@ -1,8 +1,18 @@
 <!DOCTYPE html>
-    <title>Produtos cadastrados</title>
+    <html>
+    <head>
+        <title>Produtos cadastrados</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+    </head>
     <body>
-        <h1>Lista de produtos</h1>
-        <table>
+        <form action="/pesquisarProduto" method="POST">
+            <label for="pesquisa">Pesquisar pelo nome: </label>
+            <input type="text" id="pesquisa" name="pesquisa" class="pesquisa-input-nome" required>
+            <button id="botao-buscar" type="submit">Pesquisar</button>
+        </form>
+        <h1 class="lista-de-produtos">Lista de produtos</h1>
+        <table class="registro-produtos">
             <tr>
                 <th>ID</th>
                 <th>Nome</th>
@@ -11,8 +21,20 @@
                 <th>Marca</th>
                 <th>Preço</th>
                 <th>Descrição</th>
-                <th>Ações</th>
             </tr>
+            {% if resultados %}
+            {% for resultado in resultados %}
+            <tr>
+                <td>{{ resultado.id }}</td>
+                <td>{{ resultado.nome }}</td>
+                <td>{{ resultado.data_validade }}</td>
+                <td>{{ resultado.quantidade }}</td>
+                <td>{{ resultado.marca }}</td>
+                <td>{{ resultado.preco }}</td>
+                <td>{{ resultado.descricao }}</td>
+            </tr>
+            {% endfor %}
+            {% else %}
             {% for produto in produtos %}
             <tr>
                 <th>{{ produto[0] }}</th>
@@ -25,6 +47,7 @@
                 <th>{{ produto[7] }}</th>
             </tr>
             {% endfor %}
+            {% endif %}
         </table>
     </body>
 </html>

@@ -6,6 +6,8 @@
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
+    {% block content %}
     <h1 class="boas-vindas">Olá, como é bom te ver por aqui, {{email}}</h1> 
+    {% endblock %}
 </body>  
 </html>

@@ -22,13 +22,35 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Pesquisa de clientes por telefone
+// Busca por e-mail
+document.getElementById('botao-buscar').addEventListener('click', function(event) {
+    event.preventDefault(); // Impede o envio do formulário padrão
+
+    const email = document.getElementById('pesquisa').value;
+
+    fetch('/pesquisarEmail', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            'pesquisa': email
+        })
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.body.innerHTML = data; // Atualiza o conteúdo da página com a resposta
+    })
+    .catch(error => console.error('Erro:', error));
+});
+
+// Busca por telefone
 document.getElementById('botao-buscar').addEventListener('click', function(event) {
     event.preventDefault(); // Impede o envio do formulário padrão
 
     const telefone = document.getElementById('pesquisa').value;
 
-    fetch('/pesquisar', {
+    fetch('/pesquisarTelefone', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -40,6 +62,28 @@ document.getElementById('botao-buscar').addEventListener('click', function(event
     .then(response => response.text())
     .then(data => {
         document.body.innerHTML = data; // Atualiza o conteúdo da página com a resposta
+    })
+    .catch(error => console.error('Erro:', error));
+});
+
+// Busca por nome 
+document.getElementById('botao-buscar').addEventListener('click', function(event) {
+    event.preventDefault(); // Impede o envio do formulário padrão
+
+    const nome = document.getElementById('pesquisa').value;
+
+    fetch('/pesquisarNome', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            'pesquisa': nome
+        })
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.body.innerHTML = data; // Atualiza o conteúdo da página com os registros
     })
     .catch(error => console.error('Erro:', error));
 });
