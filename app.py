@@ -44,8 +44,8 @@ def login():
     return render_template('login.html')
 
 # Rota de cdastro de usuários
-@app.route('/registro', methods=['POST', 'GET'])
-def registrarUsuario():
+@app.route('/signup', methods=['POST', 'GET'])
+def signUp():
     if request.method == 'POST' and 'nome' in request.form and 'telefone' in request.form and 'email' in request.form and 'senha' in request.form:
         nome = request.form['nome']
         telefone = request.form['telefone']
@@ -140,23 +140,29 @@ def pesquisar_clientes():
 @app.route('/atualizarCliente/<int:id>', methods=['POST', 'GET'])
 def atualizarCliente(id):
     if request.method == 'POST':
-        nome = request.form['nome']
-        telefone = request.form['telefone']
-        email = request.form['email']
-        cpf = request.form['cpf']
+        nome = request.form.get('nome')
+        telefone = request.form.get('telefone')
+        email = request.form.get('email')
+        cpf = request.form.get('cpf')
 
-        cnx = mysql.connection.cursor()
+        cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
         query = "UPDATE clientes SET nome=%s, telefone=%s, email=%s, cpf=%s WHERE id=%s"
-        cursor.execute(query, (id, nome, telefone, email, cpf))
+        cursor.execute(query, (nome, telefone, email, cpf, id))
         cnx.commit()
-        cursor.execute("SELECT * FROM clientes WHERE id = %s", (id))
-        data = cursor.fetchall()
         cursor.close()
         cnx.close()
-        return redirect('clientes', datas=data)
+        return redirect(url_for('clientes'))
     
-    return render_template('atualizar-clientes.html')
+    # Carrega os dados do cliente para o formulário
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+    cursor.execute("SELECT * FROM clientes WHERE id = %s", (id,))
+    cliente = cursor.fetchone()
+    cursor.close()
+    cnx.close()
+
+    return render_template('atualizar-clientes.html', cliente = cliente)
 
 # Rotas das operações básicas do banco (CRUD) de profissionais, exceto DELETE
 @app.route('/cadastrarProfissional', methods=['POST', 'GET'])
@@ -217,10 +223,10 @@ def atualizarProfissional(id):
         telefone = request.form['telefone']
         especialidade = request.form['especialidade']
 
-        cnx = mysql.connection.cursor()
+        cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
         query = "UPDATE profissionais SET nome=%s, telefone=%s, especialidade=%s WHERE id=%s"
-        cursor.execute(query, (id, nome, telefone, especialidade))
+        cursor.execute(query, (nome, telefone, especialidade, id))
         cnx.commit()
         cursor.close()
         cnx.close()
@@ -288,10 +294,10 @@ def atualizarFornecedor(id):
         telefone = request.form['telefone']
         empresa = request.form['empresa']
 
-        cnx = mysql.connection.cursor()
+        cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
         query = "UPDATE fornecedores SET nome=%s, telefone=%s, empresa=%s WHERE id=%s"
-        cursor.execute(query, (id, nome, telefone, empresa))
+        cursor.execute(query, (nome, telefone, empresa, id))
         cnx.commit()
         cursor.close()
         cnx.close()
@@ -364,10 +370,10 @@ def atualizarProduto(id):
         preco = request.form['preco']
         descricao = request.form['descricao']
 
-        cnx = mysql.connection.cursor()
+        cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
         query = "UPDATE produtos SET nome=%s, data_validade=%s, quantidade=%s, marca=%s, preco=%s, descricao=%s WHERE id=%s"
-        cursor.execute(query, (id, produto, dataValidade, quantidade, marca, preco, descricao))
+        cursor.execute(query, (produto, dataValidade, quantidade, marca, preco, descricao, id))
         cnx.commit()
         cursor.close()
         cnx.close()
@@ -455,7 +461,7 @@ def atualizar_agendamento(id):
             SELECT * FROM agendamento
             WHERE nomeProfissional = %s AND data = %s AND horario = %s
         """
-        cursor.execute(query_verificar_agendamento, (id, nome_profissional, data_hora))
+        cursor.execute(query_verificar_agendamento, (nome_profissional, data_hora, id))
         agendamento_existe = cursor.fetchone()
 
         if agendamento_existe:
@@ -486,11 +492,6 @@ def atualizar_agendamento(id):
             return redirect('agendamentos')
     
     return render_template('atualizar-agendamentos.html')
-
-# Calendário
-
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)

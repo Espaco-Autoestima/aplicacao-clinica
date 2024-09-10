@@ -17,6 +17,7 @@
                 <th>Nome</th>
                 <th>Telefone</th>
                 <th>Especialidade</th>
+                <th>Ações</th>
             </tr>
             {% if resultados %}
             {% for resultado in resultados %}
@@ -36,6 +37,9 @@
                 <th>{{ profissional[3] }}</th>
                 <th>{{ profissional[4] }}</th>
                 <th>{{ profissional[5] }}</th>
+                <td>
+                    <a href="{{ url_for('atualizarProfissional', id=profissional[0]) }}">Editar</a>
+                </td>
             </tr>
             {% endfor %}
             {% endif %}

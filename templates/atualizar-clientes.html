@@ -1,5 +1,11 @@
 <!DOCTYPE html>
-    <form action="/atualizarCliente" method="POST">
+<html>
+    <head>
+        <title>Atualização de clientes</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+    </head>
+    <form class="atualizacao-dados" action="/atualizarCliente" method="POST">
         <label for="nome">Nome do cliente:</label>
         <input type="text" id="nome" name="nome"/> <br>
         <label for="telefone">Telefone:</label>

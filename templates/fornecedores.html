@@ -18,6 +18,7 @@
                 <th>Nome</th>
                 <th>Telefone</th>
                 <th>Empresa</th>
+                <th>Ações</th>
             </tr>
             {% if resultados %}
             {% for resultado in resultados %}
@@ -35,6 +36,9 @@
                 <th>{{ fornecedor[1] }}</th>
                 <th>{{ fornecedor[2] }}</th>
                 <th>{{ fornecedor[3] }}</th>
+                <td>
+                    <a href="{{ url_for('atualizarFornecedor', id=fornecedor[0]) }}">Editar</a>
+                </td>
             </tr>
             {% endfor %}
             {% endif %}

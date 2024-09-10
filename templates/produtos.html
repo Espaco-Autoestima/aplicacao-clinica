@@ -21,6 +21,7 @@
                 <th>Marca</th>
                 <th>Preço</th>
                 <th>Descrição</th>
+                <th>Ações</th>
             </tr>
             {% if resultados %}
             {% for resultado in resultados %}
@@ -45,6 +46,9 @@
                 <th>{{ produto[5] }}</th>
                 <th>{{ produto[6] }}</th>
                 <th>{{ produto[7] }}</th>
+                <td>
+                    <a href="{{ url_for('atualizarProduto', id=produto[0]) }}">Editar</a>
+                </td>
             </tr>
             {% endfor %}
             {% endif %}

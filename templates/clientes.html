@@ -41,6 +41,9 @@
                 <td>{{ cliente[4] }}</td>
                 <td>{{ cliente[5] }}</td>
                 <td>{{ cliente[6] }}</td>
+                <td>
+                    <a href="{{ url_for('atualizarCliente', id=cliente[0]) }}">Editar</a>
+                </td>
             </tr>
             {% endfor %}
             {% endif %}

@@ -5,14 +5,18 @@
     </head>
     <body>
         <h1 class="cadastro">Cadastrar-se</h1>
-        {% with messages = get_flashed_messages() %}
+        <!-- Adicionar as mensagens de flash -->
+        {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
-            <div class="notification-is-danger">
-                {{ messages[0] }}
-            </div>
+            {% for category, message in messages %}
+                <div class="notification notification-is-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
         {% endif %}
         {% endwith %}
-        <form action="/registro" method="POST">
+        
+        <form action="/signup" method="POST">
             <input type="text" id="nome" name="nome" placeholder="Nome"/> <br>
             <input type="text" id="telefone" name="telefone" placeholder="Telefone"/> <br>
             <input type="text" id="email" name="email" placeholder="E-mail"/> <br>
