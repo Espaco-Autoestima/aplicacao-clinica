@@ -43,7 +43,7 @@ def login():
 
     return render_template('login.html')
 
-# Rota de cdastro de usuários
+# Rota de cadastro de usuários
 @app.route('/signup', methods=['POST', 'GET'])
 def signUp():
     if request.method == 'POST' and 'nome' in request.form and 'telefone' in request.form and 'email' in request.form and 'senha' in request.form:
@@ -71,7 +71,7 @@ def signUp():
             cnx.commit()
             cursor.close()
             cnx.close()
-            flash("Usuário registrado com sucesso!", "success")
+            flash("Conta criada com sucesso!", "success")
             return redirect(url_for('login'))
     
     return render_template('cadastro.html')
@@ -152,7 +152,7 @@ def atualizarCliente(id):
         cnx.commit()
         cursor.close()
         cnx.close()
-        return redirect(url_for('clientes'))
+        return redirect(url_for('consultarCliente'))
     
     # Carrega os dados do cliente para o formulário
     cnx = mysql.connector.connect(**config)
@@ -230,9 +230,17 @@ def atualizarProfissional(id):
         cnx.commit()
         cursor.close()
         cnx.close()
-        return redirect('profissionais')
+        return redirect(url_for('consultarProfissional'))
     
-    return render_template('atualizar-profissionais.html')
+    # Carrega os dados do profissional para o formulário
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+    cursor.execute("SELECT * FROM profissionais WHERE id = %s", (id,))
+    profissional = cursor.fetchone()
+    cursor.close()
+    cnx.close()
+
+    return render_template('atualizar-profissionais.html', profissional = profissional)
 
 # Rotas das operações básicas do banco (CRUD) de fornecedores, exceto DELETE
 @app.route('/cadastrarFornecedor', methods=['POST', 'GET'])
@@ -301,14 +309,23 @@ def atualizarFornecedor(id):
         cnx.commit()
         cursor.close()
         cnx.close()
-        return redirect('fornecedores')
+        return redirect(url_for('consultarFornecedor'))
 
-    return render_template('atualizar-fornecedores.html')
+    # Carrega os dados do fornecedor para o formulário
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+    cursor.execute("SELECT * FROM fornecedores WHERE id = %s", (id,))
+    fornecedor = cursor.fetchone()
+    cursor.close()
+    cnx.close()
+
+    return render_template('atualizar-fornecedores.html', fornecedor = fornecedor)
 
 # Regras de negócio de produtos
 @app.route('/cadastrarProduto', methods=['POST', 'GET'])
 def adicionarProduto():
-    if request.method == 'POST' and 'nome' in request.form and 'data-validade' in request.form and 'quantidade' in request.form and 'marca' in request.form and 'preco' in request.form and 'descricao' in request.form:
+    if request.method == 'POST' and 'sku' in request.form and 'nome' in request.form and 'data-validade' in request.form and 'quantidade' in request.form and 'marca' in request.form and 'preco' in request.form and 'descricao' in request.form:
+        codigo_sku = request.form['sku']
         produto = request.form['nome']
         dataValidade = request.form['data-validade']
         quantidade = request.form['quantidade']
@@ -320,8 +337,8 @@ def adicionarProduto():
         cursor = cnx.cursor()
 
         # Inserindo dados no banco 
-        query = "INSERT INTO produtos (nome, data_validade, quantidade, marca, preco, descricao) VALUES (%s, %s, %s, %s, %s, %s)"
-        cursor.execute(query, (produto, dataValidade, quantidade, marca, preco, descricao))
+        query = "INSERT INTO produtos (nome, data_validade, quantidade, marca, preco, descricao, sku) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(query, (produto, dataValidade, quantidade, marca, preco, descricao, codigo_sku))
         cnx.commit()
         cursor.close()
         cnx.close()
@@ -341,13 +358,13 @@ def consultarProduto():
 @app.route('/pesquisarProduto', methods=['POST'])
 def pesquisar_produtos():
     try:
-        nome = request.form.get("pesquisa")
+        sku = request.form.get("pesquisa")
 
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor(dictionary=True)
 
-        query = "SELECT * FROM produtos WHERE nome=%s"
-        cursor.execute(query, (nome,))
+        query = "SELECT * FROM produtos WHERE sku=%s"
+        cursor.execute(query, (sku,))
 
         resultados = cursor.fetchall()
 
@@ -363,6 +380,7 @@ def pesquisar_produtos():
 @app.route('/atualizarProduto/<int:id>', methods=['POST', 'GET'])
 def atualizarProduto(id):
     if request.method == 'POST':
+        codigo_sku = request.form['sku']
         produto = request.form['nome']
         dataValidade = request.form['data-validade']
         quantidade = request.form['quantidade']
@@ -372,14 +390,26 @@ def atualizarProduto(id):
 
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
-        query = "UPDATE produtos SET nome=%s, data_validade=%s, quantidade=%s, marca=%s, preco=%s, descricao=%s WHERE id=%s"
-        cursor.execute(query, (produto, dataValidade, quantidade, marca, preco, descricao, id))
+        query = """
+            UPDATE produtos 
+            SET nome=%s, data_validade=%s, quantidade=%s, marca=%s, preco=%s, descricao=%s, sku=%s 
+            WHERE id=%s
+        """
+        cursor.execute(query, (produto, dataValidade, quantidade, marca, preco, descricao, codigo_sku, id))
         cnx.commit()
         cursor.close()
         cnx.close()
-        return redirect('produtos')
+        return redirect(url_for('consultarProduto'))
     
-    return render_template('atualizar-produtos.html')
+    # Carrega os dados do produto para o formulário
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+    cursor.execute("SELECT * FROM produtos WHERE id = %s", (id,))
+    produto = cursor.fetchone()
+    cursor.close()
+    cnx.close()
+
+    return render_template('atualizar-produtos.html', produto = produto)
 
 # Regras de negócio de agendamento
 @app.route('/realizarAgendamento', methods=['POST', 'GET'])
@@ -390,7 +420,6 @@ def realizar_agendamento():
         sessao = request.form['sessao']
         horario = request.form['horario']
         data = request.form['data']
-        data_hora = data + ' ' + horario + ':00'
 
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
@@ -400,7 +429,7 @@ def realizar_agendamento():
             SELECT * FROM agendamento
             WHERE nomeProfissional = %s AND data = %s AND horario = %s
         """
-        cursor.execute(query_verificar_agendamento, (nome_profissional, data_hora))
+        cursor.execute(query_verificar_agendamento, (nome_profissional, data, horario))
         agendamento_existe = cursor.fetchone()
 
         if agendamento_existe:
@@ -410,9 +439,7 @@ def realizar_agendamento():
         query_disponibilidade = """ 
             SELECT d.id_disponibilidade
             FROM disponibilidade d
-            INNER JOIN profissionais p ON
-            p.id = d.profissionais_id 
-            WHERE d.dia = %s AND d.hora = %s AND p.nome = %s
+            WHERE d.dia = %s AND d.hora = %s AND d.profissionais_id = (SELECT id FROM profissionais WHERE nome = %s)
         """
         cursor.execute(query_disponibilidade, (data, horario, nome_profissional))
         disponibilidade = cursor.fetchone()
@@ -422,13 +449,25 @@ def realizar_agendamento():
             return 'Horário não disponível para agendamento.'
         else:
             # Horário está disponível, então inserir na tabela de agendamento
+            query_cliente = "SELECT id FROM clientes WHERE nome = %s"
+            cursor.execute(query_cliente, (nome_cliente,))
+            cliente = cursor.fetchone()
+            if not cliente:
+                return 'Cliente não encontrado.'
+
+            query_profissional = "SELECT id FROM profissionais WHERE nome = %s"
+            cursor.execute(query_profissional, (nome_profissional,))
+            profissional = cursor.fetchone()
+            if not profissional:
+                return 'Profissional não encontrado.'
+
             query_agendamento = """
                 INSERT INTO agendamento(nomeCliente, nomeProfissional, sessao, data, horario, clientes_id, profissionais_id)
-                VALUES (%s, %s, %s, %s, (SELECT id FROM clientes WHERE nome = %s), (SELECT id FROM profissionais WHERE nome = %s))
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
             """
-            cursor.execute(query_agendamento, (nome_cliente, nome_profissional, sessao, data, horario, data_hora))
+            cursor.execute(query_agendamento, (nome_cliente, nome_profissional, sessao, data, horario, cliente[0], profissional[0]))
             cnx.commit()
-            print("Agendamento inserido:", (nome_cliente, nome_profissional, sessao, data, horario, data_hora))
+            print("Agendamento inserido:", (nome_cliente, nome_profissional, sessao, data, horario))
             return redirect('agendamentos')
 
     return render_template('cadastro-agendamento.html')
@@ -484,7 +523,7 @@ def atualizar_agendamento(id):
         else:
             # Horário está disponível, então inserir na tabela de agendamento
             query_agendamento = """
-                "UPDATE agendamento SET nome_cliente=%s, nome_profissional=%s, sessao=%s, data=%s, horario=%s WHERE id=%s"
+                "UPDATE agendamento SET nomeCliente=%s, nomeProfissional=%s, sessao=%s, data=%s, horario=%s WHERE id=%s"
             """
             cursor.execute(query_agendamento, (nome_cliente, nome_profissional, sessao, data, horario))
             cnx.commit()

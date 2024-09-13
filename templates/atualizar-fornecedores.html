@@ -1,11 +1,15 @@
+{% include 'menu.html' %}
 <!DOCTYPE html>
-    <form action="/atualizarFornecedor" method="POST">
-        <label for="nome">Nome do fornecedor:</label>
-        <input type="text" id="nome" name="nome"/> <br>
-        <label for="telefone">Telefone:</label>
-        <input type="text" id="telefone" name="telefone"/> <br>
-        <label for="empresa">Empresa:</label>
-        <input type="text" id="empresa" name="empresa"/> <br>
+<html>
+    <head>
+        <title>Atualização de fornecedores</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+    </head>
+    <form class="atualizacao-dados" action="{{ url_for('atualizarFornecedor', id=fornecedor[0]) }}" method="POST">
+        <input type="text" id="nome" name="nome" value="{{ fornecedor[1] }}"/> <br>
+        <input type="text" id="telefone" name="telefone" value="{{ fornecedor[2] }}"/> <br>
+        <input type="text" id="empresa" name="empresa" value="{{ fornecedor[3] }}"/> <br>
         <button type="submit" value="enviar">Atualizar dados</button>
     </form>   
 </html>

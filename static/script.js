@@ -87,3 +87,25 @@ document.getElementById('botao-buscar').addEventListener('click', function(event
     })
     .catch(error => console.error('Erro:', error));
 });
+
+// Busca por SKU para os produtos
+document.getElementById('botao-buscar').addEventListener('click', function(event) {
+    event.preventDefault(); // Impede o envio do formulário padrão
+
+    const sku = document.getElementById('pesquisa').value;
+
+    fetch('/pesquisarSKU', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            'pesquisa': sku
+        })
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.body.innerHTML = data; // Atualiza o conteúdo da página com os registros
+    })
+    .catch(error => console.error('Erro:', error));
+});

@@ -1,3 +1,4 @@
+{% include 'menu.html' %}
 <!DOCTYPE html>
 <head>
     <title>Novo agendamento</title>
@@ -7,7 +8,7 @@
     <h1 class="cadastro-agendamentos">Agendar consulta</h1>
     <form action="/realizarAgendamento" method="POST">
         <input type="text" id="nomec" name="nomec" placeholder="Nome do cliente"/> <br>
-        <input type="text" id="nomep" name="nomep" placeholder="Nome do profissional"/> <br>
+        <input type="text" id="nomep" name="nomep" placeholder="Nome do profissional"/> <br>        
         <input type="number" id="sessao" name="sessao" placeholder="Sessão"/> <br>
         <input type="time" id="horario" name="horario" placeholder="Horário"/> <br>
         <button type="submit" value="enviar" class="botao">Agendar</button>

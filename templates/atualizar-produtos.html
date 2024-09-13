@@ -1,23 +1,21 @@
+{% include 'menu.html' %}
 <!DOCTYPE html>
+<html lang="pt-BR">
 <head>
+    <meta charset="UTF-8">
+    <title>Atualização de produtos</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1 class="atualizar-produtos">Atualizar produto</h1>
-    <form action="/atualizarProduto" method="POST">
-        <label for="nome">Nome do produto</label>
-        <input type="text" id="nome" name="nome"/> <br>
-        <label for="data-validade">Data de validade</label>
-        <input type="date" id="data-validade" name="data-validade"/> <br>
-        <label for="quantidade">Quantidade</label>
-        <input type="number" id="quantidade" name="quantidade"/> <br>
-        <label for="marca">Marca</label>
-        <input type="text" id="marca" name="marca"/> <br>
-        <label for="preco">Preço</label>
-        <input type="number" name="preco" id="preco" min="0" step="0.01" /> <br>
-        <label for="descricao">Descrição</label>
-        <input type="text" id="descricao" name="descricao"/> <br>
-        <button type="submit" value="enviar" class="botao">Adicionar produto</button>
+    <form class="atualizacao-dados" action="{{ url_for('atualizarProduto', id=produto[0]) }}" method="POST">
+        <input type="text" id="nome" name="nome" placeholder="Nome do produto" value="{{ produto[1] }}"/> <br>
+        <input type="date" id="data-validade" name="data-validade" value="{{ produto[2] }}"/> <br>
+        <input type="number" id="quantidade" name="quantidade" placeholder="Quantidade" value="{{ produto[3] }}"/> <br>
+        <input type="text" id="marca" name="marca" placeholder="Marca" value="{{ produto[4] }}"/> <br>
+        <input type="number" id="preco" name="preco" min="0" step="0.01" placeholder="Preço" value="{{ produto[5] }}" /> <br>
+        <input type="text" id="descricao" name="descricao" placeholder="Descrição" value="{{ produto[6] }}"/> <br>
+        <input type="number" id="sku" name="sku" placeholder="Código do produto" value="{{ produto[7] }}"/> <br>
+        <button type="submit" value="enviar" class="botao">Atualizar dados</button>
     </form>   
 </body>
 </html>

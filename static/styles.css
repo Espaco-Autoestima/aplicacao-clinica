@@ -137,7 +137,7 @@ h2.menu-title {
     flex-direction: column;
     border: 1px solid rgb(224, 224, 224);
     border-radius: 15px;
-    width: 15%;
+    width: 16%;
     height: 100%;
     background-color: #FFFFFF;
     padding: 0;
@@ -146,7 +146,7 @@ h2.menu-title {
 }
 
 /* Links do submenu */
-a.menu-clientes, a.menu-profissionais, a.menu-pagamentos, 
+a.menu-agendamentos, a.menu-clientes, a.menu-profissionais, a.menu-fornecedores, a.menu-pagamentos, 
 a.menu-procedimentos, a.menu-produtos {
     font-size: 14px;
     background-color: #FFFFFF;
@@ -155,15 +155,14 @@ a.menu-procedimentos, a.menu-produtos {
 }
 
 /* Efeito ao passar o mouse no submenu */
-a.menu-clientes:hover, a.menu-profissionais:hover, a.menu-pagamentos:hover, 
-a.menu-procedimentos:hover, a.menu-produtos:hover {
+a.menu-agendamentos:hover, a.menu-clientes:hover, a.menu-profissionais:hover, a.menu-fornecedores:hover, 
+a.menu-pagamentos:hover, a.menu-procedimentos:hover, a.menu-produtos:hover {
     background-color: #CEFDF1;
     transition: all 1s ease-out;
 }
 
 /* Links do menu */
-a.menu-home, a.menu-agenda, 
-a.menu-agendamento {
+a.menu-home, a.menu-agenda {
     font-size: 16px;
     background-color: #FFFFFF;
     text-decoration: none;
@@ -171,9 +170,26 @@ a.menu-agendamento {
 }
 
 /* Efeito ao passar o mouse no menu */
-a.menu-home:hover, a.menu-agenda:hover, 
-a.menu-agendamento:hover {
+a.menu-home:hover, a.menu-agenda:hover {
     border-radius: 3px;
+    background-color: #CEFDF1;
+    transition: all 1s ease-out;
+}
+
+/* Links do submenu de listagem dos cadastros */
+a.lista-clientes-cadastrados, a.lista-profissionais-cadastrados, 
+a.lista-fornecedores-cadastrados, a.lista-pagamentos-cadastrados, 
+a.lista-procedimentos-cadastrados, a.lista-produtos-cadastrados {
+    font-size: 14px;
+    background-color: #FFFFFF;
+    text-decoration: none;
+    color: #000;
+}
+
+/* Efeito ao passar o mouse no submenu de listagem de cadastros */
+a.lista-clientes-cadastrados:hover, a.lista-profissionais-cadastrados:hover, 
+a.lista-fornecedores-cadastrados:hover, a.lista-pagamentos-cadastrados:hover, 
+a.lista-procedimentos-cadastrados:hover, a.lista-produtos-cadastrados:hover {
     background-color: #CEFDF1;
     transition: all 1s ease-out;
 }
@@ -217,4 +233,14 @@ table.registro-agendamentos {
     font-size: 18px;
     border: none;
     border-radius: 8px;
+}
+
+/* Setas do campo number do formulário de cadastro de produtos */
+input[type=number]::-webkit-inner-spin-button { 
+    -webkit-appearance: none;
+}
+
+input[type=number] { 
+   -moz-appearance: textfield;
+   appearance: textfield;
 }

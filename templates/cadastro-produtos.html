@@ -1,3 +1,4 @@
+{% include 'menu.html' %}
 <!DOCTYPE html>
 <head>
     <title>Cadastro de produtos</title>
@@ -6,11 +7,12 @@
 <body>
     <h1 class="cadastro-produtos">Cadastrar produto</h1>
     <form action="/cadastrarProduto" method="POST">
+        <input type="number" id="sku" name="sku" placeholder="Código do produto"/> <br>
         <input type="text" id="nome" name="nome" placeholder="Nome do produto"/> <br>
         <input type="date" id="data-validade" name="data-validade" placeholder="Data de validade"/> <br>
         <input type="number" id="quantidade" name="quantidade" placeholder="Quantidade"/> <br>
         <input type="text" id="marca" name="marca" placeholder="Marca"/> <br>
-        <input type="number" name="preco" id="preco" min="0" step="0.01" placeholder="Preço" /> <br>
+        <input type="number" id="preco" name="preco" min="0" step="0.01" placeholder="Preço" /> <br>
         <input type="text" id="descricao" name="descricao"placeholder="Descrição" /> <br>
         <button type="submit" value="enviar" class="botao">Adicionar produto</button>
     </form>   
