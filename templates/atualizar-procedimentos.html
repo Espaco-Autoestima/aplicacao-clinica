@@ -1,0 +1,16 @@
+{% include 'menu.html' %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Atualização de procedimentos</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+    </head>
+    <body>
+        <form class="atualizacao-dados" action="{{ url_for('atualizarProcedimento', id=procedimento[0]) }}" method="POST">
+            <input type="text" id="procedimento" name="procedimento" value="{{ procedimento[1] }}"/> <br>
+            <input type="text" id="descricao" name="descricao" value="{{ procedimento[2] }}"/> <br>
+            <button type="submit" value="enviar">Atualizar dados</button>
+        </form>   
+    </body>
+</html>

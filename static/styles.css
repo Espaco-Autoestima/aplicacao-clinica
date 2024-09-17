@@ -197,7 +197,7 @@ a.lista-procedimentos-cadastrados:hover, a.lista-produtos-cadastrados:hover {
 /* Título listas */
 h1.lista-de-clientes, h1.lista-de-profissionais, 
 h1.lista-de-fornecedores, h1.lista-de-produtos, 
-h1.lista-de-agendamentos {
+h1.lista-de-agendamentos, h1.lista-de-procedimentos {
     padding-top: 40px;
     margin-left: auto;
     margin-right: auto;
@@ -207,7 +207,7 @@ h1.lista-de-agendamentos {
 /* Tabelas de registros */
 table.registro-clientes, table.registro-profissionais, 
 table.registro-fornecedores, table.registro-produtos,
-table.registro-agendamentos {
+table.registro-agendamentos, table.registro-procedimentos {
     margin-left: auto;
     margin-right: auto;
     align-items: center;

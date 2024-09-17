@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 import mysql.connector
 
 app = Flask(__name__)
@@ -36,6 +36,7 @@ def login():
             session['loggedin'] = True
             session['id'] = conta[0]
             session['email'] = conta[1]
+            session['senha'] = conta[2]
             return redirect(url_for('home'))
         else:
             # Caso a conta não exista ou se algum dado estiver incorreto
@@ -67,6 +68,7 @@ def signUp():
         else:
             # Inserindo os dados no banco
             query = "INSERT INTO contas (nome_usuario, telefone, email, senha) VALUES (%s, %s, %s, %s)"
+        
             cursor.execute(query, (nome, telefone, email, senha))
             cnx.commit()
             cursor.close()
@@ -75,6 +77,11 @@ def signUp():
             return redirect(url_for('login'))
     
     return render_template('cadastro.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('login')
 
 # Página inicial apenas para usuários logados
 @app.route('/home')
@@ -414,61 +421,78 @@ def atualizarProduto(id):
 # Regras de negócio de agendamento
 @app.route('/realizarAgendamento', methods=['POST', 'GET'])
 def realizar_agendamento():
-    if request.method == 'POST' and 'nomec' in request.form and 'nomep' in request.form and 'sessao' in request.form and 'horario' in request.form and 'data' in request.form: 
+    if request.method == 'POST' and 'nomec' in request.form and 'nomep' in request.form and 'sessao' in request.form and 'horario' in request.form and 'data' in request.form:
         nome_cliente = request.form['nomec']
         nome_profissional = request.form['nomep']
         sessao = request.form['sessao']
         horario = request.form['horario']
         data = request.form['data']
 
-        cnx = mysql.connector.connect(**config)
-        cursor = cnx.cursor()
+        try:
+            cnx = mysql.connector.connect(**config)
+            cursor = cnx.cursor(dictionary=True)
 
-        # Verifica se o profissional já tem um agendamento na mesma data e hora
-        query_verificar_agendamento = """
-            SELECT * FROM agendamento
-            WHERE nomeProfissional = %s AND data = %s AND horario = %s
-        """
-        cursor.execute(query_verificar_agendamento, (nome_profissional, data, horario))
-        agendamento_existe = cursor.fetchone()
+            # Verifica se o profissional já tem um agendamento na mesma data e hora
+            query_verificar_agendamento = """
+                SELECT * FROM agendamento
+                WHERE nomeProfissional = %s AND data = %s AND horario = %s
+            """
+            cursor.execute(query_verificar_agendamento, (nome_profissional, data, horario))
+            agendamento_existe = cursor.fetchone()
 
-        if agendamento_existe:
-            return 'Este profissional já tem um agendamento nesta data e horário.'
+            if agendamento_existe:
+                flash('Este profissional já tem um agendamento nesta data e horário.', 'warning')
+                return redirect(url_for('agendar'))
 
-        # Verifica na tabela de disponibilidades no MySQL se possuem a data com o profissional disponível
-        query_disponibilidade = """ 
-            SELECT d.id_disponibilidade
-            FROM disponibilidade d
-            WHERE d.dia = %s AND d.hora = %s AND d.profissionais_id = (SELECT id FROM profissionais WHERE nome = %s)
-        """
-        cursor.execute(query_disponibilidade, (data, horario, nome_profissional))
-        disponibilidade = cursor.fetchone()
+            # Verifica na tabela de disponibilidades no MySQL se possuem a data com o profissional disponível
+            query_disponibilidade = """ 
+                SELECT d.id_disponibilidade
+                FROM disponibilidade d
+                WHERE d.dia = %s AND d.hora = %s AND d.profissionais_id = (SELECT id FROM profissionais WHERE nome = %s)
+            """
+            cursor.execute(query_disponibilidade, (data, horario, nome_profissional))
+            disponibilidade = cursor.fetchone()
 
-        if disponibilidade:
-            # Horário não disponível
-            return 'Horário não disponível para agendamento.'
-        else:
-            # Horário está disponível, então inserir na tabela de agendamento
+            if disponibilidade:
+                flash('Horário não disponível para agendamento.', 'error')
+                return redirect(url_for('agendar'))
+
+            # Verifica se o cliente e o profissional existem
             query_cliente = "SELECT id FROM clientes WHERE nome = %s"
             cursor.execute(query_cliente, (nome_cliente,))
             cliente = cursor.fetchone()
             if not cliente:
-                return 'Cliente não encontrado.'
+                flash('Cliente não encontrado.', 'error')
+                return redirect(url_for('clientes'))
 
             query_profissional = "SELECT id FROM profissionais WHERE nome = %s"
             cursor.execute(query_profissional, (nome_profissional,))
             profissional = cursor.fetchone()
             if not profissional:
-                return 'Profissional não encontrado.'
+                flash('Profissional não encontrado.', 'error')
+                return redirect(url_for('profissionais'))
 
+            # Insere o novo agendamento
             query_agendamento = """
                 INSERT INTO agendamento(nomeCliente, nomeProfissional, sessao, data, horario, clientes_id, profissionais_id)
                 VALUES (%s, %s, %s, %s, %s, %s, %s)
             """
             cursor.execute(query_agendamento, (nome_cliente, nome_profissional, sessao, data, horario, cliente[0], profissional[0]))
+
+            # Comita a transação
             cnx.commit()
-            print("Agendamento inserido:", (nome_cliente, nome_profissional, sessao, data, horario))
-            return redirect('agendamentos')
+            flash('Agendamento realizado com sucesso!', 'success')
+            return redirect(url_for('agendar'))
+
+        except mysql.connector.Error as err:
+            flash(f'Erro ao agendar: {err}', 'error')
+            return redirect(url_for('agendar'))
+
+        finally:
+            if cursor:
+                cursor.close()
+            if cnx:
+                cnx.close()
 
     return render_template('cadastro-agendamento.html')
 
@@ -531,6 +555,83 @@ def atualizar_agendamento(id):
             return redirect('agendamentos')
     
     return render_template('atualizar-agendamentos.html')
+
+# Regras de negócio de procedimentos 
+@app.route('/cadastrarProcedimento', methods=['POST', 'GET'])
+def adicionarProcedimento():
+    if request.method == 'POST' and 'procedimento' in request.form and 'descricao' in request.form:
+        nome = request.form['procedimento']
+        descricao = request.form['descricao']
+
+        cnx = mysql.connector.connect(**config)
+        cursor = cnx.cursor()
+
+        # Inserindo dados no banco
+        query = "INSERT INTO procedimentos (nome, descricao) VALUES (%s, %s)"
+        cursor.execute(query, (nome, descricao))
+        cnx.commit()
+        cursor.close()
+        cnx.close()
+        return redirect('procedimentos')
+    
+    return render_template('cadastro-procedimentos.html')
+
+@app.route('/procedimentos', methods=['POST', 'GET'])
+def consultarProcedimento():
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+    cursor.execute("SELECT * FROM procedimentos")
+    procedimentos = cursor.fetchall()
+    return render_template('procedimentos.html', procedimentos = procedimentos)
+
+@app.route('/pesquisarProcedimento', methods=['POST'])
+def pesquisar_procedimento():
+    try:
+        nome = request.form.get("pesquisa")
+
+        cnx = mysql.connector.connect(**config)
+        cursor = cnx.cursor(dictionary=True)
+
+        # Usando placeholders para evitar SQL Injection
+        query = "SELECT * FROM procedimentos WHERE nome=%s"
+        cursor.execute(query, (nome,))
+
+        resultados = cursor.fetchall()
+
+        return render_template('procedimentos.html', resultados = resultados)
+    
+    except mysql.connector.Error as err:
+        return f"Tente novamente mais tarde: {err}", 500
+    
+    finally:
+        cursor.close()
+        cnx.close()
+
+@app.route('/atualizarProcedimento/<int:id>', methods=['POST', 'GET'])
+def atualizarProcedimento(id):
+    if request.method == 'POST':
+        nome = request.form['procedimento']
+        descricao = request.form['descricao']
+
+        cnx = mysql.connector.connect(**config)
+        cursor = cnx.cursor()
+        query = "UPDATE procedimentos SET nome=%s, descricao=%s WHERE id=%s"
+        cursor.execute(query, (nome, descricao, id))
+        cnx.commit()
+        cursor.close()
+        cnx.close()
+        return redirect(url_for('consultarProcedimento'))
+    
+    # Carrega os dados do procedimento para o formulário
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+    cursor.execute("SELECT * FROM procedimentos WHERE id = %s", (id,))
+    procedimentoList = cursor.fetchone()
+    cursor.close()
+    cnx.close()
+
+    return render_template('atualizar-procedimentos.html', procedimento = procedimentoList)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

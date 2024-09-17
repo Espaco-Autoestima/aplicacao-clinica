@@ -1,21 +1,49 @@
 {% include 'menu.html' %}
 <!DOCTYPE html>
-    <title>Procedimentos cadastrados</title>
+    <html>
+    <head>
+        <title>Procedimentos cadastrados</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+    </head>
     <body>
-        <h1>Lista de procedimentos</h1>
-        <table>
+        <form action="/pesquisarProcedimento" method="POST">
+            <label for="pesquisa">Pesquisar pelo procedimento: </label>
+            <input type="text" id="pesquisa" name="pesquisa" class="pesquisa-input-nome" required>
+            <button id="botao-buscar" type="submit">Pesquisar</button>
+        </form>
+        <h1 class="lista-de-procedimentos">Lista de procedimentos</h1>
+        <table class="registro-procedimentos">
             <tr>
                 <th>ID</th>
-                <th>Nome</th>
+                <th>Procedimento</th>
                 <th>Descrição</th>
+                <th>Ações</th>
             </tr>
-            {% for procedimento in procedimentos %}
+            {% if resultados %}
+            {% for resultado in resultados %}
             <tr>
-                <th>{{ procedimento[0] }}</th>
-                <th>{{ procedimento[1] }}</th>
-                <th>{{ procedimento[2] }}</th>
+                <td>{{ resultado.id }}</td>
+                <td>{{ resultado.nome }}</td>
+                <td>{{ resultado.descricao }}</td>
             </tr>
             {% endfor %}
+            {% else %}
+            {% for procedimento in procedimentos %}
+            <tr>
+                <td>{{ procedimento[0] }}</td>
+                <td>{{ procedimento[1] }}</td>
+                <td>{{ procedimento[2] }}</td>
+                <td>{{ procedimento[3] }}</td>
+                <td>{{ procedimento[4] }}</td>
+                <td>{{ procedimento[5] }}</td>
+                <td>{{ procedimento[6] }}</td>
+                <td>
+                    <a href="{{ url_for('atualizarProcedimento', id=procedimento[0]) }}">Editar</a>
+                </td>
+            </tr>
+            {% endfor %}
+            {% endif %}
         </table>
     </body>
 </html>
