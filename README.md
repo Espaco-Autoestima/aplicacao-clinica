@@ -12,8 +12,9 @@ Aplicação desenvolvida especificamente para uma clínica de estética chamada 
 
 ## Ferramentas 
 A linguagem back-end responsável pelas regras de negócio e lógica da aplicação em questão é o **[Python](https://docs.python.org/pt-br/3/tutorial/)**:
-* O framework web utilizado é **[Flask]([https://docs.djangoproject.com/en/5.0/](https://flask.palletsprojects.com/en/3.0.x/))** que permite que a construção de aplicações Web de maneira simples e objetiva com a capacidade de escalar para aplicações complexas;
-* Neste projeto, utilizamos esse framework para criar páginas web dinâmicas através de rotas, pois facilita a criação de endpoints e a integração com bancos de dados, tornando o desenvolvimento do backend eficiente e organizado.
+* O framework web utilizado é **[Flask](https://flask.palletsprojects.com/en/3.0.x/)** que permite que a construção de aplicações Web de maneira simples e objetiva com a capacidade de escalar para aplicações complexas;
+* Neste projeto, utilizamos esse framework para criar páginas web dinâmicas através de rotas, pois facilita a criação de endpoints e a integração com bancos de dados, tornando o desenvolvimento do backend eficiente e organizado;
+* Para a prototipação e design das telas do projeto, está sendo utilizado o **[Figma](https://www.figma.com/design/VEhO4SsuqNKRqIPCCrhl0K/Espaço-Autoestima-Prototipos?node-id=0-1&node-type=canvas&t=mEEwngDu1dxQ5xk9-0)**.
 
 O SGBD utilizado nesse projeto é o MySQL, que por sua vez, está sendo executado em um container Docker, por meio de uma imagem na versão 5.7. Abaixo, segue os comandos para instalação do Flask, da biblioteca de conexão com o banco e a construção do container Docker:
 
