@@ -249,6 +249,10 @@ def atualizarProfissional(id):
 
     return render_template('atualizar-profissionais.html', profissional = profissional)
 
+@app.route('/excluirProfissional', methods=['POST', 'GET'])
+# def excluirProfissional():
+#     if request
+
 # Rotas das operações básicas do banco (CRUD) de fornecedores, exceto DELETE
 @app.route('/cadastrarFornecedor', methods=['POST', 'GET'])
 def adicionarFornecedor():
@@ -584,8 +588,9 @@ def consultarProcedimento():
     procedimentos = cursor.fetchall()
     return render_template('procedimentos.html', procedimentos = procedimentos)
 
+# Pesquisar procedimentos pelo nome
 @app.route('/pesquisarProcedimento', methods=['POST'])
-def pesquisar_procedimento():
+def pesquisar_procedimentos():
     try:
         nome = request.form.get("pesquisa")
 
@@ -593,8 +598,8 @@ def pesquisar_procedimento():
         cursor = cnx.cursor(dictionary=True)
 
         # Usando placeholders para evitar SQL Injection
-        query = "SELECT * FROM procedimentos WHERE nome=%s"
-        cursor.execute(query, (nome,))
+        query = "SELECT * FROM procedimentos WHERE nome LIKE %s"
+        cursor.execute(query, (f"%{nome}%",))
 
         resultados = cursor.fetchall()
 
@@ -631,7 +636,6 @@ def atualizarProcedimento(id):
     cnx.close()
 
     return render_template('atualizar-procedimentos.html', procedimento = procedimentoList)
-
 
 if __name__ == "__main__":
     app.run(debug=True)
