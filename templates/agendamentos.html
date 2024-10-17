@@ -13,7 +13,10 @@
             <th>Cliente</th>
             <th>Profissional</th>
             <th>Sessão</th>
+            <th>Data</th>
             <th>Horário</th>
+            <th class="column-cliente-hidden">ID do cliente</th>
+            <th class="column-profissional-hidden">ID do profissional</th>
         </tr>
         {% for agendamento in agendamentos %}
         <tr>
@@ -21,9 +24,10 @@
             <td>{{ agendamento[1] }}</td> <!-- Nome do Cliente -->
             <td>{{ agendamento[2] }}</td> <!-- Nome do Profissional -->
             <td>{{ agendamento[3] }}</td> <!-- Sessão -->
-            <td>{{ agendamento[4] }}</td> 
-            <td>{{ agendamento[5] }}</td> <!-- Data e Hora -->
-            <td>{{ agendamento[6] }}</td> <!-- Data e Hora -->
+            <td>{{ agendamento[4] }}</td> <!-- Data -->
+            <td>{{ agendamento[5] }}</td> <!-- Hora -->
+            <td class="column-cliente-show">{{ agendamento[6] }}</td> <!-- ID do cliente -->
+            <td class="column-profissional-show">{{ agendamento[7] }}</td> <!-- ID do profissional -->
         </tr>
         {% endfor %}
     </table>

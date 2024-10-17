@@ -7,7 +7,7 @@
         <script src="{{ url_for('static', filename='script.js') }}"></script>
     </head>
     <body>
-        <form action="/pesquisarCliente" method="POST">
+        <form action="{{ url_for('pesquisar_clientes')}}" method="POST">
             <label for="pesquisa">Pesquisar pelo e-mail: </label>
             <input type="text" id="pesquisa" name="pesquisa" class="pesquisa-input-email" required>
             <button id="botao-buscar" type="submit">Pesquisar</button>

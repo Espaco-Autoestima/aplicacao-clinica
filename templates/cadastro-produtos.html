@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1 class="cadastro-produtos">Cadastrar produto</h1>
-    <form action="/cadastrarProduto" method="POST">
+    <form action="{{ url_for('adicionarProduto')}}" method="POST">
         <input type="number" id="sku" name="sku" placeholder="Código do produto"/> <br>
         <input type="text" id="nome" name="nome" placeholder="Nome do produto"/> <br>
         <input type="date" id="data-validade" name="data-validade" placeholder="Data de validade"/> <br>

@@ -249,10 +249,6 @@ def atualizarProfissional(id):
 
     return render_template('atualizar-profissionais.html', profissional = profissional)
 
-@app.route('/excluirProfissional', methods=['POST', 'GET'])
-# def excluirProfissional():
-#     if request
-
 # Rotas das operações básicas do banco (CRUD) de fornecedores, exceto DELETE
 @app.route('/cadastrarFornecedor', methods=['POST', 'GET'])
 def adicionarFornecedor():
@@ -425,7 +421,7 @@ def atualizarProduto(id):
 # Regras de negócio de agendamento
 @app.route('/realizarAgendamento', methods=['POST', 'GET'])
 def realizar_agendamento():
-    if request.method == 'POST' and 'nomec' in request.form and 'nomep' in request.form and 'sessao' in request.form and 'horario' in request.form and 'data' in request.form:
+    if request.method == 'POST':
         nome_cliente = request.form['nomec']
         nome_profissional = request.form['nomep']
         sessao = request.form['sessao']
@@ -445,52 +441,56 @@ def realizar_agendamento():
             agendamento_existe = cursor.fetchone()
 
             if agendamento_existe:
-                flash('Este profissional já tem um agendamento nesta data e horário.', 'warning')
-                return redirect(url_for('agendar'))
+                flash('Este profissional já possui um agendamento nesta data e horário', 'warning')
+                return redirect(url_for('realizar_agendamento'))
 
             # Verifica na tabela de disponibilidades no MySQL se possuem a data com o profissional disponível
             query_disponibilidade = """ 
                 SELECT d.id_disponibilidade
                 FROM disponibilidade d
-                WHERE d.dia = %s AND d.hora = %s AND d.profissionais_id = (SELECT id FROM profissionais WHERE nome = %s)
+                WHERE d.dia = %s AND d.hora = %s AND d.profissionais_id = (
+                    SELECT id FROM profissionais WHERE nome = %s LIMIT 1
+                )
             """
+            
             cursor.execute(query_disponibilidade, (data, horario, nome_profissional))
             disponibilidade = cursor.fetchone()
 
-            if disponibilidade:
+            if not disponibilidade:
                 flash('Horário não disponível para agendamento.', 'error')
-                return redirect(url_for('agendar'))
+                return redirect(url_for('realizar_agendamento'))
 
-            # Verifica se o cliente e o profissional existem
+            # Verifica se o cliente existe
             query_cliente = "SELECT id FROM clientes WHERE nome = %s"
             cursor.execute(query_cliente, (nome_cliente,))
             cliente = cursor.fetchone()
             if not cliente:
                 flash('Cliente não encontrado.', 'error')
-                return redirect(url_for('clientes'))
+                return redirect(url_for('consultarCliente'))
 
+            # Verifica se o profissional existe
             query_profissional = "SELECT id FROM profissionais WHERE nome = %s"
             cursor.execute(query_profissional, (nome_profissional,))
             profissional = cursor.fetchone()
             if not profissional:
-                flash('Profissional não encontrado.', 'error')
-                return redirect(url_for('profissionais'))
+                flash('Profissional não encontrado', 'error')
+                return redirect(url_for('consultarProfissional'))
 
             # Insere o novo agendamento
             query_agendamento = """
                 INSERT INTO agendamento(nomeCliente, nomeProfissional, sessao, data, horario, clientes_id, profissionais_id)
                 VALUES (%s, %s, %s, %s, %s, %s, %s)
             """
-            cursor.execute(query_agendamento, (nome_cliente, nome_profissional, sessao, data, horario, cliente[0], profissional[0]))
+            cursor.execute(query_agendamento, (nome_cliente, nome_profissional, sessao, data, horario, cliente['id'], profissional['id']))
 
-            # Comita a transação
+            # Realizar o commit da transação
             cnx.commit()
             flash('Agendamento realizado com sucesso!', 'success')
-            return redirect(url_for('agendar'))
+            return redirect(url_for('consultar_agendamento'))
 
         except mysql.connector.Error as err:
-            flash(f'Erro ao agendar: {err}', 'error')
-            return redirect(url_for('agendar'))
+            flash(f'Não foi possível agendar o cliente no momento: {err}', 'error')
+            return redirect(url_for('realizar_agendamento'))
 
         finally:
             if cursor:

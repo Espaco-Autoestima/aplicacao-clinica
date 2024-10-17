@@ -9,12 +9,12 @@
 /* Sempre que possível, utilizar o formato woff2 e woff para fontes */
 @font-face {
     font-family: "Oranienbaum", serif;
-    src: url(/fonts/Oranienbaum-Regular.ttf) format('ttf');
+    src: url(../fonts/Oranienbaum-Regular.ttf) format('ttf');
 }
 
 @font-face {
     font-family: "Montserrat", serif;
-    src: url(/fonts/Montserrat-Medium.ttf) format('ttf');
+    src: url(../fonts/Montserrat-Medium.ttf) format('ttf');
 }
 
 /* Global */
@@ -60,7 +60,7 @@ button.botao {
     display: block;
 }
 
-/* Links do cadastro e login */
+/* Links do cadastro e login em suas respectivas páginas */
 a.link-login, a.link-cadastro {
     text-decoration: none;
     color: #000;
@@ -147,7 +147,7 @@ h2.menu-title {
 
 /* Links do submenu */
 a.menu-agendamentos, a.menu-clientes, a.menu-profissionais, a.menu-fornecedores, a.menu-pagamentos, 
-a.menu-procedimentos, a.menu-produtos {
+a.menu-procedimentos, a.menu-produtos, a.logout {
     font-size: 14px;
     background-color: #FFFFFF;
     text-decoration: none;
@@ -162,7 +162,7 @@ a.menu-pagamentos:hover, a.menu-procedimentos:hover, a.menu-produtos:hover {
 }
 
 /* Links do menu */
-a.menu-home, a.menu-agenda {
+a.menu-home, a.menu-agenda, a.logout {
     font-size: 16px;
     background-color: #FFFFFF;
     text-decoration: none;
@@ -177,9 +177,10 @@ a.menu-home:hover, a.menu-agenda:hover {
 }
 
 /* Links do submenu de listagem dos cadastros */
-a.lista-clientes-cadastrados, a.lista-profissionais-cadastrados, 
+a.lista-agendamentos-cadastrados, a.lista-clientes-cadastrados, a.lista-profissionais-cadastrados, 
 a.lista-fornecedores-cadastrados, a.lista-pagamentos-cadastrados, 
-a.lista-procedimentos-cadastrados, a.lista-produtos-cadastrados {
+a.lista-procedimentos-cadastrados, a.lista-produtos-cadastrados, 
+a.logout {
     font-size: 14px;
     background-color: #FFFFFF;
     text-decoration: none;
@@ -187,7 +188,7 @@ a.lista-procedimentos-cadastrados, a.lista-produtos-cadastrados {
 }
 
 /* Efeito ao passar o mouse no submenu de listagem de cadastros */
-a.lista-clientes-cadastrados:hover, a.lista-profissionais-cadastrados:hover, 
+a.lista-agendamentos-cadastrados:hover, a.lista-clientes-cadastrados:hover, a.lista-profissionais-cadastrados:hover, 
 a.lista-fornecedores-cadastrados:hover, a.lista-pagamentos-cadastrados:hover, 
 a.lista-procedimentos-cadastrados:hover, a.lista-produtos-cadastrados:hover {
     background-color: #CEFDF1;
@@ -212,6 +213,11 @@ table.registro-agendamentos, table.registro-procedimentos {
     margin-right: auto;
     align-items: center;
     border-spacing: 20px;
+}
+
+th.column-cliente-hidden, th.column-profissional-hidden, td.column-cliente-show,
+td.column-profissional-show {
+    display: none;
 }
 
 /* Campo de pesquisa */
