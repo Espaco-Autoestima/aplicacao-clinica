@@ -2,8 +2,6 @@ from app import app
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import mysql.connector
 
-app = Flask(__name__)
-
 app.secret_key = 'secret-key-ea'
 
 # Configuração e conexão do banco de dados 
@@ -17,7 +15,7 @@ config = {
 
 @app.route('/')
 def index():
-    return render_template('cadastro-agendamento.html')
+    return render_template('login.html')
 
 # Rotas de login de usuários
 @app.route('/login', methods=['GET', 'POST'])
@@ -32,6 +30,7 @@ def login():
         query = "SELECT * FROM contas WHERE email = %s AND senha = %s"
         cursor.execute(query, (email, senha))
         conta = cursor.fetchone()
+
         # Verifica se existe a conta. Se existir, redireciona para a home
         if conta:
             session['loggedin'] = True
