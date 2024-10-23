@@ -23,7 +23,7 @@ def realizar_agendamento():
         data = request.form['data']
 
         try:
-            cnx = mysql.connector.connect(**config)
+            cnx = mysql.connector.connect(**config, buffered=True)
             cursor = cnx.cursor(dictionary=True)
 
             # Verifica se o profissional já tem um agendamento na mesma data e hora
@@ -36,6 +36,8 @@ def realizar_agendamento():
 
             if agendamento_existe:
                 flash('Este profissional já possui um agendamento nesta data e horário', 'warning')
+                cursor.close()
+                cnx.close()
                 return redirect(url_for('realizar_agendamento'))
 
             # Verifica na tabela de disponibilidades no MySQL se possuem a data com o profissional disponível
@@ -52,6 +54,8 @@ def realizar_agendamento():
 
             if not disponibilidade:
                 flash('Horário não disponível para agendamento.', 'error')
+                cursor.close()
+                cnx.close()
                 return redirect(url_for('realizar_agendamento'))
 
             # Verifica se o cliente existe
@@ -60,6 +64,8 @@ def realizar_agendamento():
             cliente = cursor.fetchone()
             if not cliente:
                 flash('Cliente não encontrado.', 'error')
+                cursor.close()
+                cnx.close()
                 return redirect(url_for('consultarCliente'))
 
             # Verifica se o profissional existe
@@ -68,6 +74,8 @@ def realizar_agendamento():
             profissional = cursor.fetchone()
             if not profissional:
                 flash('Profissional não encontrado', 'error')
+                cursor.close()
+                cnx.close()
                 return redirect(url_for('consultarProfissional'))
 
             # Insere o novo agendamento
@@ -80,17 +88,19 @@ def realizar_agendamento():
             # Realizar o commit da transação
             cnx.commit()
             flash('Agendamento realizado com sucesso!', 'success')
+            cursor.close()
+            cnx.close()
             return redirect(url_for('consultar_agendamento'))
 
         except mysql.connector.Error as err:
             flash(f'Não foi possível agendar o cliente no momento: {err}', 'error')
+            cursor.close()
+            cnx.close()
             return redirect(url_for('realizar_agendamento'))
 
         finally:
-            if cursor:
-                cursor.close()
-            if cnx:
-                cnx.close()
+            cursor.close()
+            cnx.close()
 
     return render_template('cadastro-agendamento.html')
 
@@ -100,57 +110,74 @@ def consultar_agendamento():
     cursor = cnx.cursor()
     cursor.execute("SELECT * FROM agendamento")
     agendamentos = cursor.fetchall()
-    print("Agendamentos recuperados:", agendamentos)  # Log para verificar os agendamentos recuperados
     return render_template('agendamentos.html', agendamentos=agendamentos)
 
 # Implementação da regra de negócio de atualizar agendamentos
 @app.route('/atualizarAgendamentos/<int:id>', methods=['POST', 'GET'])
 def atualizar_agendamento(id):
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+    
     if request.method == 'POST':
         nome_cliente = request.form['nomec']
         nome_profissional = request.form['nomep']
         sessao = request.form['sessao']
         horario = request.form['horario']
         data = request.form['data']
-        data_hora = data + ' ' + horario + ':00'
 
-        cnx = mysql.connector.connect(**config)
-        cursor = cnx.cursor()
-
-        # Verifica se o profissional já tem um agendamento na mesma data e hora
-        query_verificar_agendamento = """
-            SELECT * FROM agendamento
-            WHERE nomeProfissional = %s AND data = %s AND horario = %s
-        """
-        cursor.execute(query_verificar_agendamento, (nome_profissional, data_hora, id))
-        agendamento_existe = cursor.fetchone()
-
-        if agendamento_existe:
-            return 'Este profissional já tem um agendamento nesta data e horário.'
-
-        # Verifica na tabela de disponibilidades no MySQL se possuem a data com o profissional disponível
-        query_disponibilidade = """ 
-            SELECT d.id_disponibilidade
-            FROM disponibilidade d
-            INNER JOIN profissionais p ON
-            p.id = d.profissionais_id 
-            WHERE d.dia = %s AND d.hora = %s AND p.nome = %s
-        """
-        cursor.execute(query_disponibilidade, (data, horario, nome_profissional))
-        disponibilidade = cursor.fetchone()
-
-        if disponibilidade:
-            # Horário não disponível
-            return 'Horário não disponível para agendamento.'
-        else:
-            # Horário está disponível, então inserir na tabela de agendamento
-            query_agendamento = """
-                "UPDATE agendamento SET nomeCliente=%s, nomeProfissional=%s, sessao=%s, data=%s, horario=%s WHERE id=%s"
+        try:
+            # Verifica se o profissional já tem um agendamento na mesma data e hora, exceto o atual
+            query_verificar_agendamento = """
+                SELECT * FROM agendamento
+                WHERE nomeProfissional = %s AND data = %s AND horario = %s AND id != %s
             """
-            cursor.execute(query_agendamento, (nome_cliente, nome_profissional, sessao, data, horario))
+            cursor.execute(query_verificar_agendamento, (nome_profissional, data, horario, id))
+            agendamento_existe = cursor.fetchone()
+
+            if agendamento_existe:
+                flash('Este profissional já tem um agendamento nesta data e horário', 'error')
+                return redirect(url_for('consultar_agendamento'))
+
+            # Verifica na tabela de disponibilidades no MySQL se possuem a data com o profissional disponível
+            query_disponibilidade = """ 
+                SELECT d.id_disponibilidade
+                FROM disponibilidade d
+                INNER JOIN profissionais p ON p.id = d.profissionais_id 
+                WHERE d.dia = %s AND d.hora = %s AND p.nome = %s
+            """
+            cursor.execute(query_disponibilidade, (data, horario, nome_profissional))
+            disponibilidade = cursor.fetchone()
+
+            if not disponibilidade:
+                flash('Horário não disponível para agendamento', 'error')
+                return redirect(url_for('consultar_agendamento'))
+
+            # Atualiza o agendamento
+            query_agendamento = """
+                UPDATE agendamento SET nomeCliente=%s, nomeProfissional=%s, sessao=%s, data=%s, horario=%s WHERE id=%s
+            """
+            cursor.execute(query_agendamento, (nome_cliente, nome_profissional, sessao, data, horario, id))
+            
+            # Realiza o commit da transação
             cnx.commit()
-            print("Agendamento atualizado:", (nome_cliente, nome_profissional, sessao, data, horario))
-            return redirect('agendamentos')
+            flash('Consulta atualizada com sucesso!', 'success')
+
+        except mysql.connector.Error as err:
+            flash(f'Ocorreu um erro: {err}', 'error')
+            cnx.rollback()  # Reverte qualquer mudança se ocorrer um erro
+            
+        finally:
+            cursor.close()
+            cnx.close()
+
+        return redirect(url_for('consultar_agendamento'))
+
+    try:
+        cursor.execute("SELECT * FROM agendamento WHERE id = %s", (id,))
+        agendamento = cursor.fetchone()
+    finally:
+        cursor.close()
+        cnx.close()
     
-    return render_template('atualizar-agendamentos.html')
+    return render_template('atualizar-agendamentos.html', agendamento=agendamento)
 

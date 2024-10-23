@@ -4,6 +4,7 @@
 <head>
     <title>Consultas agendadas</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
     <h1 class="lista-de-agendamentos">Lista de consultas</h1>
@@ -15,9 +16,22 @@
             <th>Sessão</th>
             <th>Data</th>
             <th>Horário</th>
+            <th>Ações</th>
             <th class="column-cliente-hidden">ID do cliente</th>
             <th class="column-profissional-hidden">ID do profissional</th>
         </tr>
+        {% if resultados %}
+        {% for resultado in resultados %}
+        <tr>
+            <td>{{ resultado.id }}</td>
+            <td>{{ resultado.nomec }}</td>
+            <td>{{ resultado.nomep }}</td>
+            <td>{{ resultado.sessao }}</td>
+            <td>{{ resultado.data }}</td>
+            <td>{{ resultado.horario }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
         {% for agendamento in agendamentos %}
         <tr>
             <td>{{ agendamento[0] }}</td> <!-- ID -->
@@ -28,8 +42,12 @@
             <td>{{ agendamento[5] }}</td> <!-- Hora -->
             <td class="column-cliente-show">{{ agendamento[6] }}</td> <!-- ID do cliente -->
             <td class="column-profissional-show">{{ agendamento[7] }}</td> <!-- ID do profissional -->
+            <td>
+                <a href="{{ url_for('atualizar_agendamento', id=agendamento[0]) }}">Editar</a>
+            </td>
         </tr>
         {% endfor %}
+        {% endif %}
     </table>
 </body>
 </html>

@@ -64,7 +64,7 @@ def signUp():
         if conta:
             session['loggedin'] = True
             session['id'] = conta[0]
-            flash("E-mail já existe", "danger")
+            flash("Uma conta com esse e-mail já criada. Clique para fazer login", "danger")
         else:
             # Inserindo os dados no banco
             query = "INSERT INTO contas (nome_usuario, telefone, email, senha) VALUES (%s, %s, %s, %s)"

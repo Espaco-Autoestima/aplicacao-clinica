@@ -6,13 +6,6 @@
     </head>
     <body>
         <h1 class="cadastro-clientes">Cadastrar cliente</h1>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="notification is-danger">
-                {{ messages[0] }}. Clique para se <a href="{{ url_for('cadastro') }}">cadastrar</a>.
-            </div>
-        {% endif %}
-        {% endwith %}
         <form class="formulario-cad" action="{{ url_for('adicionarCliente')}}" method="POST">
             <input type="text" id="nome" name="nome" placeholder="Nome do cliente"/> <br>
             <input type="text" id="telefone" name="telefone" placeholder="Telefone"/> <br>
