@@ -10,20 +10,19 @@
     <h1 class="lista-de-agendamentos">Lista de consultas</h1>
     <table class="registro-agendamentos">
         <tr>
-            <th>ID</th>
+            <th class="id-agendamento-hidden">ID</th>
             <th>Cliente</th>
             <th>Profissional</th>
             <th>Sessão</th>
             <th>Data</th>
             <th>Horário</th>
             <th>Ações</th>
-            <th class="column-cliente-hidden">ID do cliente</th>
-            <th class="column-profissional-hidden">ID do profissional</th>
+            <th class="id-cliente-hidden">ID do cliente</th>
+            <th class="id-profissional-hidden">ID do profissional</th>
         </tr>
         {% if resultados %}
         {% for resultado in resultados %}
         <tr>
-            <td>{{ resultado.id }}</td>
             <td>{{ resultado.nomec }}</td>
             <td>{{ resultado.nomep }}</td>
             <td>{{ resultado.sessao }}</td>
@@ -34,7 +33,6 @@
         {% else %}
         {% for agendamento in agendamentos %}
         <tr>
-            <td>{{ agendamento[0] }}</td> <!-- ID -->
             <td>{{ agendamento[1] }}</td> <!-- Nome do Cliente -->
             <td>{{ agendamento[2] }}</td> <!-- Nome do Profissional -->
             <td>{{ agendamento[3] }}</td> <!-- Sessão -->
@@ -44,6 +42,7 @@
             <td class="column-profissional-show">{{ agendamento[7] }}</td> <!-- ID do profissional -->
             <td>
                 <a href="{{ url_for('atualizar_agendamento', id=agendamento[0]) }}">Editar</a>
+                <a href="{{ url_for('cancelar_agendamento', id=agendamento[0]) }}">Cancelar</a>
             </td>
         </tr>
         {% endfor %}

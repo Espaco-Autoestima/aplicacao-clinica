@@ -215,7 +215,7 @@ table.registro-agendamentos, table.registro-procedimentos {
     border-spacing: 20px;
 }
 
-th.column-cliente-hidden, th.column-profissional-hidden, td.column-cliente-show,
+th.id-agendamento-hidden, th.id-cliente-hidden, th.id-profissional-hidden, td.column-cliente-show,
 td.column-profissional-show {
     display: none;
 }

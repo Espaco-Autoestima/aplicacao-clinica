@@ -43,7 +43,6 @@ CREATE TABLE agendamento(
     FOREIGN KEY (profissionais_id) REFERENCES profissionais(id)
 );
 
--- Verificar/revisar a tabela de disponibiilidade
 CREATE TABLE disponibilidade(
     id_disponibilidade BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     dia date, 
@@ -68,12 +67,3 @@ CREATE TABLE fornecedores(
     telefone VARCHAR(20), 
     empresa VARCHAR(20)
 );
-
--- Verificar/revisar a tabela de consulta
--- CREATE TABLE consulta(
---     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
---     data date,
---     descricao VARCHAR(100),
---     procedimento VARCHAR(50),
---     status VARCHAR(20)   
--- );

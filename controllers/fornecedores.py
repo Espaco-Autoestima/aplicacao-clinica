@@ -2,9 +2,6 @@ from app import app
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import mysql.connector
 
-app.secret_key = 'secret-key-ea'
-
-# Configuração e conexão do banco de dados 
 config = {
     'user': 'root', 
     'password': 'E$p@c02024!', 

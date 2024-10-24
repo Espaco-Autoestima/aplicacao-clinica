@@ -2,9 +2,6 @@ from app import app
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import mysql.connector
 
-app.secret_key = 'secret-key-ea'
-
-# Configuração e conexão do banco de dados 
 config = {
     'user': 'root', 
     'password': 'E$p@c02024!', 
@@ -104,6 +101,7 @@ def realizar_agendamento():
 
     return render_template('cadastro-agendamento.html')
 
+# Endpoint de listagem de agendamentos
 @app.route('/agendamentos', methods=['POST', 'GET'])
 def consultar_agendamento():
     cnx = mysql.connector.connect(**config)
@@ -112,7 +110,7 @@ def consultar_agendamento():
     agendamentos = cursor.fetchall()
     return render_template('agendamentos.html', agendamentos=agendamentos)
 
-# Implementação da regra de negócio de atualizar agendamentos
+# Endpoint de atualização de agendamentos
 @app.route('/atualizarAgendamentos/<int:id>', methods=['POST', 'GET'])
 def atualizar_agendamento(id):
     cnx = mysql.connector.connect(**config)
@@ -135,7 +133,7 @@ def atualizar_agendamento(id):
             agendamento_existe = cursor.fetchone()
 
             if agendamento_existe:
-                flash('Este profissional já tem um agendamento nesta data e horário', 'error')
+                flash('Este profissional já possui um agendamento nesta data e horário', 'error')
                 return redirect(url_for('consultar_agendamento'))
 
             # Verifica na tabela de disponibilidades no MySQL se possuem a data com o profissional disponível
@@ -175,9 +173,48 @@ def atualizar_agendamento(id):
     try:
         cursor.execute("SELECT * FROM agendamento WHERE id = %s", (id,))
         agendamento = cursor.fetchone()
+
     finally:
         cursor.close()
         cnx.close()
     
     return render_template('atualizar-agendamentos.html', agendamento=agendamento)
 
+# Endpoint de cancelamento do agendamento/consulta
+@app.route('/cancelar-agendamento/<int:id>', methods=['POST', 'GET'])
+def cancelar_agendamento(id):
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+
+    try: 
+        query_verificar_agendamento = """
+            SELECT * FROM agendamento WHERE id = %s
+        """
+
+        cursor.execute(query_verificar_agendamento, (id,))
+        agendamento_existe = cursor.fetchone()
+
+        if agendamento_existe: 
+            query_agendamento = """
+            DELETE FROM agendamento WHERE id=%s
+            """
+            cursor.execute(query_agendamento, (id,))
+            cnx.commit()
+            flash('Consulta cancelada com sucesso!', 'success')
+        else:
+            flash('Agendamento não encontrado', 'error')
+
+    except mysql.connector.Error as err:
+        flash(f'Ocorreu um erro: {err}', 'error')
+        cnx.rollback()
+
+    finally:
+        cursor.close()
+        cnx.close()
+        
+    return render_template('cadastro-agendamento.html')
+
+# Endpoint de reagendamento de consulta
+@app.route('/reagendamento/<int:id>', methods=['POST', 'GET'])
+def reagendar_consulta(id):
+    pass
