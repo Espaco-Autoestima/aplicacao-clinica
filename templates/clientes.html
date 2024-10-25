@@ -15,7 +15,7 @@
         <h1 class="lista-de-clientes">Lista de clientes</h1>
         <table class="registro-clientes">
             <tr>
-                <th>ID</th>
+                <th class="id-column-clientes-hidden">ID</th>
                 <th>Nome</th>
                 <th>Telefone</th>
                 <th>E-mail</th>
@@ -25,7 +25,6 @@
             {% if resultados %}
             {% for resultado in resultados %}
             <tr>
-                <td>{{ resultado.id }}</td>
                 <td>{{ resultado.nome }}</td>
                 <td>{{ resultado.telefone }}</td>
                 <td>{{ resultado.email }}</td>
@@ -35,15 +34,17 @@
             {% else %}
             {% for cliente in clientes %}
             <tr>
-                <td>{{ cliente[0] }}</td>
                 <td>{{ cliente[1] }}</td>
                 <td>{{ cliente[2] }}</td>
                 <td>{{ cliente[3] }}</td>
                 <td>{{ cliente[4] }}</td>
-                <td>{{ cliente[5] }}</td>
-                <td>{{ cliente[6] }}</td>
                 <td>
-                    <a href="{{ url_for('atualizarCliente', id=cliente[0]) }}">Editar</a>
+                    <a href="{{ url_for('atualizarCliente', id=cliente[0]) }}">
+                        <button class="botao-editar">Editar</button></a>
+                </td>
+                <td>
+                    <a href="{{ url_for('deletar_cliente', id=cliente[0]) }}">
+                        <button class="botao-cancelar">Apagar</button></a>
                 </td>
             </tr>
             {% endfor %}

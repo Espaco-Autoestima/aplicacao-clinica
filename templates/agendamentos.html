@@ -10,15 +10,13 @@
     <h1 class="lista-de-agendamentos">Lista de consultas</h1>
     <table class="registro-agendamentos">
         <tr>
-            <th class="id-agendamento-hidden">ID</th>
+            <th class="id-column-agendamento-hidden">ID</th>
             <th>Cliente</th>
             <th>Profissional</th>
             <th>Sessão</th>
             <th>Data</th>
             <th>Horário</th>
             <th>Ações</th>
-            <th class="id-cliente-hidden">ID do cliente</th>
-            <th class="id-profissional-hidden">ID do profissional</th>
         </tr>
         {% if resultados %}
         {% for resultado in resultados %}
@@ -38,11 +36,13 @@
             <td>{{ agendamento[3] }}</td> <!-- Sessão -->
             <td>{{ agendamento[4] }}</td> <!-- Data -->
             <td>{{ agendamento[5] }}</td> <!-- Hora -->
-            <td class="column-cliente-show">{{ agendamento[6] }}</td> <!-- ID do cliente -->
-            <td class="column-profissional-show">{{ agendamento[7] }}</td> <!-- ID do profissional -->
             <td>
-                <a href="{{ url_for('atualizar_agendamento', id=agendamento[0]) }}">Editar</a>
-                <a href="{{ url_for('cancelar_agendamento', id=agendamento[0]) }}">Cancelar</a>
+                <a href="{{ url_for('atualizar_agendamento', id=agendamento[0]) }}">
+                    <button class="botao-editar">Editar</button></a>
+            </td>
+            <td>
+                <a href="{{ url_for('cancelar_agendamento', id=agendamento[0]) }}">
+                    <button class="botao-cancelar">Cancelar</button></a>
             </td>
         </tr>
         {% endfor %}

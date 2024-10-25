@@ -15,7 +15,7 @@
         <h1 class="lista-de-fornecedores">Lista de fornecedores</h1>
         <table class="registro-fornecedores">
             <tr>
-                <th>ID</th>
+                <th class="id-column-fornecedores-hidden">ID</th>
                 <th>Nome</th>
                 <th>Telefone</th>
                 <th>Empresa</th>
@@ -24,7 +24,6 @@
             {% if resultados %}
             {% for resultado in resultados %}
             <tr>
-                <td>{{ resultado.id }}</td>
                 <td>{{ resultado.nome }}</td>
                 <td>{{ resultado.telefone }}</td>
                 <td>{{ resultado.empresa }}</td>
@@ -33,12 +32,16 @@
             {% else %}
             {% for fornecedor in fornecedores %}
             <tr>
-                <th>{{ fornecedor[0] }}</th>
                 <th>{{ fornecedor[1] }}</th>
                 <th>{{ fornecedor[2] }}</th>
                 <th>{{ fornecedor[3] }}</th>
                 <td>
-                    <a href="{{ url_for('atualizarFornecedor', id=fornecedor[0]) }}">Editar</a>
+                    <a href="{{ url_for('atualizarFornecedor', id=fornecedor[0]) }}">
+                        <button class="botao-editar">Editar</button></a>
+                </td>
+                <td>
+                    <a href="{{ url_for('deletar_fornecedor', id=fornecedor[0]) }}">
+                        <button class="botao-cancelar">Apagar</button></a>
                 </td>
             </tr>
             {% endfor %}

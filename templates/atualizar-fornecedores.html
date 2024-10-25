@@ -6,10 +6,20 @@
         <title>Atualização de fornecedores</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     </head>
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="notification notification-is-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
     <form class="atualizacao-dados" action="{{ url_for('atualizarFornecedor', id=fornecedor[0]) }}" method="POST">
         <input type="text" id="nome" name="nome" value="{{ fornecedor[1] }}"/> <br>
         <input type="text" id="telefone" name="telefone" value="{{ fornecedor[2] }}"/> <br>
         <input type="text" id="empresa" name="empresa" value="{{ fornecedor[3] }}"/> <br>
-        <button type="submit" value="enviar">Atualizar dados</button>
+        <button type="submit" value="enviar" class="botao">Atualizar dados</button>
     </form>   
 </html>

@@ -15,7 +15,6 @@
         <h1 class="lista-de-produtos">Lista de produtos</h1>
         <table class="registro-produtos">
             <tr>
-                <th>ID</th>
                 <th>Nome</th>
                 <th>Data de validade</th>
                 <th>Quantidade</th>
@@ -28,7 +27,6 @@
             {% if resultados %}
             {% for resultado in resultados %}
             <tr>
-                <td>{{ resultado.id }}</td>
                 <td>{{ resultado.nome }}</td>
                 <td>{{ resultado.data_validade }}</td>
                 <td>{{ resultado.quantidade }}</td>
@@ -41,7 +39,6 @@
             {% else %}
             {% for produto in produtos %}
             <tr>
-                <th>{{ produto[0] }}</th>
                 <th>{{ produto[1] }}</th>
                 <th>{{ produto[2] }}</th>
                 <th>{{ produto[3] }}</th>
@@ -50,7 +47,12 @@
                 <th>{{ produto[6] }}</th>
                 <th>{{ produto[7] }}</th>
                 <td>
-                    <a href="{{ url_for('atualizarProduto', id=produto[0]) }}">Editar</a>
+                    <a href="{{ url_for('atualizarProduto', id=produto[0]) }}">
+                        <button class="botao-editar">Editar</button></a>
+                </td>
+                <td>
+                    <a href="{{ url_for('deletar_produto', id=produto[0]) }}">
+                        <button class="botao-cancelar">Apagar</button></a>
                 </td>
             </tr>
             {% endfor %}

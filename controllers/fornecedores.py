@@ -87,3 +87,36 @@ def atualizarFornecedor(id):
     cnx.close()
 
     return render_template('atualizar-fornecedores.html', fornecedor = fornecedor)
+
+@app.route('/deletar-fornecedor/<int:id>', methods=['POST', 'GET'])
+def deletar_fornecedor(id):
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+
+    try:
+        query_verificar_fornecedor = """
+            SELECT * FROM fornecedores WHERE id = %s
+        """
+
+        cursor.execute(query_verificar_fornecedor, (id,))
+        fornecedor_existe = cursor.fetchone()
+
+        if fornecedor_existe:
+            query_fornecedor = """
+            DELETE FROM fornecedores WHERE id = %s
+            """
+            cursor.execute(query_fornecedor, (id,))
+            cnx.commit()
+            flash('Fornecedor deletado com sucesso!', 'success')
+        else:
+            flash('Fornecedor não encontrado', 'error')
+
+    except mysql.connector.Error as err:
+        flash(f'Ocorreu um erro: {err}', 'error')
+        cnx.rollback()
+
+    finally:
+        cursor.close()
+        cnx.close()
+        
+    return render_template('cadastro-fornecedores.html')

@@ -50,7 +50,7 @@ def realizar_agendamento():
             disponibilidade = cursor.fetchone()
 
             if not disponibilidade:
-                flash('Horário não disponível para agendamento.', 'error')
+                flash('Horário não disponível para agendamento', 'error')
                 cursor.close()
                 cnx.close()
                 return redirect(url_for('realizar_agendamento'))

@@ -7,12 +7,22 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     </head>
     <body>
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="notification notification-is-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+        
         <form class="atualizacao-dados" action="{{ url_for('atualizarCliente', id=cliente[0]) }}" method="POST">
             <input type="text" id="nome" name="nome" value="{{ cliente[1] }}"/> <br>
             <input type="text" id="telefone" name="telefone" value="{{ cliente[2] }}"/> <br>
             <input type="text" id="email" name="email" value="{{ cliente[3] }}"/> <br>
             <input type="text" id="cpf" name="cpf" value="{{ cliente[4] }}"/>
-            <button type="submit" value="enviar">Atualizar dados</button>
+            <button type="submit" value="enviar" class="botao">Atualizar dados</button>
         </form>   
     </body>
 </html>

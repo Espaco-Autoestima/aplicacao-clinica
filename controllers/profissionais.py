@@ -86,3 +86,36 @@ def atualizarProfissional(id):
     cnx.close()
 
     return render_template('atualizar-profissionais.html', profissional = profissional)
+
+@app.route('/deletar-profissional/<int:id>', methods=['POST', 'GET'])
+def deletar_profissional(id):
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+
+    try:
+        query_verificar_profissional = """
+            SELECT * FROM profissionais WHERE id = %s
+        """
+
+        cursor.execute(query_verificar_profissional, (id,))
+        profissional_existe = cursor.fetchone()
+
+        if profissional_existe:
+            query_profissional = """
+            DELETE FROM profissionais WHERE id = %s
+            """
+            cursor.execute(query_profissional, (id,))
+            cnx.commit()
+            flash('Profissional deletado com sucesso!', 'success')
+        else:
+            flash('Profissional não encontrado', 'error')
+
+    except mysql.connector.Error as err:
+        flash(f'Ocorreu um erro: {err}', 'error')
+        cnx.rollback()
+
+    finally:
+        cursor.close()
+        cnx.close()
+        
+    return render_template('cadastro-profissionais.html')

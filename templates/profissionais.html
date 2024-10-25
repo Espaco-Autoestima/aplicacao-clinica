@@ -14,7 +14,7 @@
         <h1 class="lista-de-profissionais">Lista de profissionais</h1>
         <table class="registro-profissionais">
             <tr>
-                <th>ID</th>
+                <th class="id-column-profissionais-hidden">ID</th>
                 <th>Nome</th>
                 <th>Telefone</th>
                 <th>Especialidade</th>
@@ -23,7 +23,6 @@
             {% if resultados %}
             {% for resultado in resultados %}
             <tr>
-                <td>{{ resultado.id }}</td>
                 <td>{{ resultado.nome }}</td>
                 <td>{{ resultado.telefone }}</td>
                 <td>{{ resultado.especialidade }}</td>
@@ -32,14 +31,16 @@
             {% else %}
             {% for profissional in profissionais %}
             <tr>
-                <th>{{ profissional[0] }}</th>
                 <th>{{ profissional[1] }}</th>
                 <th>{{ profissional[2] }}</th>
                 <th>{{ profissional[3] }}</th>
-                <th>{{ profissional[4] }}</th>
-                <th>{{ profissional[5] }}</th>
                 <td>
-                    <a href="{{ url_for('atualizarProfissional', id=profissional[0]) }}">Editar</a>
+                    <a href="{{ url_for('atualizarProfissional', id=profissional[0]) }}">
+                        <button class="botao-editar">Editar</button></a>
+                </td>
+                <td>
+                    <a href="{{ url_for('deletar_profissional', id=profissional[0]) }}">
+                        <button class="botao-cancelar">Apagar</button></a>
                 </td>
             </tr>
             {% endfor %}

@@ -1,5 +1,6 @@
 from app import app
 from flask import Flask, render_template, request, redirect, url_for, flash, session
+from datetime import datetime
 import mysql.connector
 
 config = {
@@ -98,3 +99,36 @@ def atualizarProduto(id):
     cnx.close()
 
     return render_template('atualizar-produtos.html', produto = produto)
+
+@app.route('/deletar-produto/<int:id>', methods=['POST', 'GET'])
+def deletar_produto(id):
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+
+    try:
+        query_verificar_produto = """
+            SELECT * FROM produtos WHERE id = %s
+        """
+
+        cursor.execute(query_verificar_produto, (id,))
+        produto_existe = cursor.fetchone()
+
+        if produto_existe:
+            query_produto = """
+            DELETE FROM produtos WHERE id = %s
+            """
+            cursor.execute(query_produto, (id,))
+            cnx.commit()
+            flash('Produto deletado com sucesso', 'success')
+        else:
+            flash('Produto não encontrado', 'error')
+    
+    except mysql.connector.Error as err:
+        flash(f'Ocorreu um erro: {err}', 'error')
+        cnx.rollback()
+
+    finally:
+        cursor.close()
+        cnx.close()
+        
+    return render_template('cadastro-produtos.html')

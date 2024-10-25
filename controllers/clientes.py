@@ -89,3 +89,36 @@ def atualizarCliente(id):
     cnx.close()
 
     return render_template('atualizar-clientes.html', cliente = cliente)
+
+@app.route('/deletar-cliente/<int:id>', methods=['POST', 'GET'])
+def deletar_cliente(id):
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+    
+    try:
+        query_verificar_cliente = """
+            SELECT * FROM clientes WHERE id = %s
+        """
+
+        cursor.execute(query_verificar_cliente, (id,))
+        cliente_existe = cursor.fetchone()
+
+        if cliente_existe:
+            query_cliente = """
+            DELETE FROM clientes WHERE id = %s 
+            """
+            cursor.execute(query_cliente, (id,))
+            cnx.commit()
+            flash('Cliente deletado com sucesso!', 'success')
+        else:
+            flash('Cliente não encontrado', 'error')
+        
+    except mysql.connector.Error as err:
+        flash(f'Ocorreu um erro: {err}', 'error')
+        cnx.rollback()
+
+    finally:
+        cursor.close()
+        cnx.close()
+        
+    return render_template('cadastro-clientes.html')

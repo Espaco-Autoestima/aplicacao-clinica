@@ -15,7 +15,6 @@
         <h1 class="lista-de-procedimentos">Lista de procedimentos</h1>
         <table class="registro-procedimentos">
             <tr>
-                <th>ID</th>
                 <th>Procedimento</th>
                 <th>Descrição</th>
                 <th>Ações</th>
@@ -23,7 +22,6 @@
             {% if resultados %}
             {% for resultado in resultados %}
             <tr>
-                <td>{{ resultado.id }}</td>
                 <td>{{ resultado.nome }}</td>
                 <td>{{ resultado.descricao }}</td>
             </tr>
@@ -31,15 +29,15 @@
             {% else %}
             {% for procedimento in procedimentos %}
             <tr>
-                <td>{{ procedimento[0] }}</td>
                 <td>{{ procedimento[1] }}</td>
                 <td>{{ procedimento[2] }}</td>
-                <td>{{ procedimento[3] }}</td>
-                <td>{{ procedimento[4] }}</td>
-                <td>{{ procedimento[5] }}</td>
-                <td>{{ procedimento[6] }}</td>
                 <td>
-                    <a href="{{ url_for('atualizarProcedimento', id=procedimento[0]) }}">Editar</a>
+                    <a href="{{ url_for('atualizarProcedimento', id=procedimento[0]) }}">
+                        <button class="botao-editar">Editar</button></a>
+                </td>
+                <td>
+                    <a href="{{ url_for('deletar_procedimento', id=procedimento[0]) }}">
+                        <button class="botao-cancelar">Apagar</button></a>
                 </td>
             </tr>
             {% endfor %}

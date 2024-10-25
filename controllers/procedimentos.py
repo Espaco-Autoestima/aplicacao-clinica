@@ -85,3 +85,37 @@ def atualizarProcedimento(id):
     cnx.close()
 
     return render_template('atualizar-procedimentos.html', procedimento = procedimentoList)
+
+@app.route('/deletar-procedimento/<int:id>', methods=['POST', 'GET'])
+def deletar_procedimento(id):
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+
+    try:
+        query_verificar_procedimento = """
+            SELECT * FROM procedimentos WHERE id = %s
+        """
+
+        cursor.execute(query_verificar_procedimento, (id,))
+        procedimento_existe = cursor.fetchone()
+
+        if procedimento_existe:
+            query_procedimento = """
+            DELETE FROM procedimentos WHERE id = %s
+            """
+
+            cursor.execute(query_procedimento, (id,))
+            cnx.commit()
+            flash('Procedimento deletado com sucesso!', 'success')
+        else:
+            flash('Procedimento não encontrado', 'error')
+
+    except mysql.connector.Error as err:
+        flash(f'Ocorreu um erro: {err}', 'error')
+        cnx.rollback()
+
+    finally:
+        cursor.close()
+        cnx.close()
+        
+    return render_template('cadastro-procedimentos.html')

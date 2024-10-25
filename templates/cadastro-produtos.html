@@ -6,6 +6,16 @@
 </head>
 <body>
     <h1 class="cadastro-produtos">Cadastrar produto</h1>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="notification notification-is-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+        
     <form action="{{ url_for('adicionarProduto')}}" method="POST">
         <input type="number" id="sku" name="sku" placeholder="Código do produto"/> <br>
         <input type="text" id="nome" name="nome" placeholder="Nome do produto"/> <br>
