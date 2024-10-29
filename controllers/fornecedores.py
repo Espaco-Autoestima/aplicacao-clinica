@@ -107,7 +107,7 @@ def deletar_fornecedor(id):
             """
             cursor.execute(query_fornecedor, (id,))
             cnx.commit()
-            flash('Fornecedor deletado com sucesso!', 'success')
+            flash('Fornecedor excluído com sucesso!', 'success')
         else:
             flash('Fornecedor não encontrado', 'error')
 

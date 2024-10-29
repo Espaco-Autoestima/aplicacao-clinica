@@ -142,6 +142,7 @@ p.titulo-cadastros-menu {
 
 /* Título "menu" */
 h2.menu-title {
+    text-transform: uppercase;
     padding-top: 25px;
     background-color: #FFFFFF;
     text-align: center;
@@ -231,13 +232,6 @@ table.registro-agendamentos, table.registro-procedimentos {
     margin-top: 20px;
     align-items: center;
     border-spacing: 20px;
-}
-
-/* IDs dos registros */
-th.id-column-agendamento-hidden, th.id-column-clientes-hidden, th.id-column-fornecedores-hidden, 
-th.id-column-profissionais-hidden, th.id-column-procedimentos-hidden, td.column-cliente-show,
-td.column-profissional-show {
-    display: none;
 }
 
 button.botao-editar {

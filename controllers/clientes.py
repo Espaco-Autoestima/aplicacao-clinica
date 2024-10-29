@@ -104,12 +104,19 @@ def deletar_cliente(id):
         cliente_existe = cursor.fetchone()
 
         if cliente_existe:
-            query_cliente = """
-            DELETE FROM clientes WHERE id = %s 
-            """
-            cursor.execute(query_cliente, (id,))
-            cnx.commit()
-            flash('Cliente deletado com sucesso!', 'success')
+            query_verificar_agendamento = "SELECT * FROM agendamento WHERE clientes_id = %s"
+            cursor.execute(query_verificar_agendamento, (id,))
+            agendamento_existe = cursor.fetchone()
+
+            if agendamento_existe:
+                flash('Não é possível excluir o cliente porque ele possui agendamentos associados', 'error')
+            else: 
+                query_cliente = """
+                DELETE FROM clientes WHERE id = %s 
+                """
+                cursor.execute(query_cliente, (id,))
+                cnx.commit()
+                flash('Cliente excluído com sucesso!', 'success')
         else:
             flash('Cliente não encontrado', 'error')
         

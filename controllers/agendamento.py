@@ -167,7 +167,7 @@ def atualizar_agendamento(id):
         finally:
             cursor.close()
             cnx.close()
-
+        
         return redirect(url_for('consultar_agendamento'))
 
     try:

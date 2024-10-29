@@ -106,7 +106,7 @@ def deletar_profissional(id):
             """
             cursor.execute(query_profissional, (id,))
             cnx.commit()
-            flash('Profissional deletado com sucesso!', 'success')
+            flash('Profissional excluído com sucesso!', 'success')
         else:
             flash('Profissional não encontrado', 'error')
 

@@ -14,7 +14,6 @@ config = {
 def index():
     return render_template('login.html')
 
-# Rotas de login de usuários
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST' and 'email' in request.form and 'senha' in request.form:
@@ -28,7 +27,7 @@ def login():
         cursor.execute(query, (email, senha))
         conta = cursor.fetchone()
 
-        # Verifica se existe a conta. Se existir, redireciona para a home
+        # Verifica se a conta existe. Se sim, redireciona para a home
         if conta:
             session['loggedin'] = True
             session['id'] = conta[0]
@@ -36,12 +35,11 @@ def login():
             session['senha'] = conta[2]
             return redirect(url_for('home'))
         else:
-            # Caso a conta não exista ou se algum dado estiver incorreto
+            # Caso não exista ou se algum dado esteja incorreto
             flash("E-mail ou senha incorretos", "danger")
 
     return render_template('login.html')
 
-# Rota de cadastro de usuários
 @app.route('/signup', methods=['POST', 'GET'])
 def signUp():
     if request.method == 'POST' and 'nome' in request.form and 'telefone' in request.form and 'email' in request.form and 'senha' in request.form:
@@ -61,7 +59,7 @@ def signUp():
         if conta:
             session['loggedin'] = True
             session['id'] = conta[0]
-            flash("Uma conta com esse e-mail já criada. Clique para fazer login", "danger")
+            flash("Uma conta com esse e-mail já criada. Clique para fazer login", "warning")
         else:
             # Inserindo os dados no banco
             query = "INSERT INTO contas (nome_usuario, telefone, email, senha) VALUES (%s, %s, %s, %s)"
@@ -80,7 +78,32 @@ def logout():
     session.clear()
     return redirect('login')
 
-# Página inicial apenas para usuários logados
+# @app.route('/apagar-conta/<int:id>', methods=['POST', 'GET'])
+# def apagar_conta(id):
+#     cnx = mysql.connector.connect(**config)
+#     cursor = cnx.cursor()
+
+#     try:
+#         if conta:
+#             session['loggedin'] = True
+#             session['id'] = conta[0]
+#             query = "DELETE FROM contas WHERE id = %s"
+#             cursor.execute(query, (id,))
+#             cnx.commit()
+#             cursor.close()
+#             cnx.close()
+#             flash("Conta excluída com sucesso!", "success")
+#             return redirect(url_for('signUp', contas=contas))
+        
+#     except mysql.connector.Error as err:
+#         flash(f'Ocorreu um erro: {err}', 'error')
+#         cnx.rollback()
+
+#     finally:
+#         cursor.close()
+#         cnx.close()
+
+# Exibe a página inicial apenas para usuários logados
 @app.route('/home')
 def home():
     if 'loggedin' in session:

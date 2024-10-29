@@ -119,7 +119,7 @@ def deletar_produto(id):
             """
             cursor.execute(query_produto, (id,))
             cnx.commit()
-            flash('Produto deletado com sucesso', 'success')
+            flash('Produto excluído com sucesso', 'success')
         else:
             flash('Produto não encontrado', 'error')
     

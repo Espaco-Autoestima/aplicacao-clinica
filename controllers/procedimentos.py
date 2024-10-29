@@ -106,7 +106,7 @@ def deletar_procedimento(id):
 
             cursor.execute(query_procedimento, (id,))
             cnx.commit()
-            flash('Procedimento deletado com sucesso!', 'success')
+            flash('Procedimento excluído com sucesso!', 'success')
         else:
             flash('Procedimento não encontrado', 'error')
 

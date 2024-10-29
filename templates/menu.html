@@ -3,10 +3,10 @@
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <div class="sidebar">
-    <h2 class="menu-title">MENU</h2>
+    <h2 class="menu-title">Menu</h2>
     <ul style="list-style: none;" class="menu">
         <li class="menu-item">
-            <a href="../home" class="menu-home">Home</a>
+            <a href="{{ url_for('home')}}" class="menu-home">Home</a>
         </li>
         <li class="menu-item">
             <a href="/calendario" class="menu-agenda">Agenda</a>
@@ -14,29 +14,29 @@
         <li class="menu-item">
             <p class="titulo-cadastros-menu">Cadastros</p>
             <ul style="list-style: none;" class="submenu">
-                <li><a href="/realizarAgendamento" class="menu-agendamentos">Agendamento</a></li>
-                <li><a href="/cadastrarCliente" class="menu-clientes">Cliente</a></li>
-                <li><a href="/cadastrarProfissional" class="menu-profissionais">Profissional</a></li>
-                <li><a href="/cadastrarFornecedor" class="menu-fornecedores">Fornecedor</a></li>
+                <li><a href="{{ url_for('realizar_agendamento')}}" class="menu-agendamentos">Agendamento</a></li>
+                <li><a href="{{ url_for('adicionarCliente')}}" class="menu-clientes">Cliente</a></li>
+                <li><a href="{{ url_for('adicionarFornecedor')}}" class="menu-fornecedores">Fornecedor</a></li>
                 <li><a href="#" class="menu-pagamentos">Pagamento</a></li>
-                <li><a href="/cadastrarProduto" class="menu-produtos">Produto</a></li>
-                <li><a href="/cadastrarProcedimento" class="menu-procedimentos">Procedimento</a></li>
+                <li><a href="{{ url_for('adicionarProcedimento')}}" class="menu-procedimentos">Procedimento</a></li>
+                <li><a href="{{ url_for('adicionarProduto')}}" class="menu-produtos">Produto</a></li>
+                <li><a href="{{ url_for('adicionarProfissional')}}" class="menu-profissionais">Profissional</a></li>
             </ul>
         </li>
         <li class="menu-item">
             <p class="titulo-cadastros-menu">Listas</p>
             <ul style="list-style: none;" class="submenu">
-                <li><a href="/agendamentos" class="lista-agendamentos-cadastrados">Consultas agendadas</a></li>
-                <li><a href="/clientes" class="lista-clientes-cadastrados">Clientes cadastrados</a></li>
-                <li><a href="/profissionais" class="lista-profissionais-cadastrados">Profissionais cadastrados</a></li>
-                <li><a href="/fornecedores" class="lista-fornecedores-cadastrados">Fornecedores cadastrados</a></li>
+                <li><a href="{{ url_for('consultarCliente')}}" class="lista-clientes-cadastrados">Clientes cadastrados</a></li>
+                <li><a href="{{ url_for('consultar_agendamento')}}" class="lista-agendamentos-cadastrados">Consultas agendadas</a></li>
+                <li><a href="{{ url_for('consultarFornecedor')}}" class="lista-fornecedores-cadastrados">Fornecedores cadastrados</a></li>
                 <li><a href="#" class="lista-pagamentos-cadastrados">Pagamentos cadastrados</a></li>
-                <li><a href="/produtos" class="lista-produtos-cadastrados">Produtos cadastrados</a></li>
-                <li><a href="/procedimentos" class="lista-procedimentos-cadastrados">Procedimentos cadastrados</a></li>
+                <li><a href="{{ url_for('consultarProcedimento')}}" class="lista-procedimentos-cadastrados">Procedimentos cadastrados</a></li>
+                <li><a href="{{ url_for('consultarProduto')}}" class="lista-produtos-cadastrados">Produtos cadastrados</a></li>
+                <li><a href="{{ url_for('consultarProfissional')}}" class="lista-profissionais-cadastrados">Profissionais cadastrados</a></li>
             </ul>
         </li>
         <li class="menu-item">
-            <li><a href="/logout" class="logout">Logout</a></li>
+            <li><a href="{{ url_for('logout')}}" class="logout">Logout</a></li>
         </li>
     </ul>
 </div>
