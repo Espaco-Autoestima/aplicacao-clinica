@@ -1,8 +1,10 @@
 FROM python:3.10
+
 WORKDIR /app
 
-RUN pip install flask
-RUN pip install mysql-connector-python
+COPY requirements.txt requirements.txt
+
+RUN pip3 install -r requirements.txt
 
 RUN mkdir -p controllers static templates tests
 
