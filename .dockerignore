@@ -7,6 +7,8 @@ ENV/
 env.bak/ 
 venv.bak/ 
 
-# Arquivos na raíz do projeto
+# Arquivos e pastas na raíz do projeto
 LICENSE
 README.MD
+
+img-readme/

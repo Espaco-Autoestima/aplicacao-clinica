@@ -1,4 +1,4 @@
-CREATE SCHEMA espacoautoestima;
+CREATE SCHEMA IF NOT EXISTS espacoautoestima;
 USE espacoautoestima;
 
 CREATE TABLE contas(
