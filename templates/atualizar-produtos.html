@@ -17,7 +17,7 @@
         {% endif %}
         {% endwith %}
 
-    <form class="atualizacao-dados" action="{{ url_for('atualizarProduto', id=produto[0]) }}" method="POST">
+    <form class="atualizacao-dados" action="{{ url_for('atualizar_produto', id=produto[0]) }}" method="POST">
         <input type="text" id="nome" name="nome" placeholder="Nome do produto" value="{{ produto[1] }}"/> <br>
         <input type="date" id="data-validade" name="data-validade" value="{{ produto[2] }}"/> <br>
         <input type="number" id="quantidade" name="quantidade" placeholder="Quantidade" value="{{ produto[3] }}"/> <br>

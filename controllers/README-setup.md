@@ -86,6 +86,10 @@ Após isso, execute:
 ```
 docker run -p 5000:5000 -d nome-imagem
 ```
+Não se esqueça de manter o container do banco executando normalmente!
+
+## Desenvolvimento local x Desenvolvimento em um container
+Para que o container, cuja imagem do MySQL está instalada, atribua o 'host' como 'localhost'. Porém, quando a imagem da aplicação for gerada, utilize o id do container para que funcione normalmente.
 
 ### Criação do Docker Compose 
 Para executar o Docker Compose, é necessário que os containers sejam parados. Liste todos para recuperar o ID e então:
@@ -104,3 +108,7 @@ Em caso de uma eventual mudança ou restabelecimento:
 docker compose stop
 docker compose down 
 ```
+
+## Testes unitários
+
+## Testes automatizados com Selenium

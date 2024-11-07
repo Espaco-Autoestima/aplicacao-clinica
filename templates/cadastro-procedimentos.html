@@ -16,7 +16,7 @@
         {% endif %}
         {% endwith %}
         
-    <form action="{{ url_for('adicionarProcedimento')}}" method="POST">
+    <form action="{{ url_for('adicionar_procedimento')}}" method="POST">
         <input type="text" id="procedimento" name="procedimento" placeholder="Nome do procedimento"/> <br>
         <input type="text" id="descricao" name="descricao" placeholder="Descrição"/> <br>
         <button type="submit" value="enviar" class="botao">Adicionar procedimento</button>

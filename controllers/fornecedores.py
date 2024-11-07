@@ -10,8 +10,8 @@ config = {
     'raise_on_warnings': True
 }
 
-@app.route('/cadastrarFornecedor', methods=['POST', 'GET'])
-def adicionarFornecedor():
+@app.route('/fornecedor', methods=['POST', 'GET'])
+def adicionar_fornecedor():
     if request.method == 'POST' and 'nome' in request.form and 'telefone' in request.form and 'empresa' in request.form:
         nome = request.form['nome']
         telefone = request.form['telefone']
@@ -31,7 +31,7 @@ def adicionarFornecedor():
     return render_template('cadastro-fornecedores.html')
 
 @app.route('/fornecedores', methods=['POST', 'GET'])
-def consultarFornecedor():
+def consultar_fornecedores():
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
     cursor.execute("SELECT * FROM fornecedores")
@@ -39,7 +39,7 @@ def consultarFornecedor():
     return render_template('fornecedores.html', fornecedores = fornecedores)
 
 # Busca de fornecedores por telefone 
-@app.route('/pesquisarFornecedor', methods=['POST'])
+@app.route('/pesquisar-fornecedor', methods=['POST'])
 def pesquisar_fornecedores():
     try:
         telefone = request.form.get("pesquisa")
@@ -62,8 +62,8 @@ def pesquisar_fornecedores():
         cursor.close()
         cnx.close()
 
-@app.route('/atualizarFornecedor/<int:id>', methods=['POST', 'GET'])
-def atualizarFornecedor(id):
+@app.route('/fornecedores/<int:id>', methods=['POST', 'GET'])
+def atualizar_fornecedor(id):
     if request.method == 'POST':
         nome = request.form['nome']
         telefone = request.form['telefone']
@@ -76,7 +76,7 @@ def atualizarFornecedor(id):
         cnx.commit()
         cursor.close()
         cnx.close()
-        return redirect(url_for('consultarFornecedor'))
+        return redirect(url_for('consultar_fornecedores'))
 
     # Carrega os dados do fornecedor para o formulário
     cnx = mysql.connector.connect(**config)
@@ -88,7 +88,7 @@ def atualizarFornecedor(id):
 
     return render_template('atualizar-fornecedores.html', fornecedor = fornecedor)
 
-@app.route('/deletar-fornecedor/<int:id>', methods=['POST', 'GET'])
+@app.route('/fornecedor/<int:id>', methods=['POST', 'GET'])
 def deletar_fornecedor(id):
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()

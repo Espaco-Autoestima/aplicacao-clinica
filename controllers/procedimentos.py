@@ -10,8 +10,8 @@ config = {
     'raise_on_warnings': True
 }
 
-@app.route('/cadastrarProcedimento', methods=['POST', 'GET'])
-def adicionarProcedimento():
+@app.route('/procedimento', methods=['POST', 'GET'])
+def adicionar_procedimento():
     if request.method == 'POST' and 'procedimento' in request.form and 'descricao' in request.form:
         nome = request.form['procedimento']
         descricao = request.form['descricao']
@@ -30,7 +30,7 @@ def adicionarProcedimento():
     return render_template('cadastro-procedimentos.html')
 
 @app.route('/procedimentos', methods=['POST', 'GET'])
-def consultarProcedimento():
+def consultar_procedimentos():
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
     cursor.execute("SELECT * FROM procedimentos")
@@ -38,7 +38,7 @@ def consultarProcedimento():
     return render_template('procedimentos.html', procedimentos = procedimentos)
 
 # Pesquisar procedimentos pelo nome
-@app.route('/pesquisarProcedimento', methods=['POST'])
+@app.route('/pesquisar-procedimento', methods=['POST'])
 def pesquisar_procedimentos():
     try:
         nome = request.form.get("pesquisa")
@@ -61,8 +61,8 @@ def pesquisar_procedimentos():
         cursor.close()
         cnx.close()
 
-@app.route('/atualizarProcedimento/<int:id>', methods=['POST', 'GET'])
-def atualizarProcedimento(id):
+@app.route('/procedimentos/<int:id>', methods=['POST', 'GET'])
+def atualizar_procedimento(id):
     if request.method == 'POST':
         nome = request.form['procedimento']
         descricao = request.form['descricao']
@@ -74,7 +74,7 @@ def atualizarProcedimento(id):
         cnx.commit()
         cursor.close()
         cnx.close()
-        return redirect(url_for('consultarProcedimento'))
+        return redirect(url_for('consultar_procedimento'))
     
     # Carrega os dados do procedimento para o formulário
     cnx = mysql.connector.connect(**config)
@@ -86,7 +86,7 @@ def atualizarProcedimento(id):
 
     return render_template('atualizar-procedimentos.html', procedimento = procedimentoList)
 
-@app.route('/deletar-procedimento/<int:id>', methods=['POST', 'GET'])
+@app.route('/procedimento/<int:id>', methods=['POST', 'GET'])
 def deletar_procedimento(id):
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()

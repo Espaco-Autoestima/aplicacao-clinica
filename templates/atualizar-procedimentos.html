@@ -17,7 +17,7 @@
         {% endif %}
         {% endwith %}
 
-        <form class="atualizacao-dados" action="{{ url_for('atualizarProcedimento', id=procedimento[0]) }}" method="POST">
+        <form class="atualizacao-dados" action="{{ url_for('atualizar_procedimento', id=procedimento[0]) }}" method="POST">
             <input type="text" id="procedimento" name="procedimento" value="{{ procedimento[1] }}"/> <br>
             <input type="text" id="descricao" name="descricao" value="{{ procedimento[2] }}"/> <br>
             <button type="submit" value="enviar" class="botao">Atualizar dados</button>

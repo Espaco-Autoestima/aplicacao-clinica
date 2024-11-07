@@ -17,7 +17,7 @@
         {% endif %}
         {% endwith %}
         
-        <form class="atualizacao-dados" action="{{ url_for('atualizarCliente', id=cliente[0]) }}" method="POST">
+        <form class="atualizacao-dados" action="{{ url_for('atualizar_cliente', id=cliente[0]) }}" method="POST">
             <input type="text" id="nome" name="nome" value="{{ cliente[1] }}"/> <br>
             <input type="text" id="telefone" name="telefone" value="{{ cliente[2] }}"/> <br>
             <input type="text" id="email" name="email" value="{{ cliente[3] }}"/> <br>

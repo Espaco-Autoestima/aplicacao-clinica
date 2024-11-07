@@ -3,7 +3,7 @@ WORKDIR /app
 
 COPY requirements.txt requirements.txt
 
-RUN pip3 install -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 RUN mkdir -p controllers static templates tests
 
@@ -14,4 +14,4 @@ COPY templates/ templates/
 COPY static/ static/
 
 RUN chmod -R a+rwx controllers static templates tests
-CMD ["python","app.py", "0.0.0.0:5000"]
+CMD ["python","app.py"]

@@ -10,8 +10,8 @@ config = {
     'raise_on_warnings': True
 }
 
-@app.route('/cadastrarProfissional', methods=['POST', 'GET'])
-def adicionarProfissional():
+@app.route('/profissional', methods=['POST', 'GET'])
+def adicionar_profissional():
     if request.method == 'POST' and 'nome' in request.form and 'telefone' in request.form and 'especialidade' in request.form:
         nome = request.form['nome']
         telefone = request.form['telefone']
@@ -30,7 +30,7 @@ def adicionarProfissional():
     return render_template('cadastro-profissionais.html')
 
 @app.route('/profissionais', methods=['POST', 'GET'])
-def consultarProfissional():
+def consultar_profissionais():
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
     cursor.execute("SELECT * FROM profissionais")
@@ -38,7 +38,7 @@ def consultarProfissional():
     return render_template('profissionais.html', profissionais = profissionais)
 
 # Busca de profissionais por telefone
-@app.route('/pesquisarProfissional', methods=['POST'])
+@app.route('/pesquisar-profissional', methods=['POST'])
 def pesquisar_profissionais():
     try:
         telefone = request.form.get("pesquisa")
@@ -61,8 +61,8 @@ def pesquisar_profissionais():
         cursor.close()
         cnx.close()
 
-@app.route('/atualizarProfissional/<int:id>', methods=['POST', 'GET'])
-def atualizarProfissional(id):
+@app.route('/profissionais/<int:id>', methods=['POST', 'GET'])
+def atualizar_profissional(id):
     if request.method == 'POST':
         nome = request.form['nome']
         telefone = request.form['telefone']
@@ -75,7 +75,7 @@ def atualizarProfissional(id):
         cnx.commit()
         cursor.close()
         cnx.close()
-        return redirect(url_for('consultarProfissional'))
+        return redirect(url_for('consultar_profissionais'))
     
     # Carrega os dados do profissional para o formulário
     cnx = mysql.connector.connect(**config)
@@ -87,7 +87,7 @@ def atualizarProfissional(id):
 
     return render_template('atualizar-profissionais.html', profissional = profissional)
 
-@app.route('/deletar-profissional/<int:id>', methods=['POST', 'GET'])
+@app.route('/profissional/<int:id>', methods=['POST', 'GET'])
 def deletar_profissional(id):
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()

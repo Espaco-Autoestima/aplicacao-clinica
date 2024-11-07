@@ -19,6 +19,7 @@ def login():
     if request.method == 'POST' and 'email' in request.form and 'senha' in request.form:
         email = request.form['email']
         senha = request.form['senha']
+
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
 

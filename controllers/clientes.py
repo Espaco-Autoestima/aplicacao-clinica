@@ -10,8 +10,8 @@ config = {
     'raise_on_warnings': True
 }
 
-@app.route('/cadastrarCliente', methods=['POST', 'GET'])
-def adicionarCliente():
+@app.route('/cliente', methods=['POST', 'GET'])
+def adicionar_cliente():
     if request.method == 'POST' and 'nome' in request.form and 'telefone' in request.form and 'email' in request.form and 'cpf' in request.form:
         nome = request.form['nome']
         telefone = request.form['telefone']
@@ -32,7 +32,7 @@ def adicionarCliente():
     return render_template('cadastro-clientes.html')
 
 @app.route('/clientes', methods=['POST', 'GET'])
-def consultarCliente():
+def consultar_clientes():
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
     cursor.execute("SELECT * FROM clientes")
@@ -40,7 +40,7 @@ def consultarCliente():
     return render_template('clientes.html', clientes = clientes)
 
 # Busca de clientes por e-mail
-@app.route('/pesquisarCliente', methods=['POST'])
+@app.route('/pesquisar-cliente', methods=['POST'])
 def pesquisar_clientes():
     try:
         email = request.form.get("pesquisa")
@@ -63,8 +63,8 @@ def pesquisar_clientes():
         cursor.close()
         cnx.close()
 
-@app.route('/atualizarCliente/<int:id>', methods=['POST', 'GET'])
-def atualizarCliente(id):
+@app.route('/clientes/<int:id>', methods=['POST', 'GET'])
+def atualizar_cliente(id):
     if request.method == 'POST':
         nome = request.form.get('nome')
         telefone = request.form.get('telefone')
@@ -78,7 +78,7 @@ def atualizarCliente(id):
         cnx.commit()
         cursor.close()
         cnx.close()
-        return redirect(url_for('consultarCliente'))
+        return redirect(url_for('consultar_clientes'))
     
     # Carrega os dados do cliente para o formulário
     cnx = mysql.connector.connect(**config)
@@ -90,7 +90,7 @@ def atualizarCliente(id):
 
     return render_template('atualizar-clientes.html', cliente = cliente)
 
-@app.route('/deletar-cliente/<int:id>', methods=['POST', 'GET'])
+@app.route('/cliente/<int:id>', methods=['POST', 'GET'])
 def deletar_cliente(id):
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()

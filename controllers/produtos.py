@@ -11,8 +11,8 @@ config = {
     'raise_on_warnings': True
 }
 
-@app.route('/cadastrarProduto', methods=['POST', 'GET'])
-def adicionarProduto():
+@app.route('/produto', methods=['POST', 'GET'])
+def adicionar_produto():
     if request.method == 'POST' and 'sku' in request.form and 'nome' in request.form and 'data-validade' in request.form and 'quantidade' in request.form and 'marca' in request.form and 'preco' in request.form and 'descricao' in request.form:
         codigo_sku = request.form['sku']
         produto = request.form['nome']
@@ -36,7 +36,7 @@ def adicionarProduto():
     return render_template('cadastro-produtos.html')
 
 @app.route('/produtos', methods=['POST', 'GET'])
-def consultarProduto():
+def consultar_produtos():
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
     cursor.execute("SELECT * FROM produtos")
@@ -44,7 +44,7 @@ def consultarProduto():
     return render_template('produtos.html', produtos = produtos)
 
 # Busca de produtos por nome
-@app.route('/pesquisarProduto', methods=['POST'])
+@app.route('/pesquisar-produto', methods=['POST'])
 def pesquisar_produtos():
     try:
         sku = request.form.get("pesquisa")
@@ -66,8 +66,8 @@ def pesquisar_produtos():
         cursor.close()
         cnx.close() 
 
-@app.route('/atualizarProduto/<int:id>', methods=['POST', 'GET'])
-def atualizarProduto(id):
+@app.route('/produtos/<int:id>', methods=['POST', 'GET'])
+def atualizar_produto(id):
     if request.method == 'POST':
         codigo_sku = request.form['sku']
         produto = request.form['nome']
@@ -88,7 +88,7 @@ def atualizarProduto(id):
         cnx.commit()
         cursor.close()
         cnx.close()
-        return redirect(url_for('consultarProduto'))
+        return redirect(url_for('consultar_produto'))
     
     # Carrega os dados do produto para o formulário
     cnx = mysql.connector.connect(**config)
@@ -100,7 +100,7 @@ def atualizarProduto(id):
 
     return render_template('atualizar-produtos.html', produto = produto)
 
-@app.route('/deletar-produto/<int:id>', methods=['POST', 'GET'])
+@app.route('/produto/<int:id>', methods=['POST', 'GET'])
 def deletar_produto(id):
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()

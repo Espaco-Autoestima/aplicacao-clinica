@@ -10,7 +10,7 @@ config = {
     'raise_on_warnings': True
 }
 
-@app.route('/realizarAgendamento', methods=['POST', 'GET'])
+@app.route('/agendamento', methods=['POST', 'GET'])
 def realizar_agendamento():
     if request.method == 'POST':
         nome_cliente = request.form['nomec']
@@ -63,7 +63,7 @@ def realizar_agendamento():
                 flash('Cliente não encontrado.', 'error')
                 cursor.close()
                 cnx.close()
-                return redirect(url_for('consultarCliente'))
+                return redirect(url_for('consultar_clientes'))
 
             # Verifica se o profissional existe
             query_profissional = "SELECT id FROM profissionais WHERE nome = %s"
@@ -73,7 +73,7 @@ def realizar_agendamento():
                 flash('Profissional não encontrado', 'error')
                 cursor.close()
                 cnx.close()
-                return redirect(url_for('consultarProfissional'))
+                return redirect(url_for('consultar_profissionais'))
 
             # Insere o novo agendamento
             query_agendamento = """
@@ -87,7 +87,7 @@ def realizar_agendamento():
             flash('Agendamento realizado com sucesso!', 'success')
             cursor.close()
             cnx.close()
-            return redirect(url_for('consultar_agendamento'))
+            return redirect(url_for('consultar_agendamentos'))
 
         except mysql.connector.Error as err:
             flash(f'Não foi possível agendar o cliente no momento: {err}', 'error')
@@ -103,7 +103,7 @@ def realizar_agendamento():
 
 # Endpoint de listagem de agendamentos
 @app.route('/agendamentos', methods=['POST', 'GET'])
-def consultar_agendamento():
+def consultar_agendamentos():
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
     cursor.execute("SELECT * FROM agendamento")
@@ -111,7 +111,7 @@ def consultar_agendamento():
     return render_template('agendamentos.html', agendamentos=agendamentos)
 
 # Endpoint de atualização de agendamentos
-@app.route('/atualizarAgendamentos/<int:id>', methods=['POST', 'GET'])
+@app.route('/agendamentos/<int:id>', methods=['POST', 'GET'])
 def atualizar_agendamento(id):
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
@@ -134,7 +134,7 @@ def atualizar_agendamento(id):
 
             if agendamento_existe:
                 flash('Este profissional já possui um agendamento nesta data e horário', 'error')
-                return redirect(url_for('consultar_agendamento'))
+                return redirect(url_for('consultar_agendamentos'))
 
             # Verifica na tabela de disponibilidades no MySQL se possuem a data com o profissional disponível
             query_disponibilidade = """ 
@@ -148,7 +148,7 @@ def atualizar_agendamento(id):
 
             if not disponibilidade:
                 flash('Horário não disponível para agendamento', 'error')
-                return redirect(url_for('consultar_agendamento'))
+                return redirect(url_for('consultar_agendamentos'))
 
             # Atualiza o agendamento
             query_agendamento = """
@@ -168,7 +168,7 @@ def atualizar_agendamento(id):
             cursor.close()
             cnx.close()
         
-        return redirect(url_for('consultar_agendamento'))
+        return redirect(url_for('consultar_agendamentos'))
 
     try:
         cursor.execute("SELECT * FROM agendamento WHERE id = %s", (id,))
@@ -181,7 +181,7 @@ def atualizar_agendamento(id):
     return render_template('atualizar-agendamentos.html', agendamento=agendamento)
 
 # Endpoint de cancelamento do agendamento/consulta
-@app.route('/cancelar-agendamento/<int:id>', methods=['POST', 'GET'])
+@app.route('/agendamento/<int:id>', methods=['POST', 'GET'])
 def cancelar_agendamento(id):
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
