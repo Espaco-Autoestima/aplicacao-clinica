@@ -13,8 +13,13 @@ config = {
     'raise_on_warnings': True
 }
 
+<<<<<<< Updated upstream
 @app.route('/cadastrarCliente', methods=['POST', 'GET'])
 def adicionarCliente():
+=======
+@app.route('/cadastrar-clientes', methods=['POST', 'GET'])
+def adicionar_cliente():
+>>>>>>> Stashed changes
     if request.method == 'POST' and 'nome' in request.form and 'telefone' in request.form and 'email' in request.form and 'cpf' in request.form:
         nome = request.form['nome']
         telefone = request.form['telefone']
@@ -34,8 +39,13 @@ def adicionarCliente():
     
     return render_template('cadastro-clientes.html')
 
+<<<<<<< Updated upstream
 @app.route('/clientes', methods=['POST', 'GET'])
 def consultarCliente():
+=======
+@app.route('/clientes', methods=['GET'])
+def consultar_clientes():
+>>>>>>> Stashed changes
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
     cursor.execute("SELECT * FROM clientes")
@@ -43,7 +53,11 @@ def consultarCliente():
     return render_template('clientes.html', clientes = clientes)
 
 # Busca de clientes por e-mail
+<<<<<<< Updated upstream
 @app.route('/pesquisarCliente', methods=['POST'])
+=======
+@app.route('/pesquisar-clientes', methods=['POST´p'])
+>>>>>>> Stashed changes
 def pesquisar_clientes():
     try:
         email = request.form.get("pesquisa")
@@ -66,8 +80,13 @@ def pesquisar_clientes():
         cursor.close()
         cnx.close()
 
+<<<<<<< Updated upstream
 @app.route('/atualizarCliente/<int:id>', methods=['POST', 'GET'])
 def atualizarCliente(id):
+=======
+@app.route('/atualizar-clientes/<int:id>', methods=['POST', 'GET', 'PUT'])
+def atualizar_cliente(id):
+>>>>>>> Stashed changes
     if request.method == 'POST':
         nome = request.form.get('nome')
         telefone = request.form.get('telefone')
@@ -91,4 +110,48 @@ def atualizarCliente(id):
     cursor.close()
     cnx.close()
 
+<<<<<<< Updated upstream
     return render_template('atualizar-clientes.html', cliente = cliente)
+=======
+    return render_template('atualizar-clientes.html', cliente = cliente)
+
+@app.route('/deletar-clientes/<int:id>', methods=['POST', 'GET'])
+def deletar_cliente(id):
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+    
+    try:
+        query_verificar_cliente = """
+            SELECT * FROM clientes WHERE id = %s
+        """
+
+        cursor.execute(query_verificar_cliente, (id,))
+        cliente_existe = cursor.fetchone()
+
+        if cliente_existe:
+            query_verificar_agendamento = "SELECT * FROM agendamento WHERE clientes_id = %s"
+            cursor.execute(query_verificar_agendamento, (id,))
+            agendamento_existe = cursor.fetchone()
+
+            if agendamento_existe:
+                flash('Não é possível excluir o cliente porque ele possui agendamentos associados', 'error')
+            else: 
+                query_cliente = """
+                DELETE FROM clientes WHERE id = %s 
+                """
+                cursor.execute(query_cliente, (id,))
+                cnx.commit()
+                flash('Cliente excluído com sucesso!', 'success')
+        else:
+            flash('Cliente não encontrado', 'error')
+        
+    except mysql.connector.Error as err:
+        flash(f'Ocorreu um erro: {err}', 'error')
+        cnx.rollback()
+
+    finally:
+        cursor.close()
+        cnx.close()
+        
+    return render_template('cadastro-clientes.html')
+>>>>>>> Stashed changes

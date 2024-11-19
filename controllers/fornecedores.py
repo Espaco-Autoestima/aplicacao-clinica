@@ -13,8 +13,13 @@ config = {
     'raise_on_warnings': True
 }
 
+<<<<<<< Updated upstream
 @app.route('/cadastrarFornecedor', methods=['POST', 'GET'])
 def adicionarFornecedor():
+=======
+@app.route('/cadastrar-fornecedores', methods=['POST', 'GET'])
+def adicionar_fornecedor():
+>>>>>>> Stashed changes
     if request.method == 'POST' and 'nome' in request.form and 'telefone' in request.form and 'empresa' in request.form:
         nome = request.form['nome']
         telefone = request.form['telefone']
@@ -42,7 +47,11 @@ def consultarFornecedor():
     return render_template('fornecedores.html', fornecedores = fornecedores)
 
 # Busca de fornecedores por telefone 
+<<<<<<< Updated upstream
 @app.route('/pesquisarFornecedor', methods=['POST'])
+=======
+@app.route('/pesquisar-fornecedores', methods=['POST'])
+>>>>>>> Stashed changes
 def pesquisar_fornecedores():
     try:
         telefone = request.form.get("pesquisa")
@@ -65,8 +74,13 @@ def pesquisar_fornecedores():
         cursor.close()
         cnx.close()
 
+<<<<<<< Updated upstream
 @app.route('/atualizarFornecedor/<int:id>', methods=['POST', 'GET'])
 def atualizarFornecedor(id):
+=======
+@app.route('/atualizar-fornecedores/<int:id>', methods=['POST', 'GET'])
+def atualizar_fornecedor(id):
+>>>>>>> Stashed changes
     if request.method == 'POST':
         nome = request.form['nome']
         telefone = request.form['telefone']
@@ -89,4 +103,41 @@ def atualizarFornecedor(id):
     cursor.close()
     cnx.close()
 
+<<<<<<< Updated upstream
     return render_template('atualizar-fornecedores.html', fornecedor = fornecedor)
+=======
+    return render_template('atualizar-fornecedores.html', fornecedor = fornecedor)
+
+@app.route('/excluir-fornecedores/<int:id>', methods=['POST', 'GET'])
+def deletar_fornecedor(id):
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+
+    try:
+        query_verificar_fornecedor = """
+            SELECT * FROM fornecedores WHERE id = %s
+        """
+
+        cursor.execute(query_verificar_fornecedor, (id,))
+        fornecedor_existe = cursor.fetchone()
+
+        if fornecedor_existe:
+            query_fornecedor = """
+            DELETE FROM fornecedores WHERE id = %s
+            """
+            cursor.execute(query_fornecedor, (id,))
+            cnx.commit()
+            flash('Fornecedor excluído com sucesso!', 'success')
+        else:
+            flash('Fornecedor não encontrado', 'error')
+
+    except mysql.connector.Error as err:
+        flash(f'Ocorreu um erro: {err}', 'error')
+        cnx.rollback()
+
+    finally:
+        cursor.close()
+        cnx.close()
+        
+    return render_template('cadastro-fornecedores.html')
+>>>>>>> Stashed changes

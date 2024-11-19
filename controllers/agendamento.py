@@ -13,7 +13,11 @@ config = {
     'raise_on_warnings': True
 }
 
+<<<<<<< Updated upstream
 @app.route('/realizarAgendamento', methods=['POST', 'GET'])
+=======
+@app.route('/cadastrar-agendamentos', methods=['POST', 'GET'])
+>>>>>>> Stashed changes
 def realizar_agendamento():
     if request.method == 'POST':
         nome_cliente = request.form['nomec']
@@ -103,8 +107,13 @@ def consultar_agendamento():
     print("Agendamentos recuperados:", agendamentos)  # Log para verificar os agendamentos recuperados
     return render_template('agendamentos.html', agendamentos=agendamentos)
 
+<<<<<<< Updated upstream
 # Implementação da regra de negócio de atualizar agendamentos
 @app.route('/atualizarAgendamentos/<int:id>', methods=['POST', 'GET'])
+=======
+# Endpoint de atualização de agendamentos
+@app.route('/atualizar-agendamentos/<int:id>', methods=['POST', 'GET'])
+>>>>>>> Stashed changes
 def atualizar_agendamento(id):
     if request.method == 'POST':
         nome_cliente = request.form['nomec']
@@ -117,7 +126,65 @@ def atualizar_agendamento(id):
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
 
+<<<<<<< Updated upstream
         # Verifica se o profissional já tem um agendamento na mesma data e hora
+=======
+            if agendamento_existe:
+                flash('Este profissional já possui um agendamento nesta data e horário', 'error')
+                return redirect(url_for('consultar_agendamentos'))
+
+            # Verifica na tabela de disponibilidades no MySQL se possuem a data com o profissional disponível
+            query_disponibilidade = """ 
+                SELECT d.id_disponibilidade
+                FROM disponibilidade d
+                INNER JOIN profissionais p ON p.id = d.profissionais_id 
+                WHERE d.dia = %s AND d.hora = %s AND p.nome = %s
+            """
+            cursor.execute(query_disponibilidade, (data, horario, nome_profissional))
+            disponibilidade = cursor.fetchone()
+
+            if not disponibilidade:
+                flash('Horário não disponível para agendamento', 'error')
+                return redirect(url_for('consultar_agendamentos'))
+
+            # Atualiza o agendamento
+            query_agendamento = """
+                UPDATE agendamento SET nomeCliente=%s, nomeProfissional=%s, sessao=%s, data=%s, horario=%s WHERE id=%s
+            """
+            cursor.execute(query_agendamento, (nome_cliente, nome_profissional, sessao, data, horario, id))
+            
+            # Realiza o commit da transação
+            cnx.commit()
+            flash('Consulta atualizada com sucesso!', 'success')
+
+        except mysql.connector.Error as err:
+            flash(f'Ocorreu um erro: {err}', 'error')
+            cnx.rollback()  # Reverte qualquer mudança se ocorrer um erro
+            
+        finally:
+            cursor.close()
+            cnx.close()
+        
+        return redirect(url_for('consultar_agendamentos'))
+
+    try:
+        cursor.execute("SELECT * FROM agendamento WHERE id = %s", (id,))
+        agendamento = cursor.fetchone()
+
+    finally:
+        cursor.close()
+        cnx.close()
+    
+    return render_template('atualizar-agendamentos.html', agendamento=agendamento)
+
+# Endpoint de cancelamento do agendamento/consulta
+@app.route('/cancelar-agendamento/<int:id>', methods=['POST', 'GET'])
+def cancelar_agendamento(id):
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+
+    try: 
+>>>>>>> Stashed changes
         query_verificar_agendamento = """
             SELECT * FROM agendamento
             WHERE nomeProfissional = %s AND data = %s AND horario = %s

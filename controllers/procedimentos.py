@@ -13,8 +13,13 @@ config = {
     'raise_on_warnings': True
 }
 
+<<<<<<< Updated upstream
 @app.route('/cadastrarProcedimento', methods=['POST', 'GET'])
 def adicionarProcedimento():
+=======
+@app.route('/cadastrar-procedimentos', methods=['POST', 'GET'])
+def adicionar_procedimento():
+>>>>>>> Stashed changes
     if request.method == 'POST' and 'procedimento' in request.form and 'descricao' in request.form:
         nome = request.form['procedimento']
         descricao = request.form['descricao']
@@ -41,7 +46,11 @@ def consultarProcedimento():
     return render_template('procedimentos.html', procedimentos = procedimentos)
 
 # Pesquisar procedimentos pelo nome
+<<<<<<< Updated upstream
 @app.route('/pesquisarProcedimento', methods=['POST'])
+=======
+@app.route('/pesquisar-procedimentos', methods=['POST'])
+>>>>>>> Stashed changes
 def pesquisar_procedimentos():
     try:
         nome = request.form.get("pesquisa")
@@ -64,8 +73,13 @@ def pesquisar_procedimentos():
         cursor.close()
         cnx.close()
 
+<<<<<<< Updated upstream
 @app.route('/atualizarProcedimento/<int:id>', methods=['POST', 'GET'])
 def atualizarProcedimento(id):
+=======
+@app.route('/atualizar-procedimentos/<int:id>', methods=['POST', 'GET'])
+def atualizar_procedimento(id):
+>>>>>>> Stashed changes
     if request.method == 'POST':
         nome = request.form['procedimento']
         descricao = request.form['descricao']
@@ -87,4 +101,42 @@ def atualizarProcedimento(id):
     cursor.close()
     cnx.close()
 
+<<<<<<< Updated upstream
     return render_template('atualizar-procedimentos.html', procedimento = procedimentoList)
+=======
+    return render_template('atualizar-procedimentos.html', procedimento = procedimentoList)
+
+@app.route('/excluir-procedimento/<int:id>', methods=['POST', 'GET'])
+def deletar_procedimento(id):
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+
+    try:
+        query_verificar_procedimento = """
+            SELECT * FROM procedimentos WHERE id = %s
+        """
+
+        cursor.execute(query_verificar_procedimento, (id,))
+        procedimento_existe = cursor.fetchone()
+
+        if procedimento_existe:
+            query_procedimento = """
+            DELETE FROM procedimentos WHERE id = %s
+            """
+
+            cursor.execute(query_procedimento, (id,))
+            cnx.commit()
+            flash('Procedimento excluído com sucesso!', 'success')
+        else:
+            flash('Procedimento não encontrado', 'error')
+
+    except mysql.connector.Error as err:
+        flash(f'Ocorreu um erro: {err}', 'error')
+        cnx.rollback()
+
+    finally:
+        cursor.close()
+        cnx.close()
+        
+    return render_template('cadastro-procedimentos.html')
+>>>>>>> Stashed changes

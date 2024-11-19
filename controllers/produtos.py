@@ -13,8 +13,13 @@ config = {
     'raise_on_warnings': True
 }
 
+<<<<<<< Updated upstream
 @app.route('/cadastrarProduto', methods=['POST', 'GET'])
 def adicionarProduto():
+=======
+@app.route('/cadastrar-produtos', methods=['POST', 'GET'])
+def adicionar_produto():
+>>>>>>> Stashed changes
     if request.method == 'POST' and 'sku' in request.form and 'nome' in request.form and 'data-validade' in request.form and 'quantidade' in request.form and 'marca' in request.form and 'preco' in request.form and 'descricao' in request.form:
         codigo_sku = request.form['sku']
         produto = request.form['nome']
@@ -46,7 +51,11 @@ def consultarProduto():
     return render_template('produtos.html', produtos = produtos)
 
 # Busca de produtos por nome
+<<<<<<< Updated upstream
 @app.route('/pesquisarProduto', methods=['POST'])
+=======
+@app.route('/pesquisar-produtos', methods=['POST'])
+>>>>>>> Stashed changes
 def pesquisar_produtos():
     try:
         sku = request.form.get("pesquisa")
@@ -68,8 +77,13 @@ def pesquisar_produtos():
         cursor.close()
         cnx.close() 
 
+<<<<<<< Updated upstream
 @app.route('/atualizarProduto/<int:id>', methods=['POST', 'GET'])
 def atualizarProduto(id):
+=======
+@app.route('/atualizar-produtos/<int:id>', methods=['POST', 'GET'])
+def atualizar_produto(id):
+>>>>>>> Stashed changes
     if request.method == 'POST':
         codigo_sku = request.form['sku']
         produto = request.form['nome']
@@ -100,4 +114,41 @@ def atualizarProduto(id):
     cursor.close()
     cnx.close()
 
+<<<<<<< Updated upstream
     return render_template('atualizar-produtos.html', produto = produto)
+=======
+    return render_template('atualizar-produtos.html', produto = produto)
+
+@app.route('/excluir-produto/<int:id>', methods=['POST', 'GET'])
+def deletar_produto(id):
+    cnx = mysql.connector.connect(**config)
+    cursor = cnx.cursor()
+
+    try:
+        query_verificar_produto = """
+            SELECT * FROM produtos WHERE id = %s
+        """
+
+        cursor.execute(query_verificar_produto, (id,))
+        produto_existe = cursor.fetchone()
+
+        if produto_existe:
+            query_produto = """
+            DELETE FROM produtos WHERE id = %s
+            """
+            cursor.execute(query_produto, (id,))
+            cnx.commit()
+            flash('Produto excluído com sucesso', 'success')
+        else:
+            flash('Produto não encontrado', 'error')
+    
+    except mysql.connector.Error as err:
+        flash(f'Ocorreu um erro: {err}', 'error')
+        cnx.rollback()
+
+    finally:
+        cursor.close()
+        cnx.close()
+        
+    return render_template('cadastro-produtos.html')
+>>>>>>> Stashed changes
