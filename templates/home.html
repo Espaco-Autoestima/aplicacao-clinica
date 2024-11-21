@@ -6,7 +6,29 @@
 </head>
 <body>
     {% block content %}
-    <h1 class="boas-vindas">Olá, como é bom te ver por aqui, {{email}}</h1> 
+    <h1 class="boas-vindas">Olá, como é bom te ver por aqui, {{email}}</h1>
+    <table class="registro-agendamentos">
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Profissional</th>
+                <th>N° da sessão</th>
+                <th>Data</th>
+                <th>Hora</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for agendamento in agendamentos %}
+            <tr>
+                <td>{{ agendamento[1] }}</td>
+                <td>{{ agendamento[2] }}</td>
+                <td>{{ agendamento[3] }}</td>
+                <td>{{ agendamento[4] }}</td>
+                <td>{{ agendamento[5] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table> 
     {% endblock %}
 </body>  
 </html>

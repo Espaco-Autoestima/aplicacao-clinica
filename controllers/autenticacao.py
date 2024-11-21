@@ -108,5 +108,15 @@ def logout():
 @app.route('/home')
 def home():
     if 'loggedin' in session:
-        return render_template('home.html', email=session['email'])
+        try:
+            cnx = mysql.connector.connect(**config)
+            cursor = cnx.cursor()
+            cursor.execute("SELECT * FROM agendamento ORDER BY data ASC, horario ASC LIMIT 6")
+            agendamentos = cursor.fetchall()
+            return render_template('home.html', email=session['email'], agendamentos = agendamentos)
+        except mysql.connector.Error as err:
+            return "Ocorreu um erro ao buscar os agendamentos"
+        finally:
+            cursor.close()
+            cnx.close()
     return redirect(url_for('login'))

@@ -12,7 +12,19 @@
             <input type="text" id="pesquisa" name="pesquisa" class="pesquisa-input-email" required>
             <button id="botao-buscar" type="submit">Pesquisar</button>
         </form>
+
         <h1 class="lista-de-clientes">Lista de clientes</h1>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="notification notification-is-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+        
         <table class="registro-clientes">
             <tr>
                 <th>Nome</th>

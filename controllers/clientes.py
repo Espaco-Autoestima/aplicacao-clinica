@@ -128,4 +128,4 @@ def deletar_cliente(id):
         cursor.close()
         cnx.close()
         
-    return render_template('cadastro-clientes.html')
+    return redirect(url_for('consultar_clientes'))
