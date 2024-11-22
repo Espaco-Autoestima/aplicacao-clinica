@@ -264,6 +264,21 @@ button.botao-cancelar:hover {
     color: #FFF;
 }
 
+button.botao-reagendar {
+    width: 100%;
+    background-color: #FFF;
+    color: #f3cf01;
+    font-size: 14px;
+    border: solid 1px #f3cf01;
+    border-radius: 8px;
+    display: block;
+}
+
+button.botao-reagendar:hover {
+    background-color: #f3cf01;
+    color: #FFF;
+}
+
 /* Alinhamento ao centro de registros da tabela */
 td {
     text-align: center;

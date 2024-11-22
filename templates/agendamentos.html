@@ -40,6 +40,10 @@
                     <button class="botao-editar">Editar</button></a>
             </td>
             <td>
+                <a href="{{ url_for('reagendar_consulta', id=agendamento[0]) }}">
+                    <button class="botao-reagendar">Reagendar</button></a>
+            </td>
+            <td>
                 <a href="{{ url_for('cancelar_agendamento', id=agendamento[0]) }}">
                     <button class="botao-cancelar">Cancelar</button></a>
             </td>

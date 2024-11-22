@@ -10,5 +10,6 @@ venv.bak/
 # Arquivos e pastas na raíz do projeto
 LICENSE
 README.MD
+.gitignore
 
 img-readme/
