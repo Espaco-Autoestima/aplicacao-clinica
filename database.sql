@@ -1,7 +1,7 @@
 CREATE SCHEMA IF NOT EXISTS espacoautoestima;
 USE espacoautoestima;
 
-CREATE TABLE contas(
+CREATE TABLE IF NOT EXISTS contas(
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nome_usuario VARCHAR(50),
     telefone VARCHAR(25),
@@ -9,7 +9,7 @@ CREATE TABLE contas(
     senha VARCHAR(20)
 );
 
-CREATE TABLE clientes(
+CREATE TABLE IF NOT EXISTS clientes(
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
     nome VARCHAR(45), 
     telefone VARCHAR(25), 
@@ -17,20 +17,20 @@ CREATE TABLE clientes(
     cpf VARCHAR(25)
 );
 
-CREATE TABLE profissionais(
+CREATE TABLE IF NOT EXISTS profissionais(
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
     nome VARCHAR(45), 
     telefone VARCHAR(25), 
     especialidade VARCHAR(20)
 );
 
-CREATE TABLE procedimentos(
+CREATE TABLE IF NOT EXISTS procedimentos(
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
     nome VARCHAR(45), 
     descricao VARCHAR(100)
 );
 
-CREATE TABLE agendamento(
+CREATE TABLE IF NOT EXISTS agendamento(
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nomeCliente VARCHAR(30),
     nomeProfissional VARCHAR(30),
@@ -43,7 +43,7 @@ CREATE TABLE agendamento(
     FOREIGN KEY (profissionais_id) REFERENCES profissionais(id)
 );
 
-CREATE TABLE disponibilidade(
+CREATE TABLE IF NOT EXISTS disponibilidade(
     id_disponibilidade BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     dia date, 
     hora time,
@@ -51,7 +51,7 @@ CREATE TABLE disponibilidade(
     FOREIGN KEY (profissionais_id) REFERENCES profissionais(id) 
 );
 
-CREATE TABLE produtos(
+CREATE TABLE IF NOT EXISTS produtos(
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
     nome VARCHAR(45), 
     data_validade date, 
@@ -61,7 +61,7 @@ CREATE TABLE produtos(
     descricao VARCHAR(100)
 );
 
-CREATE TABLE fornecedores(
+CREATE TABLE IF NOT EXISTS fornecedores(
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
     nome VARCHAR(45), 
     telefone VARCHAR(20), 

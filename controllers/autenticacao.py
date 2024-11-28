@@ -1,5 +1,6 @@
 from app import app
 from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask_bcrypt import Bcrypt
 import mysql.connector
 
 config = {
@@ -9,6 +10,8 @@ config = {
     'database': 'espacoautoestima',
     'raise_on_warnings': True
 }
+
+bcrypt = Bcrypt(app)
 
 @app.route('/')
 def index():
@@ -56,6 +59,7 @@ def signUp():
         query = "SELECT * FROM contas WHERE email = %s and senha = %s"
         cursor.execute(query, (email, senha))
         conta = cursor.fetchone()
+
         # Verifica se existe a conta. Se existir, redireciona para a home
         if conta:
             session['loggedin'] = True
@@ -64,7 +68,7 @@ def signUp():
         else:
             # Inserindo os dados no banco
             query = "INSERT INTO contas (nome_usuario, telefone, email, senha) VALUES (%s, %s, %s, %s)"
-        
+            
             cursor.execute(query, (nome, telefone, email, senha))
             cnx.commit()
             cursor.close()

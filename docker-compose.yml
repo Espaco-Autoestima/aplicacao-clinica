@@ -5,6 +5,8 @@ services:
       - db
     image: app-espaco-autoestima
     command: python app.py 
+    links:
+      - db
     volumes:
       - web_data:/controllers
     ports:
